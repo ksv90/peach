@@ -1,20 +1,26 @@
 import { Container, Text } from '@chakra-ui/react';
-import { useThemeContext } from '../contexts';
+import { useAppContext, useThemeContext } from '../contexts';
+import AnimationProps from './AnimationProps';
+import SkeletonProps from './SkeletonProps';
 
 export default function PropsPanel() {
-  const themeContext = useThemeContext();
+  const { textColor } = useThemeContext();
+  const { currentSkeleton, currentAnimation } = useAppContext();
   return (
     <Container>
       <Text
         paddingTop="10px"
-        borderColor={themeContext.textColor}
+        borderColor={textColor}
         borderStyle="solid"
         borderBottomWidth="1px"
         textTransform="uppercase"
         align="center"
+        marginBottom="15px"
       >
         props panel
       </Text>
+      {currentSkeleton && <SkeletonProps name={currentSkeleton} />}
+      {currentAnimation && <AnimationProps anim={currentAnimation} />}
     </Container>
   );
 }

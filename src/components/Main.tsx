@@ -15,13 +15,13 @@ export default function Main() {
         <ToolBar />
       </Flex>
       <Flex flexBasis="calc(100vh - 48px)">
-        <Flex flexBasis="20vw" minW="250px" boxShadow={FRAME}>
+        <Flex flexBasis="20vw" minW="200px" boxShadow={FRAME}>
           <LayersPanel />
         </Flex>
         <Flex flexGrow="1" bg={extraColor} boxShadow={FRAME}>
           <Scene />
         </Flex>
-        <Flex flexBasis="15vw" minW="200px" boxShadow={FRAME}>
+        <Flex flexBasis="25vw" minW="250px" boxShadow={FRAME}>
           <PropsPanel />
         </Flex>
       </Flex>

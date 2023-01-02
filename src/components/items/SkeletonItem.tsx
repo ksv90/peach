@@ -1,9 +1,13 @@
 import { ViewIcon } from '@chakra-ui/icons';
 import { Flex, Text } from '@chakra-ui/react';
-import { PropsWithChildren } from 'react';
-import { useThemeContext } from '../contexts';
+import { useThemeContext } from '../../contexts';
 
-export default function SkeletonItem({ children }: PropsWithChildren) {
+interface SkeletonItemProps {
+  name: string;
+  showProps(name: string): void;
+}
+
+export default function SkeletonItem({ name, showProps }: SkeletonItemProps) {
   const { specialColor } = useThemeContext();
   return (
     <Flex
@@ -13,9 +17,10 @@ export default function SkeletonItem({ children }: PropsWithChildren) {
       padding="5px 0"
       borderRadius="md"
       _hover={{ bg: specialColor }}
+      onClick={() => showProps(name)}
     >
       <ViewIcon boxSize={6} flexBasis="15%" />
-      <Text>{children}</Text>
+      <Text>{name}</Text>
     </Flex>
   );
 }

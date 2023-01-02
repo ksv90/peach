@@ -1,32 +1,76 @@
-import { SkeletonData } from '@pixi-spine/runtime-4.1';
+import { SkeletonData, Spine } from '@pixi-spine/runtime-4.1';
 import { Application } from 'pixi.js';
 import { createContext, PropsWithChildren, useContext, useReducer } from 'react';
 import { useThemeContext } from './ThemeContext';
 
-export type AppPayload = [string, SkeletonData];
+export type SkeletonPayload = [string, SkeletonData];
+export type AnimationPayload = [string, string];
+export type CurrentSkeletonPayload = string | null;
+export type CurrentAnimationPayload = string | null;
 
 export type AppState = {
   app: Application;
   skeletonList: Record<string, SkeletonData>;
-  setSkeleton(payload: AppPayload): void;
+  addSkeleton(payload: SkeletonPayload): void;
+  animationsList: Record<string, Spine>;
+  addAnimation(payload: AnimationPayload): void;
+  currentSkeleton: string | null;
+  setCurrentSkeleton(payload: CurrentSkeletonPayload): void;
+  currentAnimation: string | null;
+  setCurrentAnimation(payload: CurrentAnimationPayload): void;
 };
 
 export type AppProviderProps = PropsWithChildren;
 
 export const enum AppTypes {
-  add = 'add',
+  AddSkeleton = 'addSkeleton',
+  AddAnimation = 'addAnimation',
+  SetSkeletonProps = 'setSkeletonProps',
+  SetAnimationProps = 'setAnimationProps',
 }
 
-interface AppAction {
-  type: AppTypes;
-  payload: AppPayload;
+interface SkeletonAction {
+  type: AppTypes.AddSkeleton;
+  payload: SkeletonPayload;
 }
 
-export const dataReducer = (state: AppState, action: AppAction) => {
+interface AnimationAction {
+  type: AppTypes.AddAnimation;
+  payload: AnimationPayload;
+}
+
+interface CurrentSkeletonAction {
+  type: AppTypes.SetSkeletonProps;
+  payload: CurrentSkeletonPayload;
+}
+
+interface CurrentAnimationAction {
+  type: AppTypes.SetAnimationProps;
+  payload: CurrentAnimationPayload;
+}
+
+export const appReducer = (
+  state: AppState,
+  action: SkeletonAction | CurrentSkeletonAction | AnimationAction | CurrentAnimationAction,
+): AppState => {
   switch (action.type) {
-    case AppTypes.add: {
+    case AppTypes.AddSkeleton: {
       const [name, skeleton] = action.payload;
       return { ...state, skeletonList: { ...state.skeletonList, [name]: skeleton } };
+    }
+    case AppTypes.AddAnimation: {
+      const [name, anim] = action.payload;
+      const skeleton = state.skeletonList[name];
+      if (!skeleton) throw new Error(`Skeleton ${name} not found`);
+      const spine = new Spine(skeleton);
+      spine.name = anim;
+      return { ...state, animationsList: { ...state.animationsList, [anim]: spine } };
+    }
+    case AppTypes.SetSkeletonProps: {
+      return { ...state, currentSkeleton: action.payload };
+    }
+    case AppTypes.SetAnimationProps: {
+      return { ...state, currentAnimation: action.payload };
     }
     default:
       return state;
@@ -42,11 +86,37 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   const dataContext: AppState = {
     app: new Application({ backgroundColor: parseInt(extraColor.slice(1), 16) }),
     skeletonList: {},
-    setSkeleton(): void {},
+    addSkeleton() {},
+    animationsList: {},
+    addAnimation() {},
+    currentSkeleton: null,
+    setCurrentSkeleton() {},
+    currentAnimation: null,
+    setCurrentAnimation() {},
   };
-  const [state, dispatch] = useReducer(dataReducer, dataContext);
+  const [state, dispatch] = useReducer(appReducer, dataContext);
 
-  const setSkeleton = (payload: AppPayload) => dispatch({ type: AppTypes.add, payload });
+  const addSkeleton = (payload: SkeletonPayload) => {
+    dispatch({ type: AppTypes.AddSkeleton, payload });
+  };
 
-  return <AppContext.Provider value={{ ...state, setSkeleton }}>{children}</AppContext.Provider>;
+  const setCurrentSkeleton = (payload: CurrentSkeletonPayload) => {
+    dispatch({ type: AppTypes.SetSkeletonProps, payload });
+  };
+
+  const addAnimation = (payload: AnimationPayload) => {
+    dispatch({ type: AppTypes.AddAnimation, payload });
+  };
+
+  const setCurrentAnimation = (payload: CurrentAnimationPayload) => {
+    dispatch({ type: AppTypes.SetAnimationProps, payload });
+  };
+
+  return (
+    <AppContext.Provider
+      value={{ ...state, addSkeleton, setCurrentSkeleton, addAnimation, setCurrentAnimation }}
+    >
+      {children}
+    </AppContext.Provider>
+  );
 };

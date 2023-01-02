@@ -14,17 +14,13 @@ function createSelectFile(): HTMLInputElement {
 
 export default function Download() {
   const { mainColor, specialColor } = useThemeContext();
-  const { setSkeleton } = useAppContext();
+  const { addSkeleton } = useAppContext();
 
   function selectSpine({ target }: Event) {
     if (target instanceof HTMLInputElement) {
       loadSpines(target.files)
-        .then((skeletons) => {
-          skeletons.forEach(([name, skeleton]) => setSkeleton([name, skeleton]));
-        })
-        .catch((e) => {
-          new Error(`Spine not loaded ${e}`);
-        });
+        .then((skeletons) => skeletons.forEach(([name, skeleton]) => addSkeleton([name, skeleton])))
+        .catch((e) => new Error(`Spine not loaded ${e}`));
     }
   }
 
