@@ -1,4 +1,11 @@
 {
-	"extends": "@releaseband/typescript-config",
-	"include": ["src/**/*", "vite.config.ts"]
+  "extends": "@releaseband/typescript-config",
+  "buildOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@peach/components": ["src/components"],
+      "@peach/contexts": ["src/contexts"]
+    }
+  },
+  "include": ["src/**/*", "vite.config.ts"]
 }

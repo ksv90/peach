@@ -18,6 +18,14 @@
 		"node": "18.12.1"
 	},
 	"dependencies": {
+		"@chakra-ui/icons": "^2.0.15",
+		"@chakra-ui/react": "^2.4.6",
+		"@emotion/react": "^11.10.5",
+		"@emotion/styled": "^11.10.5",
+		"@pixi-spine/base": "^3.1.0",
+		"@pixi-spine/loader-4.1": "^3.1.0",
+		"@pixi-spine/runtime-4.1": "^3.1.0",
+		"framer-motion": "^8.0.2",
 		"pixi.js": "^6.5.8",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0"
@@ -33,6 +41,8 @@
 		"is-ci": "^3.0.1",
 		"prettier": "^2.8.1",
 		"typescript": "^4.9.4",
-		"vite": "^4.0.3"
+		"vite": "^4.0.3",
+		"vite-plugin-dts": "^1.7.1",
+		"vite-tsconfig-paths": "^4.0.3"
 	}
 }
