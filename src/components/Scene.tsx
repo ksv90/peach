@@ -5,12 +5,23 @@ import { useAppContext } from '../contexts';
 export default function Scene() {
   const ref = useRef<HTMLDivElement>(null);
   const { app } = useAppContext();
+
+  function resize() {
+    /* при изменении размеров окна, флекс-контейнер не уменьшается из-за вложенного элемента,
+    поэтому размеры элемента заведомо устанавливаются меньше флекс-контейнера*/
+    app.cancelResize();
+    app.view.width = 0;
+    app.view.height = 0;
+    app.resize();
+  }
+
   useEffect(() => {
     if (!ref.current) return;
-    app.stage.width = app.view.width = ref.current.offsetWidth;
-    app.stage.height = app.view.height = ref.current.offsetHeight;
+    app.resizeTo = ref.current;
     ref.current.appendChild(app.view);
+    window.addEventListener('resize', resize);
     return () => {
+      window.removeEventListener('resize', resize);
       app.view.remove();
       app.destroy();
     };
