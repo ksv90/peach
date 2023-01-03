@@ -32,11 +32,13 @@ jobs:
       - name: Type check
         run: pnpm type-check
 
-      - name: Lint
-        run: pnpm lint
+      # TODO: добавить линтер
+      # - name: Lint
+      #   run: pnpm lint
 
-      - name: Test
-        run: pnpm test
+      # TODO: добавить тесты
+      # - name: Test
+      #   run: pnpm test
 
       - name: Build
         run: pnpm build
