@@ -3,10 +3,12 @@ import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useAppContext, useThemeContext } from '../../contexts';
 import { loadSpines } from '../../utils';
 
+const devices = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+
 function createSelectFile(): HTMLInputElement {
   const input = document.createElement('input');
   input.type = 'file';
-  input.webkitdirectory = true;
+  if (!devices.test(navigator.userAgent)) input.webkitdirectory = true;
   input.accept = 'application/json, image/png, image/jpeg, .atlas';
   input.multiple = true;
   return input;

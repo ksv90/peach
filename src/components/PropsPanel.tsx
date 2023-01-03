@@ -1,7 +1,7 @@
 import { Container, Text } from '@chakra-ui/react';
 import { useAppContext, useThemeContext } from '../contexts';
-import AnimationProps from './AnimationProps';
-import SkeletonProps from './SkeletonProps';
+import AnimationProps from './props/AnimationProps';
+import SkeletonProps from './props/SkeletonProps';
 
 export default function PropsPanel() {
   const { textColor } = useThemeContext();

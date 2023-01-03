@@ -1,5 +1,5 @@
 import { Flex, Text } from '@chakra-ui/react';
-import { useAppContext } from '../contexts';
+import { useAppContext } from '../../contexts';
 
 interface SkeletonItemProps {
   name: string;
