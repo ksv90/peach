@@ -16,9 +16,9 @@ export const AppContext = createContext({} as AppContextState);
 export const useAppContext = () => useContext(AppContext);
 
 export const AppProvider = ({ children }: AppProviderProps) => {
-  const { extraColor } = useThemeContext();
+  const { mainColorHover } = useThemeContext();
 
-  const [state, dispatch] = useReducer(appReducer, createAppReducerState(extraColor));
+  const [state, dispatch] = useReducer(appReducer, createAppReducerState(mainColorHover));
 
   const appContext: AppContextState = {
     ...state,
@@ -28,10 +28,10 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     addAnimation(payload: AnimationPayload) {
       dispatch({ type: AppReducerTypes.AddAnimation, payload });
     },
-    setCurrentSkeleton(payload: CurrentSkeletonPayload) {
+    showSkeletonProps(payload: CurrentSkeletonPayload) {
       dispatch({ type: AppReducerTypes.SetSkeletonProps, payload });
     },
-    setCurrentAnimation(payload: CurrentAnimationPayload) {
+    showAnimationProps(payload: CurrentAnimationPayload) {
       dispatch({ type: AppReducerTypes.SetAnimationProps, payload });
     },
   };

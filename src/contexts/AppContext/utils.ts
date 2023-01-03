@@ -39,12 +39,12 @@ export function makeSetSkeletonState(
   state: AppReducerState,
   payload: CurrentSkeletonPayload,
 ): AppReducerState {
-  return { ...state, currentSkeleton: payload };
+  return { ...state, currentAnimation: null, currentSkeleton: payload };
 }
 
 export function makeSetAnimationState(
   state: AppReducerState,
   payload: CurrentAnimationPayload,
 ): AppReducerState {
-  return { ...state, currentAnimation: payload };
+  return { ...state, currentSkeleton: null, currentAnimation: payload };
 }

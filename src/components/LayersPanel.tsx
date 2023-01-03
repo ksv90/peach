@@ -1,22 +1,12 @@
+import { CalendarIcon, ViewIcon } from '@chakra-ui/icons';
 import { Container, Text } from '@chakra-ui/react';
 import { useAppContext, useThemeContext } from '../contexts';
-import { AnimationItem } from './items';
-import SkeletonItem from './items/SkeletonItem';
+import LayerItem from './LayerItem';
 
 export default function LayersPanel() {
   const { textColor } = useThemeContext();
-  const { skeletonList, animationsList, setCurrentSkeleton, setCurrentAnimation } = useAppContext();
-
-  function showSkeletonProps(name: string) {
-    setCurrentAnimation(null);
-    setCurrentSkeleton(name);
-  }
-
-  function showAnimationProps(anim: string) {
-    setCurrentSkeleton(null);
-    setCurrentAnimation(anim);
-  }
-
+  const appContext = useAppContext();
+  const { currentSkeleton, currentAnimation, showSkeletonProps, showAnimationProps } = appContext;
   return (
     <Container>
       <Text
@@ -30,11 +20,23 @@ export default function LayersPanel() {
       >
         layers panel
       </Text>
-      {Object.keys(skeletonList).map((name) => (
-        <SkeletonItem key={name} name={name} showProps={showSkeletonProps} />
+      {Object.keys(appContext.skeletonList).map((name) => (
+        <LayerItem
+          key={name}
+          name={name}
+          showProps={showSkeletonProps}
+          selected={currentSkeleton === name}
+          Icon={ViewIcon}
+        />
       ))}
-      {Object.keys(animationsList).map((anim) => (
-        <AnimationItem key={anim} anim={anim} showProps={showAnimationProps} />
+      {Object.keys(appContext.animationsList).map((anim) => (
+        <LayerItem
+          key={anim}
+          name={anim}
+          showProps={showAnimationProps}
+          selected={currentAnimation === anim}
+          Icon={CalendarIcon}
+        />
       ))}
     </Container>
   );

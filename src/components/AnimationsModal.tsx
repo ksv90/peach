@@ -11,7 +11,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
-import { useAppContext } from '../contexts';
+import { useAppContext, useThemeContext } from '../contexts';
 
 interface AnimationsModalProps {
   isOpen: boolean;
@@ -19,6 +19,7 @@ interface AnimationsModalProps {
 }
 
 export default function AnimationsModal({ isOpen, onClose }: AnimationsModalProps) {
+  const { mainColorHover } = useThemeContext();
   const { skeletonList, addAnimation } = useAppContext();
 
   return (
@@ -28,16 +29,20 @@ export default function AnimationsModal({ isOpen, onClose }: AnimationsModalProp
         <ModalHeader>Select animation</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Accordion>
+          <Accordion allowMultiple>
             {Object.entries(skeletonList).map(([name, skeleton]) => {
               return (
                 <AccordionItem key={name}>
-                  <AccordionButton>{name}</AccordionButton>
+                  <AccordionButton>
+                    <Text borderBottom="1px white solid">{name}</Text>
+                  </AccordionButton>
                   <AccordionPanel>
                     {skeleton.animations?.map(({ name: anim }) => {
                       return (
                         <Text
                           key={anim}
+                          transition="all 0.2s"
+                          _hover={{ bg: mainColorHover }}
                           onClick={() => {
                             addAnimation([name, anim]);
                             onClose();
