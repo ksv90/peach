@@ -3,33 +3,43 @@ import { IconButton, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/rea
 import { useThemeContext } from '../../contexts';
 
 export default function Settings() {
-  const { mainColor, specialColor } = useThemeContext();
+  const { mainColor, specialColorHover } = useThemeContext();
   return (
     <Menu>
       <MenuButton
         as={IconButton}
         aria-label="Options"
         icon={<HamburgerIcon />}
-        colorScheme="blue"
+        variant="custom"
         transition="all 0.2s"
         borderRadius="lg"
       />
       <MenuList bg={mainColor}>
-        <MenuItem bg={mainColor} _hover={{ bg: specialColor }} icon={<AddIcon />} command="⌘T">
+        <MenuItem bg={mainColor} _hover={{ bg: specialColorHover }} icon={<AddIcon />} command="⌘T">
           New Tab
         </MenuItem>
         <MenuItem
           bg={mainColor}
-          _hover={{ bg: specialColor }}
+          _hover={{ bg: specialColorHover }}
           icon={<ExternalLinkIcon />}
           command="⌘N"
         >
           New Window
         </MenuItem>
-        <MenuItem bg={mainColor} _hover={{ bg: specialColor }} icon={<RepeatIcon />} command="⌘⇧N">
+        <MenuItem
+          bg={mainColor}
+          _hover={{ bg: specialColorHover }}
+          icon={<RepeatIcon />}
+          command="⌘⇧N"
+        >
           Open Closed Tab
         </MenuItem>
-        <MenuItem bg={mainColor} _hover={{ bg: specialColor }} icon={<EditIcon />} command="⌘O">
+        <MenuItem
+          bg={mainColor}
+          _hover={{ bg: specialColorHover }}
+          icon={<EditIcon />}
+          command="⌘O"
+        >
           Open File...
         </MenuItem>
       </MenuList>

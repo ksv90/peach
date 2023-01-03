@@ -5,6 +5,20 @@ const config: ThemeConfig = {
   useSystemColorMode: true,
 };
 
-const chakraTheme = extendTheme({ config });
+const chakraTheme = extendTheme({
+  config,
+  components: {
+    Button: {
+      variants: {
+        custom: {
+          bg: 'blue.500',
+          _hover: {
+            bg: 'blue.600',
+          },
+        },
+      },
+    },
+  },
+});
 
 export default chakraTheme;

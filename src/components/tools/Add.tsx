@@ -5,7 +5,7 @@ import { useThemeContext } from '../../contexts';
 import AnimationsModal from '../AnimationsModal';
 
 export default function Add() {
-  const { mainColor, specialColor } = useThemeContext();
+  const { mainColor, specialColorHover } = useThemeContext();
   const [animationModalOpen, setAnimationModalOpen] = useState(false);
 
   function animationHandler() {
@@ -16,7 +16,7 @@ export default function Add() {
     <Menu>
       <MenuButton
         as={Button}
-        colorScheme="blue"
+        variant="custom"
         rightIcon={<ChevronDownIcon />}
         transition="all 0.2s"
         borderRadius="lg"
@@ -24,13 +24,13 @@ export default function Add() {
         Add to scene
       </MenuButton>
       <MenuList bg={mainColor}>
-        <MenuItem bg={mainColor} _hover={{ bg: specialColor }}>
+        <MenuItem bg={mainColor} _hover={{ bg: specialColorHover }}>
           Texture
         </MenuItem>
-        <MenuItem onClick={animationHandler} bg={mainColor} _hover={{ bg: specialColor }}>
+        <MenuItem onClick={animationHandler} bg={mainColor} _hover={{ bg: specialColorHover }}>
           Animation
         </MenuItem>
-        <MenuItem bg={mainColor} _hover={{ bg: specialColor }}>
+        <MenuItem bg={mainColor} _hover={{ bg: specialColorHover }}>
           Text
         </MenuItem>
       </MenuList>

@@ -15,7 +15,7 @@ function createSelectFile(): HTMLInputElement {
 }
 
 export default function Download() {
-  const { mainColor, specialColor } = useThemeContext();
+  const { mainColor, specialColorHover } = useThemeContext();
   const { addSkeleton } = useAppContext();
 
   function selectSpine({ target }: Event) {
@@ -36,7 +36,7 @@ export default function Download() {
     <Menu>
       <MenuButton
         as={Button}
-        colorScheme="blue"
+        variant="custom"
         rightIcon={<ChevronDownIcon />}
         transition="all 0.2s"
         borderRadius="lg"
@@ -44,16 +44,16 @@ export default function Download() {
         Download
       </MenuButton>
       <MenuList bg={mainColor}>
-        <MenuItem bg={mainColor} _hover={{ bg: specialColor }}>
+        <MenuItem bg={mainColor} _hover={{ bg: specialColorHover }}>
           Image
         </MenuItem>
-        <MenuItem onClick={spineHandler} bg={mainColor} _hover={{ bg: specialColor }}>
+        <MenuItem onClick={spineHandler} bg={mainColor} _hover={{ bg: specialColorHover }}>
           Spine
         </MenuItem>
-        <MenuItem bg={mainColor} _hover={{ bg: specialColor }}>
+        <MenuItem bg={mainColor} _hover={{ bg: specialColorHover }}>
           WebFont
         </MenuItem>
-        <MenuItem bg={mainColor} _hover={{ bg: specialColor }}>
+        <MenuItem bg={mainColor} _hover={{ bg: specialColorHover }}>
           BitmapFont
         </MenuItem>
       </MenuList>

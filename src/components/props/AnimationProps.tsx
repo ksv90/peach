@@ -17,7 +17,7 @@ export default function AnimationProps({ anim }: SkeletonItemProps) {
   }
   return (
     <Flex flexDirection="column">
-      <Button colorScheme="blue" onClick={clickHandler}>
+      <Button variant="custom" onClick={clickHandler}>
         {'play animation'}
       </Button>
     </Flex>

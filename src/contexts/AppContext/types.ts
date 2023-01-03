@@ -51,8 +51,8 @@ export interface AppReducerState {
 export interface AppContextState extends AppReducerState {
   addSkeleton(payload: SkeletonPayload): void;
   addAnimation(payload: AnimationPayload): void;
-  setCurrentSkeleton(payload: CurrentSkeletonPayload): void;
-  setCurrentAnimation(payload: CurrentAnimationPayload): void;
+  showSkeletonProps(payload: CurrentSkeletonPayload): void;
+  showAnimationProps(payload: CurrentAnimationPayload): void;
 }
 
 export type AppProviderProps = PropsWithChildren;
