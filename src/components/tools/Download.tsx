@@ -1,7 +1,6 @@
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
-import { useElementsContext, useThemeContext } from '../../contexts';
-import { loadSpines } from '../../utils';
+import { useAppContext, useElementsContext, useThemeContext } from '../../contexts';
 
 const devices = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
 
@@ -16,13 +15,19 @@ function createSelectFile(): HTMLInputElement {
 
 export default function Download() {
   const { mainColor, specialColorHover } = useThemeContext();
+  const { assets } = useAppContext();
   const { addSkeleton } = useElementsContext();
 
-  function selectSpine({ target }: Event) {
-    if (target instanceof HTMLInputElement) {
-      loadSpines(target.files)
-        .then((skeletons) => skeletons.forEach(([name, skeleton]) => addSkeleton([name, skeleton])))
-        .catch((e) => new Error(`Spine not loaded ${e}`));
+  async function selectSpine({ target }: Event) {
+    if (!(target instanceof HTMLInputElement)) return;
+    if (!target.files) throw new Error('Files are not selected');
+    const entities = [...target.files].map(({ name }) => name);
+    try {
+      await assets.loadFiles(target.files);
+      const skeletons = assets.getSkeletons(entities);
+      skeletons.forEach(([name, skeleton]) => addSkeleton([name, skeleton]));
+    } catch (err) {
+      new Error(`Spine not loaded ${err}`);
     }
   }
 
