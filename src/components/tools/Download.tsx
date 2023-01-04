@@ -1,6 +1,6 @@
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
-import { useAppContext, useThemeContext } from '../../contexts';
+import { useElementsContext, useThemeContext } from '../../contexts';
 import { loadSpines } from '../../utils';
 
 const devices = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
@@ -16,7 +16,7 @@ function createSelectFile(): HTMLInputElement {
 
 export default function Download() {
   const { mainColor, specialColorHover } = useThemeContext();
-  const { addSkeleton } = useAppContext();
+  const { addSkeleton } = useElementsContext();
 
   function selectSpine({ target }: Event) {
     if (target instanceof HTMLInputElement) {
