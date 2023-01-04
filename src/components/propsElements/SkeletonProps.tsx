@@ -1,7 +1,8 @@
-import { Button, Flex, Text } from '@chakra-ui/react';
+import { Flex, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useAppContext, useThemeContext } from '../../contexts';
 import AnimationsModal from '../AnimationsModal';
+import { ButtonProp } from '../properties';
 
 interface SkeletonItemProps {
   name: string;
@@ -29,12 +30,8 @@ export default function SkeletonProps({ name }: SkeletonItemProps) {
     <>
       <Flex flexDirection="column" gap="5px">
         <Text>{`animations amount: ${skeleton.animations.length}`}</Text>
-        <Button variant="custom" onClick={createAnimationClichHandler}>
-          {'create animation'}
-        </Button>
-        <Button variant="custom" onClick={removeSkeletonClickHandler}>
-          {'remove skeleton'}
-        </Button>
+        <ButtonProp content="create animation" clickHandler={createAnimationClichHandler} />
+        <ButtonProp content="remove skeleton" clickHandler={removeSkeletonClickHandler} />
       </Flex>
       <AnimationsModal
         animationList={{ [name]: skeleton }}

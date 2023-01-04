@@ -1,13 +1,13 @@
 import { Container, Text } from '@chakra-ui/react';
 import { useAppContext, useThemeContext } from '../contexts';
-import AnimationProps from './props/AnimationProps';
-import SkeletonProps from './props/SkeletonProps';
+import AnimationProps from './propsElements/AnimationProps';
+import SkeletonProps from './propsElements/SkeletonProps';
 
 export default function PropsPanel() {
   const { textColor } = useThemeContext();
   const { currentSkeleton, currentAnimation } = useAppContext();
   return (
-    <Container>
+    <Container overflowY="scroll">
       <Text
         paddingTop="10px"
         borderColor={textColor}
