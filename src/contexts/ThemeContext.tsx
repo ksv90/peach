@@ -5,6 +5,8 @@ export type ThemeState = {
   readonly mainColorHover: string;
   readonly specialColor: string;
   readonly specialColorHover: string;
+  readonly sliderColor: string;
+  readonly sliderFill: string;
   readonly textColor: string;
 };
 
@@ -21,6 +23,8 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     specialColor: 'blue.500',
     specialColorHover: 'blue.600',
     textColor: '#ffffff',
+    sliderColor: 'red.100',
+    sliderFill: 'red.500',
   };
   return <ThemeContext.Provider value={themeContext}>{children}</ThemeContext.Provider>;
 };
