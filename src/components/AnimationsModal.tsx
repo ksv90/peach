@@ -11,16 +11,18 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
-import { useAppContext, useThemeContext } from '../contexts';
+import { SkeletonData } from '@pixi-spine/runtime-4.1';
 
 interface AnimationsModalProps {
+  animationList: Record<string, SkeletonData>;
   isOpen: boolean;
   onClose(): void;
+  itemClick(payload: [string, string]): void;
+  colorHover?: string;
 }
 
-export default function AnimationsModal({ isOpen, onClose }: AnimationsModalProps) {
-  const { mainColorHover } = useThemeContext();
-  const { skeletonList, addAnimation } = useAppContext();
+export default function AnimationsModal(props: AnimationsModalProps) {
+  const { animationList, isOpen, onClose, itemClick, colorHover } = props;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -30,7 +32,7 @@ export default function AnimationsModal({ isOpen, onClose }: AnimationsModalProp
         <ModalCloseButton />
         <ModalBody>
           <Accordion allowMultiple>
-            {Object.entries(skeletonList).map(([name, skeleton]) => {
+            {Object.entries(animationList).map(([name, skeleton]) => {
               return (
                 <AccordionItem key={name}>
                   <AccordionButton>
@@ -42,9 +44,9 @@ export default function AnimationsModal({ isOpen, onClose }: AnimationsModalProp
                         <Text
                           key={anim}
                           transition="all 0.2s"
-                          _hover={{ bg: mainColorHover }}
+                          _hover={{ bg: colorHover }}
                           onClick={() => {
-                            addAnimation([name, anim]);
+                            itemClick([name, anim]);
                             onClose();
                           }}
                         >

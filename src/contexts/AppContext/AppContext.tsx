@@ -28,10 +28,10 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     addAnimation(payload: AnimationPayload) {
       dispatch({ type: AppReducerTypes.AddAnimation, payload });
     },
-    showSkeletonProps(payload: CurrentSkeletonPayload) {
+    setSkeletonProps(payload: CurrentSkeletonPayload) {
       dispatch({ type: AppReducerTypes.SetSkeletonProps, payload });
     },
-    showAnimationProps(payload: CurrentAnimationPayload) {
+    setAnimationProps(payload: CurrentAnimationPayload) {
       dispatch({ type: AppReducerTypes.SetAnimationProps, payload });
     },
   };

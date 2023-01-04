@@ -14,14 +14,14 @@ export default function Main() {
       <Flex flexBasis="48px" boxShadow={FRAME}>
         <ToolBar />
       </Flex>
-      <Flex flexBasis="calc(100vh - 48px)">
+      <Flex flexBasis="calc(100vh - 48px)" overflow="hidden">
         <Flex flexBasis="20vw" minW="200px" boxShadow={FRAME}>
           <LayersPanel />
         </Flex>
         <Flex flexGrow="1" bg={mainColorHover} boxShadow={FRAME}>
           <Scene />
         </Flex>
-        <Flex flexBasis="25vw" minW="250px" boxShadow={FRAME}>
+        <Flex flexBasis="20vw" minW="200px" boxShadow={FRAME}>
           <PropsPanel />
         </Flex>
       </Flex>
