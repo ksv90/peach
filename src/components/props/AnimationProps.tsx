@@ -6,19 +6,40 @@ interface SkeletonItemProps {
 }
 
 export default function AnimationProps({ anim }: SkeletonItemProps) {
-  const { animationsList, app } = useAppContext();
+  const { app, animationsList, setAnimationProps } = useAppContext();
   const spine = animationsList[anim];
-  function clickHandler() {
+
+  if (!spine) throw new Error(`Animation ${anim} not fuind`);
+  console.log(spine);
+
+  function playClichHandler() {
     if (!spine) return;
     app.stage.addChild(spine);
     const { width, height } = app.view;
     spine.position.set(width / 2, height / 2);
     spine.state.setAnimation(0, anim);
   }
+
+  function stopClickHandler() {
+    spine?.state.clearTracks();
+  }
+
+  function removeClickHandler() {
+    delete animationsList[anim];
+    setAnimationProps(null);
+    spine?.destroy();
+  }
+
   return (
-    <Flex flexDirection="column">
-      <Button variant="custom" onClick={clickHandler}>
+    <Flex flexDirection="column" gap="5px">
+      <Button variant="custom" onClick={playClichHandler}>
         {'play animation'}
+      </Button>
+      <Button variant="custom" onClick={stopClickHandler}>
+        {'stop animation'}
+      </Button>
+      <Button variant="custom" onClick={removeClickHandler}>
+        {'remove animation'}
       </Button>
     </Flex>
   );

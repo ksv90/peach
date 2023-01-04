@@ -41,18 +41,18 @@ export type AppReducerAction =
   | CurrentAnimationAction;
 
 export interface AppReducerState {
-  app: Application;
-  skeletonList: Record<string, SkeletonData>;
-  animationsList: Record<string, Spine>;
-  currentSkeleton: string | null;
-  currentAnimation: string | null;
+  readonly app: Application;
+  readonly skeletonList: Record<string, SkeletonData>;
+  readonly animationsList: Record<string, Spine>;
+  readonly currentSkeleton: string | null;
+  readonly currentAnimation: string | null;
 }
 
 export interface AppContextState extends AppReducerState {
   addSkeleton(payload: SkeletonPayload): void;
   addAnimation(payload: AnimationPayload): void;
-  showSkeletonProps(payload: CurrentSkeletonPayload): void;
-  showAnimationProps(payload: CurrentAnimationPayload): void;
+  setSkeletonProps(payload: CurrentSkeletonPayload): void;
+  setAnimationProps(payload: CurrentAnimationPayload): void;
 }
 
 export type AppProviderProps = PropsWithChildren;

@@ -6,9 +6,9 @@ import LayerItem from './LayerItem';
 export default function LayersPanel() {
   const { textColor } = useThemeContext();
   const appContext = useAppContext();
-  const { currentSkeleton, currentAnimation, showSkeletonProps, showAnimationProps } = appContext;
+  const { currentSkeleton, currentAnimation, setSkeletonProps, setAnimationProps } = appContext;
   return (
-    <Container>
+    <Container overflowY="scroll">
       <Text
         paddingTop="10px"
         borderColor={textColor}
@@ -24,7 +24,7 @@ export default function LayersPanel() {
         <LayerItem
           key={name}
           name={name}
-          showProps={showSkeletonProps}
+          showProps={setSkeletonProps}
           selected={currentSkeleton === name}
           Icon={ViewIcon}
         />
@@ -33,7 +33,7 @@ export default function LayersPanel() {
         <LayerItem
           key={anim}
           name={anim}
-          showProps={showAnimationProps}
+          showProps={setAnimationProps}
           selected={currentAnimation === anim}
           Icon={CalendarIcon}
         />

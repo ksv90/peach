@@ -1,14 +1,15 @@
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useState } from 'react';
-import { useThemeContext } from '../../contexts';
+import { useAppContext, useThemeContext } from '../../contexts';
 import AnimationsModal from '../AnimationsModal';
 
 export default function Add() {
-  const { mainColor, specialColorHover } = useThemeContext();
+  const { mainColor, mainColorHover, specialColorHover } = useThemeContext();
+  const { skeletonList, addAnimation } = useAppContext();
   const [animationModalOpen, setAnimationModalOpen] = useState(false);
 
-  function animationHandler() {
+  function animationModalHandler() {
     setAnimationModalOpen((prev: boolean) => !prev);
   }
 
@@ -27,14 +28,20 @@ export default function Add() {
         <MenuItem bg={mainColor} _hover={{ bg: specialColorHover }}>
           Texture
         </MenuItem>
-        <MenuItem onClick={animationHandler} bg={mainColor} _hover={{ bg: specialColorHover }}>
+        <MenuItem onClick={animationModalHandler} bg={mainColor} _hover={{ bg: specialColorHover }}>
           Animation
         </MenuItem>
         <MenuItem bg={mainColor} _hover={{ bg: specialColorHover }}>
           Text
         </MenuItem>
       </MenuList>
-      <AnimationsModal isOpen={animationModalOpen} onClose={animationHandler} />
+      <AnimationsModal
+        animationList={skeletonList}
+        isOpen={animationModalOpen}
+        onClose={animationModalHandler}
+        itemClick={addAnimation}
+        colorHover={mainColorHover}
+      />
     </Menu>
   );
 }
