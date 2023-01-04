@@ -12,15 +12,15 @@ import { useThemeContext } from '../../contexts';
 interface SliderPropProps {
   content: string;
   value: number;
-  defaultValue?: number;
+  defaultValue: number;
   min?: number;
-  max?: number;
+  max: number;
   step?: number;
   changeHandler(value: number): void;
 }
 
 export default function SliderProp(props: SliderPropProps) {
-  const { content, value, changeHandler, defaultValue = 1, min = 0, max = 1, step = 0.01 } = props;
+  const { content, value, changeHandler, defaultValue, min = 0, max, step = 1 } = props;
   const { sliderColor, sliderFill, mainColorHover } = useThemeContext();
 
   return (

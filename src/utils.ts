@@ -1,35 +1,6 @@
 import { TextureAtlas } from '@pixi-spine/base';
-import { SpineParser } from '@pixi-spine/loader-4.1';
-import {
-  Animation,
-  AtlasAttachmentLoader,
-  EventTimeline,
-  SkeletonData,
-  SkeletonJson,
-  Spine,
-} from '@pixi-spine/runtime-4.1';
-import {
-  Application,
-  BaseTexture,
-  Container,
-  Graphics,
-  MaskSystem,
-  Renderer,
-  Text,
-  TextStyle,
-} from 'pixi.js';
-
-SpineParser.registerLoaderPlugin();
-
-export const createApplication = (width: number, height: number, backgroundColor?: number) =>
-  new Application({ width, height, backgroundColor });
-
-export const createText = (content: string | number, style?: Partial<TextStyle>) => {
-  const text = new Text(content, { align: 'center', ...style });
-  text.anchor.set(0.5, 0.5);
-  text.scale.set(1, -1);
-  return text;
-};
+import { AtlasAttachmentLoader, SkeletonData, SkeletonJson } from '@pixi-spine/runtime-4.1';
+import { BaseTexture } from 'pixi.js';
 
 export const splitFiles = (files: FileList): [File[], File[], File[]] => {
   const JSON_TYPE = 'application/json';
@@ -133,65 +104,4 @@ export const loadSpines = async (
       return [name, spineData];
     }),
   );
-};
-
-export const getSlotContainer = (spine: Spine, name: string): Container | undefined => {
-  const index = spine.skeleton.findSlotIndex(name);
-  return spine.slotContainers[index];
-};
-
-export const getTimeAnimationLabel = (animation: Animation, labelName: string) => {
-  const eventTimeline = animation.timelines.find(
-    (timeline): timeline is EventTimeline => timeline instanceof EventTimeline,
-  );
-  if (!eventTimeline) throw new Error(`Animation ${animation.name} has no labels`);
-  const event = eventTimeline.events.find(({ data }) => data.name === labelName);
-  if (!event) throw new Error(`Label ${labelName} not found`);
-  return event.time;
-};
-
-const anim1 = '9_s2';
-const anim2 = 'a_s2';
-
-export const createParallel = (spine: Spine) => {
-  spine.state.setAnimation(0, anim1, true);
-  setTimeout(() => {
-    spine.stateData.setMix(anim1, anim2, 0.2);
-    spine.state.setAnimation(0, anim2, false);
-    spine.state.addAnimation(0, anim2, true);
-  }, 1000);
-};
-
-type RectangleProps = {
-  x?: number;
-  y?: number;
-  width?: number;
-  height?: number;
-  color?: number;
-};
-
-const createRectangle = ({
-  x = 0,
-  y = 0,
-  width = 0,
-  height = 0,
-  color = 0x000000,
-}: RectangleProps): Container => {
-  const rectangle = new Graphics();
-  rectangle.beginFill(color);
-  rectangle.drawRect(x, y, width, height);
-  return rectangle;
-};
-
-export const createSquare = (app: Application): void => {
-  if (!(app.renderer instanceof Renderer)) return;
-  const ms = new MaskSystem(app.renderer);
-  const reelProps: RectangleProps = { x: 80, y: 100, width: 900, height: 500, color: 0xffff00 };
-  const maskProps: RectangleProps = { y: 0, width: 100, height: 500, color: 0x555555 };
-  const rectangle = createRectangle(reelProps);
-  const mask1 = createRectangle({ ...maskProps, x: 200 });
-  // rectangle.mask = mask1;
-  // ms.setMaskStack([mask1]);
-  ms.push(rectangle, mask1);
-  app.stage.addChild(mask1, rectangle);
 };

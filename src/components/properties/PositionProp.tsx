@@ -14,7 +14,6 @@ export default function PositionProp(props: PositionPropProps) {
       content={`position ${axis}`}
       defaultValue={value}
       value={value}
-      step={1}
       changeHandler={changeHandler}
       max={max}
     />

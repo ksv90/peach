@@ -1,6 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import { useState } from 'react';
-import { useAppContext } from '../../contexts';
+import { useElementsContext } from '../../contexts';
+import { useAppContext } from '../../contexts/AppContext';
 import { AlphaProp, ButtonProp, PositionProp, ScaleProp } from '../properties';
 
 interface SkeletonItemProps {
@@ -8,7 +9,8 @@ interface SkeletonItemProps {
 }
 
 export default function AnimationProps({ anim }: SkeletonItemProps) {
-  const { app, animationsList, setAnimationProps } = useAppContext();
+  const { app } = useAppContext();
+  const { animationsList, setAnimationProps } = useElementsContext();
   const { width, height } = app.view;
 
   const [alphaValue, setAlphaValue] = useState(1);
@@ -39,9 +41,11 @@ export default function AnimationProps({ anim }: SkeletonItemProps) {
   }
 
   function removeClickHandler() {
+    if (!spine) return;
     delete animationsList[anim];
     setAnimationProps(null);
-    spine?.destroy();
+    app.stage.removeChild(spine);
+    spine.destroy();
   }
 
   function alphaChangedHandler(value: number) {

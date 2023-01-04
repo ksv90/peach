@@ -3,14 +3,14 @@ import {
   AnimationPayload,
   CurrentAnimationPayload,
   CurrentSkeletonPayload,
-  AppReducerState,
+  ElementsReducerrState,
   SkeletonPayload,
 } from './types';
 
 export function makeAddSkeletonState(
-  state: AppReducerState,
+  state: ElementsReducerrState,
   [name, skeleton]: SkeletonPayload,
-): AppReducerState {
+): ElementsReducerrState {
   return {
     ...state,
     skeletonList: { ...state.skeletonList, [name]: skeleton },
@@ -20,9 +20,9 @@ export function makeAddSkeletonState(
 }
 
 export function makeAddAnimationState(
-  state: AppReducerState,
+  state: ElementsReducerrState,
   [name, anim]: AnimationPayload,
-): AppReducerState {
+): ElementsReducerrState {
   const skeleton = state.skeletonList[name];
   if (!skeleton) throw new Error(`Skeleton ${name} not found`);
   const spine = new Spine(skeleton);
@@ -36,15 +36,15 @@ export function makeAddAnimationState(
 }
 
 export function makeSetSkeletonState(
-  state: AppReducerState,
+  state: ElementsReducerrState,
   payload: CurrentSkeletonPayload,
-): AppReducerState {
+): ElementsReducerrState {
   return { ...state, currentAnimation: null, currentSkeleton: payload };
 }
 
 export function makeSetAnimationState(
-  state: AppReducerState,
+  state: ElementsReducerrState,
   payload: CurrentAnimationPayload,
-): AppReducerState {
+): ElementsReducerrState {
   return { ...state, currentSkeleton: null, currentAnimation: payload };
 }

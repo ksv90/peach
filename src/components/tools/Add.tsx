@@ -1,12 +1,12 @@
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useState } from 'react';
-import { useAppContext, useThemeContext } from '../../contexts';
+import { useElementsContext, useThemeContext } from '../../contexts';
 import AnimationsModal from '../AnimationsModal';
 
 export default function Add() {
   const { mainColor, mainColorHover, specialColorHover } = useThemeContext();
-  const { skeletonList, addAnimation } = useAppContext();
+  const { skeletonList, addAnimation } = useElementsContext();
   const [animationModalOpen, setAnimationModalOpen] = useState(false);
 
   function animationModalHandler() {

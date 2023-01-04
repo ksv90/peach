@@ -1,8 +1,7 @@
 import { SkeletonData, Spine } from '@pixi-spine/runtime-4.1';
-import { Application } from 'pixi.js';
 import { PropsWithChildren } from 'react';
 
-export const enum AppReducerTypes {
+export const enum ElementsReducerrTypes {
   AddSkeleton = 'addSkeleton',
   AddAnimation = 'addAnimation',
   SetSkeletonProps = 'setSkeletonProps',
@@ -15,40 +14,39 @@ export type CurrentSkeletonPayload = string | null;
 export type CurrentAnimationPayload = string | null;
 
 export interface SkeletonAction {
-  type: AppReducerTypes.AddSkeleton;
+  type: ElementsReducerrTypes.AddSkeleton;
   payload: SkeletonPayload;
 }
 
 export interface AnimationAction {
-  type: AppReducerTypes.AddAnimation;
+  type: ElementsReducerrTypes.AddAnimation;
   payload: AnimationPayload;
 }
 
 export interface CurrentSkeletonAction {
-  type: AppReducerTypes.SetSkeletonProps;
+  type: ElementsReducerrTypes.SetSkeletonProps;
   payload: CurrentSkeletonPayload;
 }
 
 export interface CurrentAnimationAction {
-  type: AppReducerTypes.SetAnimationProps;
+  type: ElementsReducerrTypes.SetAnimationProps;
   payload: CurrentAnimationPayload;
 }
 
-export type AppReducerAction =
+export type ElementsReducerrAction =
   | SkeletonAction
   | CurrentSkeletonAction
   | AnimationAction
   | CurrentAnimationAction;
 
-export interface AppReducerState {
-  readonly app: Application;
+export interface ElementsReducerrState {
   readonly skeletonList: Record<string, SkeletonData>;
   readonly animationsList: Record<string, Spine>;
   readonly currentSkeleton: string | null;
   readonly currentAnimation: string | null;
 }
 
-export interface AppContextState extends AppReducerState {
+export interface ElementsContextState extends ElementsReducerrState {
   addSkeleton(payload: SkeletonPayload): void;
   addAnimation(payload: AnimationPayload): void;
   setSkeletonProps(payload: CurrentSkeletonPayload): void;

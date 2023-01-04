@@ -1,18 +1,17 @@
 import { CalendarIcon, ViewIcon } from '@chakra-ui/icons';
 import { Container, Text } from '@chakra-ui/react';
-import { useAppContext, useThemeContext } from '../contexts';
+import { useElementsContext, useThemeContext } from '../contexts';
 import LayerItem from './LayerItem';
 
 export default function LayersPanel() {
   const { textColor } = useThemeContext();
-  const appContext = useAppContext();
+  const appContext = useElementsContext();
   const { currentSkeleton, currentAnimation, setSkeletonProps, setAnimationProps } = appContext;
   return (
     <Container overflowY="scroll">
       <Text
         paddingTop="10px"
         borderColor={textColor}
-        borderStyle="solid"
         borderBottomWidth="1px"
         textTransform="uppercase"
         align="center"

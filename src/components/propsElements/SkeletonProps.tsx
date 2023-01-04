@@ -1,6 +1,6 @@
 import { Flex, Text } from '@chakra-ui/react';
 import { useState } from 'react';
-import { useAppContext, useThemeContext } from '../../contexts';
+import { useElementsContext, useThemeContext } from '../../contexts';
 import AnimationsModal from '../AnimationsModal';
 import { ButtonProp } from '../properties';
 
@@ -10,7 +10,7 @@ interface SkeletonItemProps {
 
 export default function SkeletonProps({ name }: SkeletonItemProps) {
   const { mainColorHover } = useThemeContext();
-  const { skeletonList, addAnimation, setSkeletonProps } = useAppContext();
+  const { skeletonList, addAnimation, setSkeletonProps } = useElementsContext();
   const [animationModalOpen, setAnimationModalOpen] = useState(false);
 
   const skeleton = skeletonList[name];
