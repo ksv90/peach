@@ -1,12 +1,21 @@
-import { CalendarIcon, ViewIcon } from '@chakra-ui/icons';
+import { CalendarIcon, ChatIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
 import { Container, Text } from '@chakra-ui/react';
 import { useElementsContext, useThemeContext } from '../contexts';
 import LayerItem from './LayerItem';
 
 export default function LayersPanel() {
   const { textColor } = useThemeContext();
-  const appContext = useElementsContext();
-  const { currentSkeleton, currentAnimation, setSkeletonProps, setAnimationProps } = appContext;
+  const elementsContext = useElementsContext();
+  const {
+    currentSkeleton,
+    currentAnimation,
+    currentBitmapFont,
+    currentBitmapText,
+    setSkeletonProps,
+    setAnimationProps,
+    setBitmapFontProps,
+    setBitmapTextProps,
+  } = elementsContext;
   return (
     <Container overflowY="scroll">
       <Text
@@ -19,7 +28,7 @@ export default function LayersPanel() {
       >
         layers panel
       </Text>
-      {Object.keys(appContext.skeletonList).map((name) => (
+      {Object.keys(elementsContext.skeletonList).map((name) => (
         <LayerItem
           key={name}
           name={name}
@@ -28,7 +37,7 @@ export default function LayersPanel() {
           Icon={ViewIcon}
         />
       ))}
-      {Object.keys(appContext.animationsList).map((anim) => (
+      {Object.keys(elementsContext.animationsList).map((anim) => (
         <LayerItem
           key={anim}
           name={anim}
@@ -37,6 +46,27 @@ export default function LayersPanel() {
           Icon={CalendarIcon}
         />
       ))}
+      {Object.values(elementsContext.bitmapFonts).map((name) => (
+        <LayerItem
+          key={name}
+          name={name}
+          showProps={setBitmapFontProps}
+          selected={currentBitmapFont === name}
+          Icon={ChatIcon}
+        />
+      ))}
+      {Object.values(elementsContext.bitmapTexts).map((bitmapText, index) => {
+        const name = `${bitmapText.fontName}-${index + 1}`;
+        return (
+          <LayerItem
+            key={name}
+            name={name}
+            showProps={() => setBitmapTextProps(bitmapText)}
+            selected={currentBitmapText === bitmapText}
+            Icon={EditIcon}
+          />
+        );
+      })}
     </Container>
   );
 }

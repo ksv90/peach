@@ -4,11 +4,11 @@ import { useAppContext, useElementsContext, useThemeContext } from '../../contex
 
 const devices = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
 
-function createSelectFile(): HTMLInputElement {
+function createSelectFile(accept: string): HTMLInputElement {
   const input = document.createElement('input');
   input.type = 'file';
   if (!devices.test(navigator.userAgent)) input.webkitdirectory = true;
-  input.accept = 'application/json, image/png, image/jpeg, .atlas';
+  input.accept = accept;
   input.multiple = true;
   return input;
 }
@@ -16,25 +16,26 @@ function createSelectFile(): HTMLInputElement {
 export default function Download() {
   const { mainColor, specialColorHover } = useThemeContext();
   const { assets } = useAppContext();
-  const { addSkeleton } = useElementsContext();
+  const { updateSkeletons, updateBitmapFonts } = useElementsContext();
 
   async function selectSpine({ target }: Event) {
     if (!(target instanceof HTMLInputElement)) return;
     if (!target.files) throw new Error('Files are not selected');
-    const entities = [...target.files].map(({ name }) => name);
     try {
       await assets.loadFiles(target.files);
-      const skeletons = assets.getSkeletons(entities);
-      skeletons.forEach(([name, skeleton]) => addSkeleton([name, skeleton]));
     } catch (err) {
       new Error(`Spine not loaded ${err}`);
+    } finally {
+      updateSkeletons(assets.getSkeletonDatas());
+      updateBitmapFonts(assets.getBitmapFontsNames());
     }
   }
 
   function spineHandler() {
-    const input = createSelectFile();
+    const input = createSelectFile(assets.getAccept());
     input.addEventListener('change', selectSpine, { once: true });
     input.click();
+    input.remove();
   }
 
   return (
