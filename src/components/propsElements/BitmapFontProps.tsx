@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/react';
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import { useElementsContext, useThemeContext } from '../../contexts';
 import BitmapFontModal from '../BitmapFontModal';
 import { ButtonProp } from '../properties';
@@ -12,29 +12,22 @@ export default function BitmapFontProps({ font }: Props) {
   const { mainColorHover } = useThemeContext();
   const { bitmapFonts, addBitmapText } = useElementsContext();
   const [bitmapFontModalOpen, setBitmapFontModalOpen] = useState(false);
-  const [content, setContent] = useState('');
 
   if (!bitmapFonts.includes(font)) throw new Error(`BitmapFont ${font} not found`);
 
-  function createBitmaTextClichHandler() {
+  function bitmapFontModalHandler() {
     setBitmapFontModalOpen((prev: boolean) => !prev);
-  }
-
-  function changeHandler({ currentTarget }: ChangeEvent<HTMLInputElement>) {
-    setContent(currentTarget.value);
   }
 
   return (
     <>
       <Flex flexDirection="column" gap="5px">
-        <ButtonProp content="create bitmapText" clickHandler={createBitmaTextClichHandler} />
+        <ButtonProp content="create bitmapText" clickHandler={bitmapFontModalHandler} />
       </Flex>
       <BitmapFontModal
         bitmapFontNames={bitmapFonts}
-        content={content}
         isOpen={bitmapFontModalOpen}
-        onClose={createBitmaTextClichHandler}
-        onChange={changeHandler}
+        onClose={bitmapFontModalHandler}
         itemClick={addBitmapText}
         colorHover={mainColorHover}
       />

@@ -14,21 +14,25 @@ import { InputProp } from './properties';
 
 interface Properties {
   bitmapFontNames: ReadonlyArray<string>;
-  content: string;
   isOpen: boolean;
   onClose(): void;
-  onChange(event: ChangeEvent): void;
   itemClick(payload: [string, string]): void;
   colorHover?: string;
 }
 
 export default function BitmapFontModal(props: Properties) {
-  const { bitmapFontNames, content, isOpen, onClose, onChange, itemClick, colorHover } = props;
+  const { bitmapFontNames, isOpen, onClose, itemClick, colorHover } = props;
   const [invalid, setInvalid] = useState(false);
+  const [content, setContent] = useState('');
+
   function clickHandler(font: string) {
     if (!content.length) return setInvalid(true);
     itemClick([content, font]);
     onClose();
+  }
+
+  function changeHandler({ currentTarget }: ChangeEvent<HTMLInputElement>) {
+    setContent(currentTarget.value);
   }
 
   return (
@@ -41,7 +45,7 @@ export default function BitmapFontModal(props: Properties) {
           <InputProp
             content={content}
             invalid={invalid}
-            onChange={onChange}
+            onChange={changeHandler}
             onFocus={() => setInvalid(false)}
           />
           <Flex justifyContent="center" alignItems="center" gap="10px">
