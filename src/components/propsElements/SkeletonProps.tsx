@@ -4,11 +4,11 @@ import { useElementsContext, useThemeContext } from '../../contexts';
 import AnimationsModal from '../AnimationsModal';
 import { ButtonProp } from '../properties';
 
-interface SkeletonItemProps {
+interface Props {
   name: string;
 }
 
-export default function SkeletonProps({ name }: SkeletonItemProps) {
+export default function SkeletonProps({ name }: Props) {
   const { mainColorHover } = useThemeContext();
   const { skeletonList, addAnimation, setSkeletonProps } = useElementsContext();
   const [animationModalOpen, setAnimationModalOpen] = useState(false);

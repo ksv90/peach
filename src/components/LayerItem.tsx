@@ -4,7 +4,7 @@ import { useThemeContext } from '../contexts';
 
 interface LayerItemProps {
   name: string;
-  showProps(anim: string): void;
+  showProps(name: string): void;
   selected?: boolean;
   Icon?: ElementType;
 }

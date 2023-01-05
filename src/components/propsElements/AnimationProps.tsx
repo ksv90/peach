@@ -4,11 +4,11 @@ import { useElementsContext } from '../../contexts';
 import { useAppContext } from '../../contexts/AppContext';
 import { AlphaProp, ButtonProp, PositionProp, ScaleProp } from '../properties';
 
-interface SkeletonItemProps {
+interface Props {
   anim: string;
 }
 
-export default function AnimationProps({ anim }: SkeletonItemProps) {
+export default function AnimationProps({ anim }: Props) {
   const { app } = useAppContext();
   const { animationsList, setAnimationProps } = useElementsContext();
   const { width, height } = app.view;

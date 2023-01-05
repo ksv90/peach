@@ -1,11 +1,14 @@
 import { Container, Text } from '@chakra-ui/react';
 import { useElementsContext, useThemeContext } from '../contexts';
 import AnimationProps from './propsElements/AnimationProps';
+import BitmapFontProps from './propsElements/BitmapFontProps';
+import BitmapTextProps from './propsElements/BitmapTextProps';
 import SkeletonProps from './propsElements/SkeletonProps';
 
 export default function PropsPanel() {
   const { textColor } = useThemeContext();
-  const { currentSkeleton, currentAnimation } = useElementsContext();
+  const { currentSkeleton, currentAnimation, currentBitmapFont, currentBitmapText } =
+    useElementsContext();
   return (
     <Container overflowY="scroll">
       <Text
@@ -20,6 +23,8 @@ export default function PropsPanel() {
       </Text>
       {currentSkeleton && <SkeletonProps name={currentSkeleton} />}
       {currentAnimation && <AnimationProps anim={currentAnimation} />}
+      {currentBitmapFont && <BitmapFontProps font={currentBitmapFont} />}
+      {currentBitmapText && <BitmapTextProps bitmapText={currentBitmapText} />}
     </Container>
   );
 }
