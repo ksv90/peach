@@ -1,9 +1,9 @@
 import { Button } from '@chakra-ui/react';
 
-interface ButtonPropProps {
+export type ButtonPropProps = {
   content: string;
   clickHandler(): void;
-}
+};
 
 export default function ButtonProp(props: ButtonPropProps) {
   const { content, clickHandler } = props;

@@ -13,20 +13,19 @@ import {
   Flex,
   Button,
 } from '@chakra-ui/react';
-import { SkeletonData } from '@pixi-spine/runtime-4.1';
+import type { AddAnimationPayload, ElementsReducerState } from '../../contexts';
 import { useAppContext, useElementsContext, useThemeContext } from '../../contexts';
 import { createSelectFile } from '../../utils';
 
-interface AnimationsModalProps {
-  animationList: Record<string, SkeletonData>;
+export type SpinesModalProps = Pick<ElementsReducerState, 'skeletons'> & {
   isOpen: boolean;
   onClose(): void;
-  itemClick(payload: [string, string]): void;
+  itemClick(payload: AddAnimationPayload): void;
   colorHover?: string;
-}
+};
 
-export default function AnimationsModal(props: AnimationsModalProps) {
-  const { animationList, isOpen, onClose, itemClick, colorHover } = props;
+export default function SpinesModal(props: SpinesModalProps) {
+  const { skeletons, isOpen, onClose, itemClick, colorHover } = props;
   const { specialColor, specialColorHover } = useThemeContext();
   const { assets, setFilesUploaded } = useAppContext();
   const { updateSkeletons, updateBitmapFonts } = useElementsContext();
@@ -50,7 +49,7 @@ export default function AnimationsModal(props: AnimationsModalProps) {
     onClose();
   }
 
-  const list = Object.entries(animationList);
+  const list = Object.entries(skeletons);
 
   const modalContentNotAnimations = (
     <>

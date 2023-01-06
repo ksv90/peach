@@ -1,18 +1,17 @@
 import { Flex } from '@chakra-ui/react';
 import { Spine } from '@pixi-spine/runtime-4.1';
 import { useEffect, useState } from 'react';
-import { useElementsContext } from '../../contexts';
-import { useAppContext } from '../../contexts/AppContext';
+import { useAppContext, useElementsContext } from '../../contexts';
 import { AlphaProp, ButtonProp, PositionProp, ScaleProp } from '../properties';
 
-interface AnimationSettingsProps {
+export type AnimationSettingsProps = {
   anim: string;
   spine: Spine;
-}
+};
 
 export default function AnimationSettings({ anim, spine }: AnimationSettingsProps) {
   const { app } = useAppContext();
-  const { animationsList, setCurrentElement } = useElementsContext();
+  const { spineAnimations, setCurrentElement } = useElementsContext();
   const { width, height } = app.view;
 
   const [alpha, setAlpha] = useState(spine.alpha);
@@ -60,7 +59,7 @@ export default function AnimationSettings({ anim, spine }: AnimationSettingsProp
   }
 
   function removeClickHandler() {
-    delete animationsList[anim];
+    delete spineAnimations[anim]; // TODO: перенести удаление в редюсер
     setCurrentElement(null);
     app.stage.removeChild(spine);
     spine.destroy();

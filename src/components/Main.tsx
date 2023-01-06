@@ -1,9 +1,9 @@
 import { Flex } from '@chakra-ui/react';
 import { useThemeContext } from '../contexts';
 import LayersPanel from './LayersPanel';
-import PropsPanel from './PropsPanel';
+import PropertiesPanel from './PropertiesPanel';
 import Scene from './Scene';
-import ToolBar from './ToolBar';
+import { ToolBar } from './tools';
 
 const FRAME = '0 0 1px 0';
 
@@ -22,7 +22,7 @@ export default function Main() {
           <Scene />
         </Flex>
         <Flex flexBasis="20vw" minW="200px" boxShadow={FRAME}>
-          <PropsPanel />
+          <PropertiesPanel />
         </Flex>
       </Flex>
     </Flex>

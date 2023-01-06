@@ -1,31 +1,22 @@
 import { CalendarIcon, EditIcon } from '@chakra-ui/icons';
-import { Container, Text } from '@chakra-ui/react';
-import { useElementsContext, useThemeContext } from '../contexts';
+import { Container } from '@chakra-ui/react';
+import { useElementsContext } from '../contexts';
+import PanelsTitel from './PanelsTitel';
 import LayerItem from './LayerItem';
 
 export default function LayersPanel() {
-  const { textColor } = useThemeContext();
   const elementsContext = useElementsContext();
   const { currentElement, setCurrentElement } = elementsContext;
   return (
     <Container overflowY="scroll">
-      <Text
-        paddingTop="10px"
-        borderColor={textColor}
-        borderBottomWidth="1px"
-        textTransform="uppercase"
-        align="center"
-        marginBottom="15px"
-      >
-        layers panel
-      </Text>
-      {Object.entries(elementsContext.animationsList).map(([anim, spine]) => (
+      <PanelsTitel>layers panel</PanelsTitel>
+      {Object.entries(elementsContext.spineAnimations).map(([anim, spine]) => (
         <LayerItem
           key={anim}
           name={anim}
           showProps={() => setCurrentElement([anim, spine])}
           selected={Array.isArray(currentElement) && currentElement[1] === spine}
-          Icon={CalendarIcon}
+          icon={<CalendarIcon boxSize={6} flexBasis="15%" />}
         />
       ))}
       {Object.values(elementsContext.bitmapTexts).map((bitmapText, index) => {
@@ -36,7 +27,7 @@ export default function LayersPanel() {
             name={name}
             showProps={() => setCurrentElement(bitmapText)}
             selected={currentElement === bitmapText}
-            Icon={EditIcon}
+            icon={<EditIcon boxSize={6} flexBasis="15%" />}
           />
         );
       })}

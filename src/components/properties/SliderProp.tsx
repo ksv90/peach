@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { useThemeContext } from '../../contexts';
 
-interface SliderPropProps {
+export type SliderPropProps = {
   readonly content: string;
   readonly value: number;
   readonly sliderOptions: {
@@ -18,7 +18,7 @@ interface SliderPropProps {
     readonly step?: number;
   };
   readonly changeHandler: (value: number) => void;
-}
+};
 
 export default function SliderProp(props: SliderPropProps) {
   const { content, value, changeHandler, sliderOptions } = props;
