@@ -8,27 +8,7 @@ import {
 } from '@chakra-ui/icons';
 import { IconButton, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useAppContext, useElementsContext, useThemeContext } from '../../contexts';
-
-const devices = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
-
-function createSelectFile(accept: string, selectFiles: (files: FileList) => void): void {
-  const input = document.createElement('input');
-  input.type = 'file';
-  if (!devices.test(navigator.userAgent)) input.webkitdirectory = true;
-  input.accept = accept;
-  input.multiple = true;
-  input.addEventListener(
-    'change',
-    ({ target }) => {
-      if (!(target instanceof HTMLInputElement)) return;
-      if (!target.files) throw new Error('Files are not selected');
-      selectFiles(target.files);
-      input.remove();
-    },
-    { once: true },
-  );
-  input.click();
-}
+import { createSelectFile } from '../../utils';
 
 export default function Settings() {
   const { mainColor, specialColorHover } = useThemeContext();
@@ -40,7 +20,7 @@ export default function Settings() {
       try {
         await assets.loadFiles(files);
       } catch (err) {
-        new Error(`Spine not loaded ${err}`);
+        new Error(`Files not loaded ${err}`);
       } finally {
         updateSkeletons(assets.getSkeletonDatas());
         updateBitmapFonts(assets.getBitmapFontsNames());

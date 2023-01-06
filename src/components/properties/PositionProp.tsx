@@ -12,10 +12,9 @@ export default function PositionProp(props: PositionPropProps) {
   return (
     <SliderProp
       content={`position ${axis}`}
-      defaultValue={value}
       value={value}
+      sliderOptions={{ max: max }}
       changeHandler={changeHandler}
-      max={max}
     />
   );
 }

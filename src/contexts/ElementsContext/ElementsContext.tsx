@@ -6,12 +6,10 @@ import {
   AppProviderProps,
   ElementsContextState,
   ElementsReducerrTypes,
-  CurrentAnimationPayload,
-  CurrentSkeletonPayload,
   UpdateSkeletonsPayload,
   UpdateBitmapFontsPayload,
   BitmapTextPayload,
-  CurrentBitmapTextPayload,
+  CurrentElementPayload,
 } from './types';
 
 export const ElementsContext = createContext({} as ElementsContextState);
@@ -31,22 +29,13 @@ export const ElementsProvider = ({ children }: AppProviderProps) => {
       dispatch({ type: ElementsReducerrTypes.UpdateBitmapFonts, payload });
     },
     addAnimation(payload: AnimationPayload) {
-      dispatch({ type: ElementsReducerrTypes.AddAnimation, payload });
+      dispatch({ type: ElementsReducerrTypes.AddAnimation, payload, app });
     },
     addBitmapText(payload: BitmapTextPayload) {
       dispatch({ type: ElementsReducerrTypes.AddBitmapText, payload, app });
     },
-    setSkeletonProps(payload: CurrentSkeletonPayload) {
-      dispatch({ type: ElementsReducerrTypes.SetSkeletonProps, payload });
-    },
-    setAnimationProps(payload: CurrentAnimationPayload) {
-      dispatch({ type: ElementsReducerrTypes.SetAnimationProps, payload });
-    },
-    setBitmapFontProps(payload: string) {
-      dispatch({ type: ElementsReducerrTypes.SetBitmapFontProps, payload });
-    },
-    setBitmapTextProps(payload: CurrentBitmapTextPayload) {
-      dispatch({ type: ElementsReducerrTypes.SetBitmapTextProps, payload });
+    setCurrentElement(payload: CurrentElementPayload) {
+      dispatch({ type: ElementsReducerrTypes.SetCurrentElement, payload });
     },
   };
 

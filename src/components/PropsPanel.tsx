@@ -1,14 +1,23 @@
 import { Container, Text } from '@chakra-ui/react';
+import { Spine } from '@pixi-spine/runtime-4.1';
+import { BitmapText } from 'pixi.js';
 import { useElementsContext, useThemeContext } from '../contexts';
-import AnimationProps from './propsElements/AnimationProps';
-import BitmapFontProps from './propsElements/BitmapFontProps';
-import BitmapTextProps from './propsElements/BitmapTextProps';
-import SkeletonProps from './propsElements/SkeletonProps';
+import { CurrentElementPayload } from '../contexts/ElementsContext/types';
+import { AnimationSettings, BitmapTextSettings } from './settings';
+
+function getElement(element: CurrentElementPayload) {
+  if (element instanceof BitmapText) return <BitmapTextSettings bitmapText={element} />;
+  if (Array.isArray(element)) {
+    const [first, second] = element;
+    if (second instanceof Spine) return <AnimationSettings anim={first} spine={second} />;
+  }
+  return <></>;
+}
 
 export default function PropsPanel() {
   const { textColor } = useThemeContext();
-  const { currentSkeleton, currentAnimation, currentBitmapFont, currentBitmapText } =
-    useElementsContext();
+  const { currentElement } = useElementsContext();
+
   return (
     <Container overflowY="scroll">
       <Text
@@ -21,10 +30,7 @@ export default function PropsPanel() {
       >
         props panel
       </Text>
-      {currentSkeleton && <SkeletonProps name={currentSkeleton} />}
-      {currentAnimation && <AnimationProps anim={currentAnimation} />}
-      {currentBitmapFont && <BitmapFontProps font={currentBitmapFont} />}
-      {currentBitmapText && <BitmapTextProps bitmapText={currentBitmapText} />}
+      {getElement(currentElement)}
     </Container>
   );
 }

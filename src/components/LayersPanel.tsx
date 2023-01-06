@@ -6,8 +6,7 @@ import LayerItem from './LayerItem';
 export default function LayersPanel() {
   const { textColor } = useThemeContext();
   const elementsContext = useElementsContext();
-  const { currentAnimation, currentBitmapText, setAnimationProps, setBitmapTextProps } =
-    elementsContext;
+  const { currentElement, setCurrentElement } = elementsContext;
   return (
     <Container overflowY="scroll">
       <Text
@@ -20,41 +19,23 @@ export default function LayersPanel() {
       >
         layers panel
       </Text>
-      {/* {Object.keys(elementsContext.skeletonList).map((name) => (
-        <LayerItem
-          key={name}
-          name={name}
-          showProps={setSkeletonProps}
-          selected={currentSkeleton === name}
-          Icon={ViewIcon}
-        />
-      ))} */}
-      {Object.keys(elementsContext.animationsList).map((anim) => (
+      {Object.entries(elementsContext.animationsList).map(([anim, spine]) => (
         <LayerItem
           key={anim}
           name={anim}
-          showProps={setAnimationProps}
-          selected={currentAnimation === anim}
+          showProps={() => setCurrentElement([anim, spine])}
+          selected={Array.isArray(currentElement) && currentElement[1] === spine}
           Icon={CalendarIcon}
         />
       ))}
-      {/* {Object.values(elementsContext.bitmapFonts).map((name) => (
-        <LayerItem
-          key={name}
-          name={name}
-          showProps={setBitmapFontProps}
-          selected={currentBitmapFont === name}
-          Icon={ChatIcon}
-        />
-      ))} */}
       {Object.values(elementsContext.bitmapTexts).map((bitmapText, index) => {
         const name = `${bitmapText.fontName}-${index + 1}`;
         return (
           <LayerItem
             key={name}
             name={name}
-            showProps={() => setBitmapTextProps(bitmapText)}
-            selected={currentBitmapText === bitmapText}
+            showProps={() => setCurrentElement(bitmapText)}
+            selected={currentElement === bitmapText}
             Icon={EditIcon}
           />
         );

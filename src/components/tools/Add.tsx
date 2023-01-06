@@ -2,8 +2,7 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useElementsContext, useThemeContext } from '../../contexts';
-import AnimationsModal from '../AnimationsModal';
-import BitmapFontModal from '../BitmapFontModal';
+import { AnimationsModal, BitmapFontModal } from '../modals';
 
 export default function Add() {
   const { mainColor, mainColorHover, specialColorHover } = useThemeContext();

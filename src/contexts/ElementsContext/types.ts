@@ -7,19 +7,14 @@ export const enum ElementsReducerrTypes {
   UpdateBitmapFonts = 'updateBitmapFonts',
   AddAnimation = 'addAnimation',
   AddBitmapText = 'addBitmapText',
-  SetSkeletonProps = 'setSkeletonProps',
-  SetAnimationProps = 'setAnimationProps',
-  SetBitmapFontProps = 'setBitmapFontProps',
-  SetBitmapTextProps = 'setBitmapTextProps',
+  SetCurrentElement = 'setCurrentElement',
 }
 
 export type UpdateSkeletonsPayload = ReadonlyArray<[string, SkeletonData]>;
 export type UpdateBitmapFontsPayload = ReadonlyArray<string>;
 export type AnimationPayload = [string, string];
 export type BitmapTextPayload = [string, string];
-export type CurrentSkeletonPayload = string | null;
-export type CurrentAnimationPayload = string | null;
-export type CurrentBitmapTextPayload = BitmapText | null;
+export type CurrentElementPayload = [string, Spine] | BitmapText | null;
 
 export interface UpdateSkeletonsAction {
   type: ElementsReducerrTypes.UpdateSkeletons;
@@ -34,6 +29,7 @@ export interface UpdateBitmapFontsAction {
 export interface AnimationAction {
   type: ElementsReducerrTypes.AddAnimation;
   payload: AnimationPayload;
+  app: Application;
 }
 
 export interface BitmapTextAction {
@@ -42,45 +38,24 @@ export interface BitmapTextAction {
   app: Application;
 }
 
-export interface CurrentSkeletonAction {
-  type: ElementsReducerrTypes.SetSkeletonProps;
-  payload: CurrentSkeletonPayload;
+export interface CurrentElementAction {
+  type: ElementsReducerrTypes.SetCurrentElement;
+  payload: CurrentElementPayload;
 }
 
-export interface CurrentAnimationAction {
-  type: ElementsReducerrTypes.SetAnimationProps;
-  payload: CurrentAnimationPayload;
-}
-
-export interface CurrentBitmapFontAction {
-  type: ElementsReducerrTypes.SetBitmapFontProps;
-  payload: string;
-}
-
-export interface CurrentBitmapTextAction {
-  type: ElementsReducerrTypes.SetBitmapTextProps;
-  payload: CurrentBitmapTextPayload;
-}
-
-export type ElementsReducerrAction =
+export type ElementsReducerAction =
   | UpdateSkeletonsAction
   | UpdateBitmapFontsAction
-  | CurrentSkeletonAction
   | AnimationAction
   | BitmapTextAction
-  | CurrentAnimationAction
-  | CurrentBitmapFontAction
-  | CurrentBitmapTextAction;
+  | CurrentElementAction;
 
 export interface ElementsReducerState {
   readonly skeletonList: Record<string, SkeletonData>;
   readonly animationsList: Record<string, Spine>;
   readonly bitmapFonts: ReadonlyArray<string>;
   readonly bitmapTexts: ReadonlyArray<BitmapText>;
-  readonly currentBitmapFont: string | null;
-  readonly currentSkeleton: string | null;
-  readonly currentAnimation: string | null;
-  readonly currentBitmapText: BitmapText | null;
+  readonly currentElement: [string, Spine] | BitmapText | null;
 }
 
 export interface ElementsContextState extends ElementsReducerState {
@@ -88,10 +63,7 @@ export interface ElementsContextState extends ElementsReducerState {
   updateBitmapFonts(payload: UpdateBitmapFontsPayload): void;
   addAnimation(payload: AnimationPayload): void;
   addBitmapText(payload: BitmapTextPayload): void;
-  setSkeletonProps(payload: CurrentSkeletonPayload): void;
-  setAnimationProps(payload: CurrentAnimationPayload): void;
-  setBitmapFontProps(payload: string): void;
-  setBitmapTextProps(payload: CurrentBitmapTextPayload): void;
+  setCurrentElement(payload: CurrentElementPayload): void;
 }
 
 export type AppProviderProps = PropsWithChildren;
