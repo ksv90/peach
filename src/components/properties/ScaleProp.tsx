@@ -1,9 +1,9 @@
 import SliderProp from './SliderProp';
 
-interface ScalePropProps {
+export type ScalePropProps = {
   value: number;
   changeHandler(value: number): void;
-}
+};
 
 export default function ScaleProp(props: ScalePropProps) {
   const { value, changeHandler } = props;

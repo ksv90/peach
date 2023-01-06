@@ -1,9 +1,9 @@
 import SliderProp from './SliderProp';
 
-interface AlphaPropProps {
+export type AlphaPropProps = {
   value: number;
   changeHandler(value: number): void;
-}
+};
 
 export default function AlphaProp(props: AlphaPropProps) {
   const { value, changeHandler } = props;

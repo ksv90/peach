@@ -1,11 +1,11 @@
 import SliderProp from './SliderProp';
 
-interface PositionPropProps {
+export type PositionPropProps = {
   axis: string;
   value: number;
   max: number;
   changeHandler(value: number): void;
-}
+};
 
 export default function PositionProp(props: PositionPropProps) {
   const { axis, value, max, changeHandler } = props;

@@ -2,11 +2,11 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useElementsContext, useThemeContext } from '../../contexts';
-import { AnimationsModal, BitmapFontModal } from '../modals';
+import { SpinesModal, BitmapFontModal } from '../modals';
 
 export default function Add() {
   const { mainColor, mainColorHover, specialColorHover } = useThemeContext();
-  const { skeletonList, addAnimation, bitmapFonts, addBitmapText } = useElementsContext();
+  const { skeletons, addAnimation, bitmapFonts, addBitmapText } = useElementsContext();
   const [animationModalOpen, setAnimationModalOpen] = useState(false);
   const [bitmapFontModalOpen, setBitmapFontModalOpen] = useState(false);
 
@@ -44,15 +44,15 @@ export default function Add() {
           BitmapText
         </MenuItem>
       </MenuList>
-      <AnimationsModal
-        animationList={skeletonList}
+      <SpinesModal
+        skeletons={skeletons}
         isOpen={animationModalOpen}
         onClose={animationModalHandler}
         itemClick={addAnimation}
         colorHover={mainColorHover}
       />
       <BitmapFontModal
-        bitmapFontNames={bitmapFonts}
+        bitmapFonts={bitmapFonts}
         isOpen={bitmapFontModalOpen}
         onClose={bitmapFontModalHandler}
         itemClick={addBitmapText}

@@ -11,20 +11,20 @@ import {
   Button,
 } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
-import { useAppContext, useElementsContext, useThemeContext } from '../../contexts';
+import type { AddBitmapTextPayload, ElementsReducerState } from '../../contexts';
+import { useElementsContext, useThemeContext, useAppContext } from '../../contexts';
 import { createSelectFile } from '../../utils';
 import { InputProp } from '../properties';
 
-interface Properties {
-  bitmapFontNames: ReadonlyArray<string>;
+export type BitmapFontModalProps = Pick<ElementsReducerState, 'bitmapFonts'> & {
   isOpen: boolean;
   onClose(): void;
-  itemClick(payload: [string, string]): void;
+  itemClick(payload: AddBitmapTextPayload): void;
   colorHover?: string;
-}
+};
 
-export default function BitmapFontModal(props: Properties) {
-  const { bitmapFontNames, isOpen, onClose, itemClick, colorHover } = props;
+export default function BitmapFontModal(props: BitmapFontModalProps) {
+  const { bitmapFonts, isOpen, onClose, itemClick, colorHover } = props;
   const { specialColor, specialColorHover } = useThemeContext();
   const { assets, setFilesUploaded } = useAppContext();
   const { updateSkeletons, updateBitmapFonts } = useElementsContext();
@@ -92,7 +92,7 @@ export default function BitmapFontModal(props: Properties) {
           </Text>
           <ArrowDownIcon />
         </Flex>
-        {bitmapFontNames.map((font) => (
+        {bitmapFonts.map((font) => (
           <Text
             key={font}
             padding="10px"
@@ -112,7 +112,7 @@ export default function BitmapFontModal(props: Properties) {
   return (
     <Modal isOpen={isOpen} onClose={closeHandler}>
       <ModalOverlay />
-      <ModalContent>{bitmapFontNames.length ? modalContent : modalContentNotFonts}</ModalContent>
+      <ModalContent>{bitmapFonts.length ? modalContent : modalContentNotFonts}</ModalContent>
     </Modal>
   );
 }

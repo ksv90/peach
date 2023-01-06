@@ -1,13 +1,12 @@
 import { Flex } from '@chakra-ui/react';
 import { BitmapText } from 'pixi.js';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { useAppContext } from '../../contexts/AppContext';
-import { AlphaProp, PositionProp, ScaleProp } from '../properties';
-import InputProp from '../properties/InputProp';
+import { useAppContext } from '../../contexts';
+import { AlphaProp, InputProp, PositionProp, ScaleProp } from '../properties';
 
-interface BitmapTextSettingsProps {
+export type BitmapTextSettingsProps = {
   bitmapText: BitmapText;
-}
+};
 
 export default function BitmapTextSettings({ bitmapText }: BitmapTextSettingsProps) {
   const { app } = useAppContext();

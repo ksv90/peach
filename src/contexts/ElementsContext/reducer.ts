@@ -1,4 +1,4 @@
-import { ElementsReducerAction, ElementsReducerState, ElementsReducerrTypes } from './types';
+import { ElementsReducerAction, ElementsReducerState, ElementsReducerTypes } from './types';
 import {
   makeAddAnimationState,
   makeAddBitmapTextState,
@@ -9,9 +9,9 @@ import {
 
 export function createElementsReducerState(): ElementsReducerState {
   return {
-    skeletonList: {},
+    skeletons: {},
     bitmapFonts: [],
-    animationsList: {},
+    spineAnimations: {},
     bitmapTexts: [],
     currentElement: null,
   };
@@ -22,19 +22,19 @@ export function elementsReducer(
   action: ElementsReducerAction,
 ): ElementsReducerState {
   switch (action.type) {
-    case ElementsReducerrTypes.UpdateSkeletons: {
+    case ElementsReducerTypes.UpdateSkeletons: {
       return makeUpdateSkeletonState(state, action.payload);
     }
-    case ElementsReducerrTypes.UpdateBitmapFonts: {
+    case ElementsReducerTypes.UpdateBitmapFonts: {
       return makeUpdateBitmapFonts(state, action.payload);
     }
-    case ElementsReducerrTypes.AddAnimation: {
+    case ElementsReducerTypes.AddAnimation: {
       return makeAddAnimationState(state, action.payload, action.app);
     }
-    case ElementsReducerrTypes.AddBitmapText: {
+    case ElementsReducerTypes.AddBitmapText: {
       return makeAddBitmapTextState(state, action.payload, action.app);
     }
-    case ElementsReducerrTypes.SetCurrentElement: {
+    case ElementsReducerTypes.SetCurrentElement: {
       return makeSetCurrentElementState(state, action.payload);
     }
     default:

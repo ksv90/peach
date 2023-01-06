@@ -2,8 +2,8 @@ import { Spine } from '@pixi-spine/runtime-4.1';
 import { Application, BitmapText } from 'pixi.js';
 import { getHalf } from '../../utils';
 import {
-  AnimationPayload,
-  BitmapTextPayload,
+  AddAnimationPayload,
+  AddBitmapTextPayload,
   CurrentElementPayload,
   ElementsReducerState,
   UpdateBitmapFontsPayload,
@@ -16,7 +16,7 @@ export function makeUpdateSkeletonState(
 ): ElementsReducerState {
   return {
     ...state,
-    skeletonList: payload.reduce((list, [name, skeleton]) => ({ ...list, [name]: skeleton }), {}),
+    skeletons: payload.reduce((list, [name, skeleton]) => ({ ...list, [name]: skeleton }), {}),
   };
 }
 
@@ -29,10 +29,10 @@ export function makeUpdateBitmapFonts(
 
 export function makeAddAnimationState(
   state: ElementsReducerState,
-  [name, anim]: AnimationPayload,
+  [name, anim]: AddAnimationPayload,
   { stage, screen }: Application,
 ): ElementsReducerState {
-  const skeleton = state.skeletonList[name];
+  const skeleton = state.skeletons[name];
   if (!skeleton) throw new Error(`Skeleton ${name} not found`);
   const spine = new Spine(skeleton);
   spine.position.set(getHalf(screen.width), getHalf(screen.height));
@@ -40,14 +40,14 @@ export function makeAddAnimationState(
   spine.name = anim;
   return {
     ...state,
-    animationsList: { ...state.animationsList, [anim]: spine },
+    spineAnimations: { ...state.spineAnimations, [anim]: spine },
     currentElement: [anim, spine],
   };
 }
 
 export function makeAddBitmapTextState(
   state: ElementsReducerState,
-  [content, font]: BitmapTextPayload,
+  [content, font]: AddBitmapTextPayload,
   { stage, screen }: Application,
 ): ElementsReducerState {
   const bitmapText = new BitmapText(content, { fontName: font });
