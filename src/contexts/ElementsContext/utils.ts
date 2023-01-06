@@ -1,23 +1,14 @@
 import { Spine } from '@pixi-spine/runtime-4.1';
 import { Application, BitmapText } from 'pixi.js';
+import { getHalf } from '../../utils';
 import {
   AnimationPayload,
   BitmapTextPayload,
-  CurrentAnimationPayload,
-  CurrentBitmapTextPayload,
-  CurrentSkeletonPayload,
+  CurrentElementPayload,
   ElementsReducerState,
   UpdateBitmapFontsPayload,
   UpdateSkeletonsPayload,
 } from './types';
-
-// TODO: временно
-const zeroing = {
-  currentSkeleton: null,
-  currentAnimation: null,
-  currentBitmapFont: null,
-  currentBitmapText: null,
-};
 
 export function makeUpdateSkeletonState(
   state: ElementsReducerState,
@@ -39,60 +30,40 @@ export function makeUpdateBitmapFonts(
 export function makeAddAnimationState(
   state: ElementsReducerState,
   [name, anim]: AnimationPayload,
+  { stage, screen }: Application,
 ): ElementsReducerState {
   const skeleton = state.skeletonList[name];
   if (!skeleton) throw new Error(`Skeleton ${name} not found`);
   const spine = new Spine(skeleton);
+  spine.position.set(getHalf(screen.width), getHalf(screen.height));
+  stage.addChild(spine);
   spine.name = anim;
   return {
     ...state,
-    ...zeroing,
     animationsList: { ...state.animationsList, [anim]: spine },
-    currentAnimation: anim,
+    currentElement: [anim, spine],
   };
 }
 
 export function makeAddBitmapTextState(
   state: ElementsReducerState,
   [content, font]: BitmapTextPayload,
-  app: Application,
+  { stage, screen }: Application,
 ): ElementsReducerState {
   const bitmapText = new BitmapText(content, { fontName: font });
   bitmapText.anchor.set(0.5, 0.5);
-  bitmapText.position.set(app.view.width / 2, app.view.height / 2);
-  app.stage.addChild(bitmapText);
+  bitmapText.position.set(getHalf(screen.width), getHalf(screen.height));
+  stage.addChild(bitmapText);
   return {
     ...state,
-    ...zeroing,
     bitmapTexts: { ...state.bitmapTexts, [content]: bitmapText },
-    currentBitmapText: bitmapText,
+    currentElement: bitmapText,
   };
 }
 
-export function makeSetSkeletonState(
+export function makeSetCurrentElementState(
   state: ElementsReducerState,
-  payload: CurrentSkeletonPayload,
+  payload: CurrentElementPayload,
 ): ElementsReducerState {
-  return { ...state, ...zeroing, currentSkeleton: payload };
-}
-
-export function makeSetAnimationState(
-  state: ElementsReducerState,
-  payload: CurrentAnimationPayload,
-): ElementsReducerState {
-  return { ...state, ...zeroing, currentAnimation: payload };
-}
-
-export function makeSetBitmapFontState(
-  state: ElementsReducerState,
-  payload: string,
-): ElementsReducerState {
-  return { ...state, ...zeroing, currentBitmapFont: payload };
-}
-
-export function makeSetBitmapTextState(
-  state: ElementsReducerState,
-  payload: CurrentBitmapTextPayload,
-): ElementsReducerState {
-  return { ...state, ...zeroing, currentBitmapText: payload };
+  return { ...state, currentElement: payload };
 }

@@ -11,11 +11,8 @@ export default function AlphaProp(props: AlphaPropProps) {
     <SliderProp
       content="alpha value"
       value={value}
+      sliderOptions={{ min: 0, max: 1, step: 0.01 }}
       changeHandler={changeHandler}
-      defaultValue={1}
-      min={0}
-      max={1}
-      step={0.01}
     />
   );
 }

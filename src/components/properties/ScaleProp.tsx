@@ -11,11 +11,8 @@ export default function ScaleProp(props: ScalePropProps) {
     <SliderProp
       content="scale value"
       value={value}
+      sliderOptions={{ max: 2, step: 0.01 }}
       changeHandler={changeHandler}
-      defaultValue={1}
-      min={0}
-      max={2}
-      step={0.01}
     />
   );
 }
