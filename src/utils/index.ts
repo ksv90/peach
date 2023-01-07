@@ -23,7 +23,11 @@ export function createSelectFile(accept: string, selectFiles: (files: FileList) 
 }
 
 // TODO: убрать обновление елементов
-export async function uploadFiles(assets: Assets, elementsContext: ElementsContextState) {
+export async function uploadFiles(
+  assets: Assets,
+  elementsContext: ElementsContextState,
+  cb?: () => void,
+) {
   const { updateSkeletons, updateBitmapFonts, updateWebFonts } = elementsContext;
   createSelectFile(assets.getAccept(), async (files) => {
     try {
@@ -32,6 +36,9 @@ export async function uploadFiles(assets: Assets, elementsContext: ElementsConte
       updateSkeletons(assets.getSkeletonDatas());
       updateBitmapFonts(assets.getBitmapFontsNames());
       updateWebFonts(assets.getWebFontNames());
+      console.log(123);
+
+      cb?.();
     }
   });
 }
