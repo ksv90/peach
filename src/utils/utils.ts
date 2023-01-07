@@ -1,15 +1,12 @@
-const ATLAS = 'atlas';
-const FNT = 'fnt';
+import { Concat } from './type';
 
-export async function loadFile(file: File): Promise<Response> {
-  const objectURL = URL.createObjectURL(file);
-  try {
-    return await fetch(objectURL);
-  } catch {
-    throw new Error(`The file ${file.name} is not uploaded`);
-  } finally {
-    URL.revokeObjectURL(objectURL);
-  }
+const enum Files {
+  Atlas = 'atlas',
+  Fnt = 'fnt',
+}
+
+export function getHalf(value: number) {
+  return Math.round(value / 2);
 }
 
 function getExtension(name: string): string {
@@ -17,11 +14,11 @@ function getExtension(name: string): string {
 }
 
 export function isAtlas(name: string): boolean {
-  return getExtension(name) === ATLAS;
+  return getExtension(name) === Files.Atlas;
 }
 
 export function isXml(name: string): boolean {
-  return getExtension(name) === FNT;
+  return getExtension(name) === Files.Fnt;
 }
 
 export function getBaseName(name: string): string {
@@ -33,11 +30,11 @@ export function makeExtension(name: string) {
 }
 
 export function makeAtlasExtension() {
-  return makeExtension(ATLAS);
+  return makeExtension(Files.Atlas);
 }
 
 export function makeFntExtension() {
-  return makeExtension(FNT);
+  return makeExtension(Files.Fnt);
 }
 
 export function makeAtlasName(name: string): string {
@@ -47,13 +44,6 @@ export function makeAtlasName(name: string): string {
 export function toFirstCapitalize<T extends string>(str: T): Capitalize<T> {
   return ((str.at(0)?.toUpperCase() ?? '') + str.slice(1)) as Capitalize<T>;
 }
-
-export type Concat<T extends ReadonlyArray<string>> = T extends [
-  infer F extends string,
-  ...infer R extends string[],
-]
-  ? `${F}${Concat<R>}`
-  : '';
 
 export function join<T extends ReadonlyArray<string>>(...strings: T): Concat<T> {
   return strings.join('') as Concat<T>;

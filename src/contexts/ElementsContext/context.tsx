@@ -3,15 +3,13 @@ import { useAppContext } from '../appContext';
 import { elementsReducer, createElementsReducerState } from './reducer';
 import {
   AddAnimationPayload,
-  AppProviderProps,
   ElementsContextState,
   ElementsReducerTypes,
-  UpdateSkeletonsPayload,
-  UpdateBitmapFontsPayload,
   AddBitmapTextPayload,
   CurrentElementPayload,
-  UpdateWebFontsPayload,
   AddTextPayload,
+  AppProviderProps,
+  AddSpritePayload,
 } from './types';
 
 export const ElementsContext = createContext({} as ElementsContextState);
@@ -24,15 +22,6 @@ export const ElementsProvider = ({ children }: AppProviderProps) => {
 
   const elementsContext: ElementsContextState = {
     ...state,
-    updateSkeletons(payload: UpdateSkeletonsPayload) {
-      dispatch({ type: ElementsReducerTypes.UpdateSkeletons, payload });
-    },
-    updateBitmapFonts(payload: UpdateBitmapFontsPayload) {
-      dispatch({ type: ElementsReducerTypes.UpdateBitmapFonts, payload });
-    },
-    updateWebFonts(payload: UpdateWebFontsPayload) {
-      dispatch({ type: ElementsReducerTypes.UpdateWebfontFonts, payload });
-    },
     addAnimation(payload: AddAnimationPayload) {
       dispatch({ type: ElementsReducerTypes.AddAnimation, payload, app });
     },
@@ -41,6 +30,9 @@ export const ElementsProvider = ({ children }: AppProviderProps) => {
     },
     addText(payload: AddTextPayload) {
       dispatch({ type: ElementsReducerTypes.AddText, payload, app });
+    },
+    addSprite(payload: AddSpritePayload) {
+      dispatch({ type: ElementsReducerTypes.AddSprite, payload, app });
     },
     setCurrentElement(payload: CurrentElementPayload) {
       dispatch({ type: ElementsReducerTypes.SetCurrentElement, payload });

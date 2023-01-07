@@ -10,52 +10,39 @@ import {
   Flex,
   Button,
 } from '@chakra-ui/react';
-import { useState } from 'react';
-import type { AddBitmapTextPayload } from '../../contexts';
-import { useThemeContext, useAppContext } from '../../contexts';
+import { Texture } from 'pixi.js';
+import type { AddSpritePayload } from '../../contexts';
+import { useAppContext, useThemeContext } from '../../contexts';
 import { uploadFiles } from '../../utils';
-import { InputProp } from '../properties';
 
-export type BitmapFontsModalProps = {
+export type TextureModalProps = {
   isOpen: boolean;
   onClose(): void;
-  itemClick(payload: AddBitmapTextPayload): void;
+  itemClick(payload: AddSpritePayload): void;
   colorHover?: string;
 };
 
-export default function BitmapFontsModal(props: BitmapFontsModalProps) {
+export default function TextureModal(props: TextureModalProps) {
   const { isOpen, onClose, itemClick, colorHover } = props;
   const { specialColor, specialColorHover } = useThemeContext();
   const { assets, loader, setFilesUploaded } = useAppContext();
-  const [invalid, setInvalid] = useState(false);
-  const [content, setContent] = useState('');
-  const bitmapFonts = assets.getBitmapFontsNames();
+  const textures = assets.getTextures();
 
   function uploadCkickHandler() {
     uploadFiles(loader, setFilesUploaded);
   }
 
-  function clickHandler(font: string) {
-    if (!content.length) return setInvalid(true);
-    itemClick([content, font]);
-    closeHandler();
-  }
-
-  function closeHandler() {
-    setContent('');
+  function clickHandler(name: string, texture: Texture) {
+    itemClick([name, texture]);
     onClose();
   }
 
-  function changeHandler(value: string) {
-    setContent(value);
-  }
-
-  const modalContentNotFonts = (
+  const modalContentNotTexture = (
     <>
-      <ModalHeader>BitmapFont not loaded</ModalHeader>
+      <ModalHeader>Texture not loaded</ModalHeader>
       <ModalBody>
         <Flex justifyContent="space-between" alignItems="center" gap="10px">
-          <Text>Upload the bitmapFont to create it</Text>
+          <Text>Upload the texture to create it</Text>
           <Button bg={specialColor} _hover={{ bg: specialColorHover }} onClick={uploadCkickHandler}>
             Upload
           </Button>
@@ -66,33 +53,27 @@ export default function BitmapFontsModal(props: BitmapFontsModalProps) {
 
   const modalContent = (
     <>
-      <ModalHeader textTransform="uppercase">Creating bitmapText</ModalHeader>
+      <ModalHeader textTransform="uppercase">Creating texture</ModalHeader>
       <ModalCloseButton />
       <ModalBody>
-        <InputProp
-          content={content}
-          invalid={invalid}
-          onChange={changeHandler}
-          onFocus={() => setInvalid(false)}
-        />
         <Flex justifyContent="center" alignItems="center" gap="10px">
           <ArrowDownIcon />
           <Text as="h1" margin="10px 0" textTransform="uppercase">
-            select bitmapFont
+            select texture
           </Text>
           <ArrowDownIcon />
         </Flex>
-        {bitmapFonts.map((font) => (
+        {textures.map(([name, texture]) => (
           <Text
-            key={font}
+            key={name}
             padding="10px"
             borderBottomWidth="1px"
             transition="all 0.2s"
             _hover={{ bg: colorHover }}
             _first={{ borderTopWidth: '1px' }}
-            onClick={() => clickHandler(font)}
+            onClick={() => clickHandler(name, texture)}
           >
-            {font}
+            {name}
           </Text>
         ))}
       </ModalBody>
@@ -100,9 +81,9 @@ export default function BitmapFontsModal(props: BitmapFontsModalProps) {
   );
 
   return (
-    <Modal isOpen={isOpen} onClose={closeHandler}>
+    <Modal isOpen={isOpen} onClose={close}>
       <ModalOverlay />
-      <ModalContent>{bitmapFonts.length ? modalContent : modalContentNotFonts}</ModalContent>
+      <ModalContent>{textures.length ? modalContent : modalContentNotTexture}</ModalContent>
     </Modal>
   );
 }

@@ -1,17 +1,16 @@
 import { Container } from '@chakra-ui/react';
 import { Spine } from '@pixi-spine/runtime-4.1';
-import { BitmapText, Text } from 'pixi.js';
+import { BitmapText, Sprite, Text } from 'pixi.js';
 import { CurrentElementPayload, useElementsContext } from '../contexts';
 import PanelsTitel from './PanelsTitel';
 import { AnimationSettings, BitmapTextSettings, TextSettings } from './settings';
+import SpriteSettings from './settings/SpriteSettings';
 
 function getSettingsСomponent(element: CurrentElementPayload) {
   if (element instanceof BitmapText) return <BitmapTextSettings bitmapText={element} />;
+  if (element instanceof Sprite) return <SpriteSettings sprite={element} />;
   if (element instanceof Text) return <TextSettings text={element} />;
-  if (Array.isArray(element)) {
-    const [first, second] = element;
-    if (second instanceof Spine) return <AnimationSettings anim={first} spine={second} />;
-  }
+  if (element instanceof Spine) return <AnimationSettings spine={element} />;
   return <></>;
 }
 

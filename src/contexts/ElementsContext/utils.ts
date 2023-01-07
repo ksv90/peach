@@ -1,48 +1,20 @@
 import { Spine } from '@pixi-spine/runtime-4.1';
-import { Application, BitmapText, Text } from 'pixi.js';
+import { Application, BitmapText, Sprite, Text } from 'pixi.js';
 import { getHalf } from '../../utils';
 import {
   AddAnimationPayload,
   AddBitmapTextPayload,
+  AddSpritePayload,
   AddTextPayload,
   CurrentElementPayload,
   ElementsReducerState,
-  UpdateBitmapFontsPayload,
-  UpdateSkeletonsPayload,
-  UpdateWebFontsPayload,
 } from './types';
-
-export function makeUpdateSkeletonState(
-  state: ElementsReducerState,
-  payload: UpdateSkeletonsPayload,
-): ElementsReducerState {
-  return {
-    ...state,
-    skeletons: payload.reduce((list, [name, skeleton]) => ({ ...list, [name]: skeleton }), {}),
-  };
-}
-
-export function makeUpdateBitmapFonts(
-  state: ElementsReducerState,
-  payload: UpdateBitmapFontsPayload,
-): ElementsReducerState {
-  return { ...state, bitmapFonts: payload };
-}
-
-export function makeUpdateWebFonts(
-  state: ElementsReducerState,
-  payload: UpdateWebFontsPayload,
-): ElementsReducerState {
-  return { ...state, webFonts: payload };
-}
 
 export function makeAddAnimationState(
   state: ElementsReducerState,
-  [name, anim]: AddAnimationPayload,
+  [anim, skeleton]: AddAnimationPayload,
   { stage, screen }: Application,
 ): ElementsReducerState {
-  const skeleton = state.skeletons[name];
-  if (!skeleton) throw new Error(`Skeleton ${name} not found`);
   const spine = new Spine(skeleton);
   spine.name = anim;
   spine.position.set(getHalf(screen.width), getHalf(screen.height));
@@ -50,7 +22,7 @@ export function makeAddAnimationState(
   return {
     ...state,
     spineAnimations: { ...state.spineAnimations, [anim]: spine },
-    currentElement: [anim, spine],
+    currentElement: spine,
   };
 }
 
@@ -84,6 +56,23 @@ export function makeAddTextState(
     ...state,
     texts: [...state.texts, text],
     currentElement: text,
+  };
+}
+
+export function makeAddSpriteState(
+  state: ElementsReducerState,
+  [name, texture]: AddSpritePayload,
+  { stage, screen }: Application,
+): ElementsReducerState {
+  const sprite = new Sprite(texture);
+  sprite.name = name;
+  sprite.anchor.set(0.5, 0.5);
+  sprite.position.set(getHalf(screen.width), getHalf(screen.height));
+  stage.addChild(sprite);
+  return {
+    ...state,
+    sprites: { ...state.sprites, [name]: sprite },
+    currentElement: sprite,
   };
 }
 

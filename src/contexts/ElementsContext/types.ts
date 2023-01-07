@@ -1,39 +1,20 @@
 import { SkeletonData, Spine } from '@pixi-spine/runtime-4.1';
-import { Application, BitmapText, Text } from 'pixi.js';
+import { Application, BitmapText, Sprite, Text, Texture } from 'pixi.js';
 import { PropsWithChildren } from 'react';
 
 export const enum ElementsReducerTypes {
-  UpdateSkeletons = 'updateSkeletons',
-  UpdateBitmapFonts = 'updateBitmapFonts',
-  UpdateWebfontFonts = 'updateWebfontFonts',
   AddAnimation = 'addAnimation',
   AddBitmapText = 'addBitmapText',
   AddText = 'addText',
+  AddSprite = 'addSprite',
   SetCurrentElement = 'setCurrentElement',
 }
 
-export type UpdateSkeletonsPayload = ReadonlyArray<[string, SkeletonData]>;
-export type UpdateBitmapFontsPayload = ReadonlyArray<string>;
-export type UpdateWebFontsPayload = ReadonlyArray<string>;
-export type AddAnimationPayload = [string, string];
+export type AddAnimationPayload = [string, SkeletonData];
 export type AddBitmapTextPayload = [string, string];
 export type AddTextPayload = [string, string];
-export type CurrentElementPayload = [string, Spine] | BitmapText | Text | null;
-
-export interface UpdateSkeletonsAction {
-  type: ElementsReducerTypes.UpdateSkeletons;
-  payload: UpdateSkeletonsPayload;
-}
-
-export interface UpdateBitmapFontsAction {
-  type: ElementsReducerTypes.UpdateBitmapFonts;
-  payload: UpdateBitmapFontsPayload;
-}
-
-export interface UpdateWebFontsAction {
-  type: ElementsReducerTypes.UpdateWebfontFonts;
-  payload: UpdateWebFontsPayload;
-}
+export type AddSpritePayload = [string, Texture];
+export type CurrentElementPayload = Spine | Sprite | BitmapText | Text | null;
 
 export interface AddAnimationAction {
   type: ElementsReducerTypes.AddAnimation;
@@ -53,37 +34,37 @@ export interface AddTextAction {
   app: Application;
 }
 
+export interface AddSpriteAction {
+  type: ElementsReducerTypes.AddSprite;
+  payload: AddSpritePayload;
+  app: Application;
+}
+
 export interface CurrentElementAction {
   type: ElementsReducerTypes.SetCurrentElement;
   payload: CurrentElementPayload;
 }
 
 export type ElementsReducerAction =
-  | UpdateSkeletonsAction
-  | UpdateBitmapFontsAction
-  | UpdateWebFontsAction
   | AddAnimationAction
   | AddBitmapTextAction
   | AddTextAction
+  | AddSpriteAction
   | CurrentElementAction;
 
 export interface ElementsReducerState {
-  readonly skeletons: Record<string, SkeletonData>;
   readonly spineAnimations: Record<string, Spine>;
-  readonly bitmapFonts: ReadonlyArray<string>;
   readonly bitmapTexts: ReadonlyArray<BitmapText>;
-  readonly webFonts: ReadonlyArray<string>;
   readonly texts: ReadonlyArray<Text>;
-  readonly currentElement: [string, Spine] | BitmapText | Text | null;
+  readonly sprites: Record<string, Sprite>;
+  readonly currentElement: Spine | Sprite | BitmapText | Text | null;
 }
 
 export interface ElementsContextState extends ElementsReducerState {
-  updateSkeletons(payload: UpdateSkeletonsPayload): void;
-  updateBitmapFonts(payload: UpdateBitmapFontsPayload): void;
-  updateWebFonts(payload: UpdateWebFontsPayload): void;
   addAnimation(payload: AddAnimationPayload): void;
   addBitmapText(payload: AddBitmapTextPayload): void;
   addText(payload: AddTextPayload): void;
+  addSprite(payload: AddSpritePayload): void;
   setCurrentElement(payload: CurrentElementPayload): void;
 }
 

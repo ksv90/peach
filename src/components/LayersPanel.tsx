@@ -1,4 +1,4 @@
-import { CalendarIcon, ChatIcon, EditIcon } from '@chakra-ui/icons';
+import { CalendarIcon, ChatIcon, EditIcon, StarIcon } from '@chakra-ui/icons';
 import { Container } from '@chakra-ui/react';
 import { useElementsContext } from '../contexts';
 import PanelsTitel from './PanelsTitel';
@@ -19,8 +19,8 @@ export default function LayersPanel() {
         <LayerItem
           key={anim}
           name={anim}
-          showProps={() => setCurrentElement([anim, spine])}
-          selected={Array.isArray(currentElement) && currentElement[1] === spine}
+          showProps={() => setCurrentElement(spine)}
+          selected={currentElement === spine}
           icon={<CalendarIcon {...ICON_OPTIONS} />}
         />
       ))}
@@ -45,6 +45,18 @@ export default function LayersPanel() {
             showProps={() => setCurrentElement(text)}
             selected={currentElement === text}
             icon={<EditIcon {...ICON_OPTIONS} />}
+          />
+        );
+      })}
+      {Object.values(elementsContext.sprites).map((sprite, index) => {
+        const name = `${sprite.name}-${index + 1}`;
+        return (
+          <LayerItem
+            key={name}
+            name={name}
+            showProps={() => setCurrentElement(sprite)}
+            selected={currentElement === sprite}
+            icon={<StarIcon {...ICON_OPTIONS} />}
           />
         );
       })}

@@ -7,18 +7,15 @@ import {
   RepeatIcon,
 } from '@chakra-ui/icons';
 import { IconButton, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
-import { useAppContext, useElementsContext, useThemeContext } from '../../contexts';
+import { useAppContext, useThemeContext } from '../../contexts';
 import { uploadFiles } from '../../utils';
 
 export default function Settings() {
   const { mainColor, specialColorHover } = useThemeContext();
-  const { assets, loader, setFilesUploaded } = useAppContext();
-  const elementsContext = useElementsContext();
+  const { loader, setFilesUploaded } = useAppContext();
 
   function uploadCkickHandler() {
-    uploadFiles(assets, loader, elementsContext, setFilesUploaded).catch(
-      () => new Error('Files not loaded'),
-    );
+    uploadFiles(loader, setFilesUploaded);
   }
 
   return (

@@ -12,12 +12,12 @@ import {
   Select,
 } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
-import type { AddTextPayload, ElementsReducerState } from '../../contexts';
-import { useElementsContext, useThemeContext, useAppContext } from '../../contexts';
+import type { AddTextPayload } from '../../contexts';
+import { useThemeContext, useAppContext } from '../../contexts';
 import { uploadFiles } from '../../utils';
 import { FormControlProp } from '../properties';
 
-export type WebFontsModalProps = Pick<ElementsReducerState, 'webFonts'> & {
+export type WebFontsModalProps = {
   isOpen: boolean;
   onClose(): void;
   itemClick(payload: AddTextPayload): void;
@@ -25,19 +25,17 @@ export type WebFontsModalProps = Pick<ElementsReducerState, 'webFonts'> & {
 };
 
 export default function WebFontsModal(props: WebFontsModalProps) {
-  const { webFonts, isOpen, onClose, itemClick } = props;
+  const { isOpen, onClose, itemClick } = props;
   const { specialColor, specialColorHover } = useThemeContext();
   const { assets, loader, setFilesUploaded } = useAppContext();
-  const elementsContext = useElementsContext();
   const [content, setContent] = useState('');
   const [systemFont, setSystemFont] = useState('');
   const [loadedFont, setLoadedFont] = useState('');
   const [invalid, setInvalid] = useState(false);
+  const webFonts = assets.getWebFontNames();
 
   function uploadCkickHandler() {
-    uploadFiles(assets, loader, elementsContext, setFilesUploaded).catch(
-      () => new Error('Files not loaded'),
-    );
+    uploadFiles(loader, setFilesUploaded);
   }
 
   function createTextClickHandler() {
