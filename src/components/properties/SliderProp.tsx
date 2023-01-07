@@ -17,11 +17,11 @@ export type SliderPropProps = {
     readonly max: number;
     readonly step?: number;
   };
-  readonly changeHandler: (value: number) => void;
+  onChange(value: number): void;
 };
 
 export default function SliderProp(props: SliderPropProps) {
-  const { content, value, changeHandler, sliderOptions } = props;
+  const { content, value, onChange, sliderOptions } = props;
   const { min = 0, max, step = 1 } = sliderOptions;
   const { sliderColor, sliderFill } = useThemeContext();
 
@@ -33,7 +33,7 @@ export default function SliderProp(props: SliderPropProps) {
         </Text>
         <Text marginLeft="5px">{value}</Text>
       </Flex>
-      <Slider value={value} min={min} max={max} step={step} onChange={changeHandler}>
+      <Slider value={value} min={min} max={max} step={step} onChange={onChange}>
         <SliderTrack bg={sliderColor}>
           <SliderFilledTrack bg={sliderFill} />
         </SliderTrack>

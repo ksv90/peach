@@ -1,52 +1,52 @@
 import { Flex } from '@chakra-ui/react';
-import { BitmapText } from 'pixi.js';
+import { Text } from 'pixi.js';
 import { useEffect, useState } from 'react';
 import { useAppContext } from '../../contexts';
 import { AlphaProp, InputProp, PositionProp, ScaleProp } from '../properties';
 
-export type BitmapTextSettingsProps = {
-  bitmapText: BitmapText;
+export type TextSettingsProps = {
+  text: Text;
 };
 
-export default function BitmapTextSettings({ bitmapText }: BitmapTextSettingsProps) {
+export default function TextSettings({ text }: TextSettingsProps) {
   const { app } = useAppContext();
-  const [content, setContent] = useState(bitmapText.text);
-  const [alpha, setAlpha] = useState(bitmapText.alpha);
-  const [scale, setScale] = useState(bitmapText.scale.x);
-  const [x, setX] = useState(bitmapText.x);
-  const [y, setY] = useState(bitmapText.y);
+  const [content, setContent] = useState(text.text);
+  const [alpha, setAlpha] = useState(text.alpha);
+  const [scale, setScale] = useState(text.scale.x);
+  const [x, setX] = useState(text.x);
+  const [y, setY] = useState(text.y);
 
   useEffect(() => {
-    setContent(bitmapText.text);
-    setAlpha(bitmapText.alpha);
-    setScale(bitmapText.scale.x);
-    setX(bitmapText.x);
-    setY(bitmapText.y);
-  }, [bitmapText]);
+    setContent(text.text);
+    setAlpha(text.alpha);
+    setScale(text.scale.x);
+    setX(text.x);
+    setY(text.y);
+  }, [text]);
 
   function contentHandler(value: string): void {
     setContent(value);
-    bitmapText.text = value;
+    text.text = value;
   }
 
   function alphaHandler(value: number) {
     setAlpha(value);
-    bitmapText.alpha = value;
+    text.alpha = value;
   }
 
   function scaleHandler(value: number) {
     setScale(value);
-    bitmapText.scale.set(value);
+    text.scale.set(value);
   }
 
   function xHandler(value: number) {
     setX(value);
-    bitmapText.x = value;
+    text.x = value;
   }
 
   function yHandler(value: number) {
     setY(value);
-    bitmapText.y = value;
+    text.y = value;
   }
 
   return (

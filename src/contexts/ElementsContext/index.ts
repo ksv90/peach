@@ -1,2 +1,2 @@
-export * from './ElementsContext';
+export * from './context';
 export * from './types';

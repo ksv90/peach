@@ -73,10 +73,10 @@ export default function AnimationSettings({ anim, spine }: AnimationSettingsProp
       </Flex>
       <ButtonProp content="stop animation" clickHandler={stopClickHandler} />
       <ButtonProp content="remove animation" clickHandler={removeClickHandler} />
-      <AlphaProp value={alpha} changeHandler={alphaHandler} />
-      <ScaleProp value={scale} changeHandler={scaleHandler} />
-      <PositionProp axis="x" value={x} max={width} changeHandler={xHandler} />
-      <PositionProp axis="y" value={y} max={height} changeHandler={yHandler} />
+      <AlphaProp value={alpha} onChange={alphaHandler} />
+      <ScaleProp value={scale} onChange={scaleHandler} />
+      <PositionProp axis="x" value={x} max={width} onChange={xHandler} />
+      <PositionProp axis="y" value={y} max={height} onChange={yHandler} />
     </Flex>
   );
 }

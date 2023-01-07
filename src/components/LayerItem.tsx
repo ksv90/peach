@@ -15,7 +15,7 @@ export default function LayerItem({ name, showProps, icon, selected }: LayerItem
       alignItems="center"
       gap="10px"
       transition="all 0.2s"
-      padding="5px 0"
+      padding="5px"
       borderRadius="md"
       bg={selected ? specialColor : mainColor}
       _hover={{ bg: selected ? specialColorHover : mainColorHover }}

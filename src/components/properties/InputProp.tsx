@@ -4,18 +4,22 @@ import { ChangeEvent } from 'react';
 export type InputPropProps = {
   content: string;
   invalid?: boolean;
-  onChange(event: ChangeEvent): void;
+  onChange(value: string): void;
   onFocus?(): void;
 };
 
 export default function InputProp(props: InputPropProps) {
   const { content, invalid = false, onChange, onFocus } = props;
 
+  function changeHandler({ currentTarget }: ChangeEvent<HTMLInputElement>) {
+    onChange(currentTarget.value);
+  }
+
   return (
     <Input
-      placeholder="Basic usage"
+      placeholder="font text"
       value={content}
-      onChange={onChange}
+      onChange={changeHandler}
       onFocus={onFocus}
       isInvalid={invalid}
       errorBorderColor="crimson"
