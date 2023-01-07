@@ -1,12 +1,12 @@
 import {
-  join,
   isAtlas,
   isXml,
+  join,
   loadFile,
   makeAtlasExtension,
   makeFntExtension,
   toFirstCapitalize,
-} from './utils';
+} from '../utils';
 
 const JSON_TYPES = ['application/json'];
 const IMAGES_TYPES = ['image/png', 'image/jpg'];
