@@ -16,7 +16,7 @@ const FONT_TYPES = ['font/ttf'];
 type LoaderFile = 'texture' | 'atlas' | 'json' | 'xml' | 'font';
 type LoaderGroups = Record<LoaderFile, Array<File>>;
 type LoaderResponses = ReadonlyArray<[string, Response]>;
-type LoaderAssets = Record<
+type LoaderAssets = { updateCache(): void } & Record<
   `set${Capitalize<LoaderFile>}`,
   (name: string, response: Response) => Promise<void>
 >;
@@ -41,6 +41,7 @@ export default class Loader {
       return this.setAsset(files, responseFiles, method);
     });
     await Promise.all(queue);
+    this.assets.updateCache();
   }
 
   public async loadQueue(): Promise<LoaderResponses> {

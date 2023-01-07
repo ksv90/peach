@@ -32,7 +32,7 @@ export default function WebFontsModal(props: WebFontsModalProps) {
   const [systemFont, setSystemFont] = useState('');
   const [loadedFont, setLoadedFont] = useState('');
   const [invalid, setInvalid] = useState(false);
-  const webFonts = assets.getWebFontNames();
+  const webFonts = assets.getWebFont();
 
   function uploadCkickHandler() {
     uploadFiles(loader, setFilesUploaded);

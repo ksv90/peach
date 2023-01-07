@@ -13,6 +13,18 @@ export const enum ParserType {
 
 const PARSER = new DOMParser();
 
+type AssetsSkeletons = ReadonlyArray<[string, SkeletonData]>;
+type AssetsTextures = ReadonlyArray<[string, Texture]>;
+type AssetsBitmapFonts = ReadonlyArray<string>;
+type AssetsWebFonts = ReadonlyArray<string>;
+
+type AssetsCache = {
+  readonly skeletons: AssetsSkeletons;
+  readonly textures: AssetsTextures;
+  readonly bitmapFonts: AssetsBitmapFonts;
+  readonly webFont: AssetsWebFonts;
+};
+
 //! Конструктор BaseTexture выполняет работу с imageURL асинхронно, поэтому нужна обертка для удаления
 async function createBaseTexture(blob: Blob): Promise<BaseTexture> {
   const imageURL = URL.createObjectURL(blob);
@@ -22,7 +34,7 @@ async function createBaseTexture(blob: Blob): Promise<BaseTexture> {
 }
 
 export default class Assets {
-  private textureData: Record<string, BaseTexture> = {};
+  private textureData: Record<string, { readonly texture: BaseTexture; inUse?: boolean }> = {};
 
   private atlasData: Record<string, string> = {};
 
@@ -32,13 +44,15 @@ export default class Assets {
 
   private fontData: Array<string> = [];
 
+  private cache: AssetsCache = { skeletons: [], textures: [], bitmapFonts: [], webFont: [] };
+
   public async setTexture(name: string, response: Response) {
     if (this.textureData[name]) return;
     try {
       const texture = await createBaseTexture(await response.blob());
-      this.textureData[name] = texture;
+      this.textureData[name] = { texture };
     } catch (err) {
-      new Error(`File ${name} cannot be read as image`);
+      new Error(`File ${name} cannot be read as texture`);
     }
   }
 
@@ -73,26 +87,52 @@ export default class Assets {
   }
 
   public async setFont(name: string, response: Response, descriptors?: FontFaceDescriptors) {
-    const fontName = getBaseName(name);
-    if (this.fontData.includes(fontName)) return;
+    const font = getBaseName(name);
+    if (this.fontData.includes(font)) return;
     try {
-      const font = new FontFace(fontName, await response.arrayBuffer(), descriptors);
-      document.fonts.add(font);
-      this.fontData.push(fontName);
+      const fontFace = new FontFace(font, await response.arrayBuffer(), descriptors);
+      document.fonts.add(fontFace);
+      this.fontData.push(font);
     } catch (err) {
       new Error(`File ${name} cannot be read as font`);
     }
   }
 
-  public getSkeletonDatas(): ReadonlyArray<[string, SkeletonData]> {
+  public getSkeletonDatas(): AssetsSkeletons {
+    return this.cache.skeletons;
+  }
+
+  public getTextures(): AssetsTextures {
+    return this.cache.textures;
+  }
+
+  public getBitmapFonts(): AssetsBitmapFonts {
+    return this.cache.bitmapFonts;
+  }
+
+  public getWebFont(): AssetsWebFonts {
+    return this.cache.webFont;
+  }
+
+  public updateCache(): void {
+    this.cache = {
+      skeletons: this.createSkeletonDatas(),
+      bitmapFonts: this.createBitmapFonts(),
+      textures: this.createTextures(),
+      webFont: this.createWebFont(),
+    };
+  }
+
+  private createSkeletonDatas(): AssetsSkeletons {
     return Object.entries(this.jsonData)
       .filter(([, jsonData]) => 'skeleton' in jsonData)
       .map(([name, jsonData]) => {
         const atlas = this.atlasData[makeAtlasName(name)];
         const textureAtlas = new TextureAtlas(atlas, (textureName, loader) => {
-          const texture = this.textureData[textureName];
-          if (!texture) throw new Error(`Texture ${textureName} not loaded`);
-          loader(texture);
+          const assetsTexture = this.textureData[textureName];
+          if (!assetsTexture) throw new Error(`Texture ${textureName} not loaded`);
+          assetsTexture.inUse = true;
+          loader(assetsTexture.texture);
         });
         const atlasAttachmentLoader = new AtlasAttachmentLoader(textureAtlas);
         const skeletonJson = new SkeletonJson(atlasAttachmentLoader);
@@ -101,21 +141,22 @@ export default class Assets {
       });
   }
 
-  public getTextures(): ReadonlyArray<[string, Texture]> {
-    return Object.entries(this.textureData).map(([name, baseTexture]) => {
-      return [name, new Texture(baseTexture)];
-    });
+  private createTextures(): AssetsTextures {
+    return Object.entries(this.textureData)
+      .filter(([, assetsTexture]) => !assetsTexture.inUse)
+      .map(([name, assetsTexture]) => [getBaseName(name), new Texture(assetsTexture.texture)]);
   }
 
-  public getBitmapFontsNames(): ReadonlyArray<string> {
+  private createBitmapFonts(): AssetsBitmapFonts {
     return Object.values(this.xmlData)
       .filter((xml) => XMLFormat.test(xml))
       .map((xml) => {
         const bitmapFontData = XMLFormat.parse(xml);
         const textures = bitmapFontData.page.reduce<Record<string, Texture>>((acc, { file }) => {
-          const baseTexture = this.textureData[file];
-          if (!baseTexture) throw new Error(`Texture ${file} is not defined`);
-          const texture = new Texture(baseTexture);
+          const assetsTexture = this.textureData[file];
+          if (!assetsTexture) throw new Error(`Texture ${file} is not defined`);
+          assetsTexture.inUse = true;
+          const texture = new Texture(assetsTexture.texture);
           return { ...acc, [file]: texture };
         }, {});
         const { font } = BitmapFont.install(bitmapFontData, textures);
@@ -123,7 +164,7 @@ export default class Assets {
       });
   }
 
-  public getWebFontNames(): ReadonlyArray<string> {
+  private createWebFont(): AssetsWebFonts {
     return [...this.fontData];
   }
 
