@@ -35,9 +35,9 @@ export default function WebFontsModal(props: WebFontsModalProps) {
   const [invalid, setInvalid] = useState(false);
 
   function uploadCkickHandler() {
-    uploadFiles(assets, elementsContext)
-      .then(() => setFilesUploaded())
-      .catch(() => new Error('Files not loaded'));
+    uploadFiles(assets, elementsContext, setFilesUploaded).catch(
+      () => new Error('Files not loaded'),
+    );
   }
 
   function createTextClickHandler() {

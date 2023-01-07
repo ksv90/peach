@@ -16,9 +16,9 @@ export default function Settings() {
   const elementsContext = useElementsContext();
 
   function uploadCkickHandler() {
-    uploadFiles(assets, elementsContext)
-      .then(() => setFilesUploaded())
-      .catch(() => new Error('Files not loaded'));
+    uploadFiles(assets, elementsContext, setFilesUploaded).catch(
+      () => new Error('Files not loaded'),
+    );
   }
 
   return (
