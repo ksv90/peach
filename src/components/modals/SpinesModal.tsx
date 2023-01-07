@@ -27,11 +27,11 @@ export type SpinesModalProps = Pick<ElementsReducerState, 'skeletons'> & {
 export default function SpinesModal(props: SpinesModalProps) {
   const { skeletons, isOpen, onClose, itemClick, colorHover } = props;
   const { specialColor, specialColorHover } = useThemeContext();
-  const { assets, setFilesUploaded } = useAppContext();
+  const { assets, loader, setFilesUploaded } = useAppContext();
   const elementsContext = useElementsContext();
 
   function uploadCkickHandler() {
-    uploadFiles(assets, elementsContext, setFilesUploaded).catch(
+    uploadFiles(assets, loader, elementsContext, setFilesUploaded).catch(
       () => new Error('Files not loaded'),
     );
   }
