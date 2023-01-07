@@ -13,11 +13,12 @@ import {
   Flex,
   Button,
 } from '@chakra-ui/react';
-import type { AddAnimationPayload, ElementsReducerState } from '../../contexts';
-import { useAppContext, useElementsContext, useThemeContext } from '../../contexts';
+import { SkeletonData } from '@pixi-spine/runtime-4.1';
+import type { AddAnimationPayload } from '../../contexts';
+import { useAppContext, useThemeContext } from '../../contexts';
 import { uploadFiles } from '../../utils';
 
-export type SpinesModalProps = Pick<ElementsReducerState, 'skeletons'> & {
+export type SpinesModalProps = {
   isOpen: boolean;
   onClose(): void;
   itemClick(payload: AddAnimationPayload): void;
@@ -25,23 +26,19 @@ export type SpinesModalProps = Pick<ElementsReducerState, 'skeletons'> & {
 };
 
 export default function SpinesModal(props: SpinesModalProps) {
-  const { skeletons, isOpen, onClose, itemClick, colorHover } = props;
+  const { isOpen, onClose, itemClick, colorHover } = props;
   const { specialColor, specialColorHover } = useThemeContext();
   const { assets, loader, setFilesUploaded } = useAppContext();
-  const elementsContext = useElementsContext();
+  const skeletons = assets.getSkeletonDatas();
 
   function uploadCkickHandler() {
-    uploadFiles(assets, loader, elementsContext, setFilesUploaded).catch(
-      () => new Error('Files not loaded'),
-    );
+    uploadFiles(loader, setFilesUploaded);
   }
 
-  function clickHandler(name: string, anim: string) {
-    itemClick([name, anim]);
+  function clickHandler(anim: string, skeleton: SkeletonData) {
+    itemClick([anim, skeleton]);
     onClose();
   }
-
-  const list = Object.entries(skeletons);
 
   const modalContentNotAnimations = (
     <>
@@ -63,7 +60,7 @@ export default function SpinesModal(props: SpinesModalProps) {
       <ModalCloseButton />
       <ModalBody>
         <Accordion allowMultiple>
-          {list.map(([name, skeleton]) => {
+          {skeletons.map(([name, skeleton]) => {
             return (
               <AccordionItem key={name}>
                 <AccordionButton>
@@ -76,7 +73,7 @@ export default function SpinesModal(props: SpinesModalProps) {
                         key={anim}
                         transition="all 0.2s"
                         _hover={{ bg: colorHover }}
-                        onClick={() => clickHandler(name, anim)}
+                        onClick={() => clickHandler(anim, skeleton)}
                       >
                         {anim}
                       </Text>
@@ -94,7 +91,7 @@ export default function SpinesModal(props: SpinesModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent>{list.length ? modalContent : modalContentNotAnimations}</ModalContent>
+      <ModalContent>{skeletons.length ? modalContent : modalContentNotAnimations}</ModalContent>
     </Modal>
   );
 }

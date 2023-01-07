@@ -1,6 +1,3 @@
-import { ElementsContextState } from '../contexts';
-import { Assets, Loader } from '../core';
-
 const devices = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
 
 export async function loadFile(file: File): Promise<Response> {
@@ -33,21 +30,16 @@ export function createSelectFile(accept: string, selectFiles: (files: FileList) 
   input.click();
 }
 
-// TODO: убрать обновление елементов
-export async function uploadFiles(
-  assets: Assets,
-  loader: Loader,
-  elementsContext: ElementsContextState,
+export function uploadFiles(
+  loader: { getAccept(): string; loadFiles(files: FileList): Promise<void> },
   cb?: () => void,
-) {
-  const { updateSkeletons, updateBitmapFonts, updateWebFonts } = elementsContext;
+): void {
   createSelectFile(loader.getAccept(), async (files) => {
     try {
       await loader.loadFiles(files);
+    } catch {
+      new Error('Files not loaded');
     } finally {
-      updateSkeletons(assets.getSkeletonDatas());
-      updateBitmapFonts(assets.getBitmapFontsNames());
-      updateWebFonts(assets.getWebFontNames());
       cb?.();
     }
   });

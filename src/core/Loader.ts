@@ -32,7 +32,7 @@ export default class Loader {
     files.forEach((file) => (this.loadingQueue[file.name] = file));
   }
 
-  public async loadFiles(fileList: FileList) {
+  public async loadFiles(fileList: FileList): Promise<void> {
     const splitFiles = this.splitFiles(fileList);
     this.addToUpload(...Object.values(splitFiles).flat());
     const responseFiles = await this.loadQueue();
@@ -40,7 +40,7 @@ export default class Loader {
       const method = join('set', toFirstCapitalize(asset as LoaderFile));
       return this.setAsset(files, responseFiles, method);
     });
-    return Promise.all(queue);
+    await Promise.all(queue);
   }
 
   public async loadQueue(): Promise<LoaderResponses> {
@@ -77,7 +77,7 @@ export default class Loader {
     files: ReadonlyArray<File>,
     responses: LoaderResponses,
     method: keyof LoaderAssets,
-  ): Promise<ReadonlyArray<void>> {
+  ): Promise<void> {
     const queue = files
       .filter(({ name }) => !this.cache.includes(name))
       .map(({ name }) => {
@@ -86,7 +86,7 @@ export default class Loader {
         this.cache.push(name);
         return this.assets[method](...response);
       });
-    return Promise.all(queue);
+    await Promise.all(queue);
   }
 
   static accept = [

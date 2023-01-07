@@ -7,42 +7,13 @@ import {
   AddTextPayload,
   CurrentElementPayload,
   ElementsReducerState,
-  UpdateBitmapFontsPayload,
-  UpdateSkeletonsPayload,
-  UpdateWebFontsPayload,
 } from './types';
-
-export function makeUpdateSkeletonState(
-  state: ElementsReducerState,
-  payload: UpdateSkeletonsPayload,
-): ElementsReducerState {
-  return {
-    ...state,
-    skeletons: payload.reduce((list, [name, skeleton]) => ({ ...list, [name]: skeleton }), {}),
-  };
-}
-
-export function makeUpdateBitmapFonts(
-  state: ElementsReducerState,
-  payload: UpdateBitmapFontsPayload,
-): ElementsReducerState {
-  return { ...state, bitmapFonts: payload };
-}
-
-export function makeUpdateWebFonts(
-  state: ElementsReducerState,
-  payload: UpdateWebFontsPayload,
-): ElementsReducerState {
-  return { ...state, webFonts: payload };
-}
 
 export function makeAddAnimationState(
   state: ElementsReducerState,
-  [name, anim]: AddAnimationPayload,
+  [anim, skeleton]: AddAnimationPayload,
   { stage, screen }: Application,
 ): ElementsReducerState {
-  const skeleton = state.skeletons[name];
-  if (!skeleton) throw new Error(`Skeleton ${name} not found`);
   const spine = new Spine(skeleton);
   spine.name = anim;
   spine.position.set(getHalf(screen.width), getHalf(screen.height));

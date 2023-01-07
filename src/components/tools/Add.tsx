@@ -6,8 +6,7 @@ import { SpinesModal, BitmapFontsModal, WebFontsModal } from '../modals';
 
 export default function Add() {
   const { mainColor, mainColorHover, specialColorHover } = useThemeContext();
-  const { skeletons, bitmapFonts, webFonts, addAnimation, addBitmapText, addText } =
-    useElementsContext();
+  const { addAnimation, addBitmapText, addText } = useElementsContext();
   const [animationModalOpen, setAnimationModalOpen] = useState(false);
   const [bitmapFontModalOpen, setBitmapFontModalOpen] = useState(false);
   const [webFontModalOpen, setWebFontModalOpen] = useState(false);
@@ -54,21 +53,18 @@ export default function Add() {
         </MenuItem>
       </MenuList>
       <SpinesModal
-        skeletons={skeletons}
         isOpen={animationModalOpen}
         onClose={animationModalHandler}
         itemClick={addAnimation}
         colorHover={mainColorHover}
       />
       <BitmapFontsModal
-        bitmapFonts={bitmapFonts}
         isOpen={bitmapFontModalOpen}
         onClose={bitmapFontModalHandler}
         itemClick={addBitmapText}
         colorHover={mainColorHover}
       />
       <WebFontsModal
-        webFonts={webFonts}
         isOpen={webFontModalOpen}
         onClose={webFontModalHandler}
         itemClick={addText}

@@ -11,12 +11,12 @@ import {
   Button,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import type { AddBitmapTextPayload, ElementsReducerState } from '../../contexts';
-import { useElementsContext, useThemeContext, useAppContext } from '../../contexts';
+import type { AddBitmapTextPayload } from '../../contexts';
+import { useThemeContext, useAppContext } from '../../contexts';
 import { uploadFiles } from '../../utils';
 import { InputProp } from '../properties';
 
-export type BitmapFontsModalProps = Pick<ElementsReducerState, 'bitmapFonts'> & {
+export type BitmapFontsModalProps = {
   isOpen: boolean;
   onClose(): void;
   itemClick(payload: AddBitmapTextPayload): void;
@@ -24,17 +24,15 @@ export type BitmapFontsModalProps = Pick<ElementsReducerState, 'bitmapFonts'> & 
 };
 
 export default function BitmapFontsModal(props: BitmapFontsModalProps) {
-  const { bitmapFonts, isOpen, onClose, itemClick, colorHover } = props;
+  const { isOpen, onClose, itemClick, colorHover } = props;
   const { specialColor, specialColorHover } = useThemeContext();
   const { assets, loader, setFilesUploaded } = useAppContext();
-  const elementsContext = useElementsContext();
   const [invalid, setInvalid] = useState(false);
   const [content, setContent] = useState('');
+  const bitmapFonts = assets.getBitmapFontsNames();
 
   function uploadCkickHandler() {
-    uploadFiles(assets, loader, elementsContext, setFilesUploaded).catch(
-      () => new Error('Files not loaded'),
-    );
+    uploadFiles(loader, setFilesUploaded);
   }
 
   function clickHandler(font: string) {
