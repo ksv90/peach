@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer } from 'react';
-import { useAppContext } from '../appContext';
+import { useAppContext } from '../AppContext';
 import { elementsReducer, createElementsReducerState } from './reducer';
 import {
   AddAnimationPayload,

@@ -2,7 +2,7 @@ import { Application } from 'pixi.js';
 import { createContext, PropsWithChildren, useContext, useMemo, useState } from 'react';
 import { Loader } from '../core';
 import Assets from '../core/Assets';
-import { useThemeContext } from './themeContext';
+import { useThemeContext } from './ThemeContext';
 
 export type AppContextState = {
   readonly app: Application;
