@@ -101,6 +101,12 @@ export default class Assets {
       });
   }
 
+  public getTextures(): ReadonlyArray<[string, Texture]> {
+    return Object.entries(this.textureData).map(([name, baseTexture]) => {
+      return [name, new Texture(baseTexture)];
+    });
+  }
+
   public getBitmapFontsNames(): ReadonlyArray<string> {
     return Object.values(this.xmlData)
       .filter((xml) => XMLFormat.test(xml))

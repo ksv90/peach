@@ -5,11 +5,10 @@ import { useAppContext, useElementsContext } from '../../contexts';
 import { AlphaProp, ButtonProp, PositionProp, ScaleProp } from '../properties';
 
 export type AnimationSettingsProps = {
-  anim: string;
   spine: Spine;
 };
 
-export default function AnimationSettings({ anim, spine }: AnimationSettingsProps) {
+export default function AnimationSettings({ spine }: AnimationSettingsProps) {
   const { app } = useAppContext();
   const { spineAnimations, setCurrentElement } = useElementsContext();
   const { width, height } = app.view;
@@ -47,11 +46,11 @@ export default function AnimationSettings({ anim, spine }: AnimationSettingsProp
   }
 
   function playClichHandler() {
-    spine.state.setAnimation(0, anim);
+    spine.state.setAnimation(0, spine.name);
   }
 
   function loopClichHandler() {
-    spine.state.setAnimation(0, anim, true);
+    spine.state.setAnimation(0, spine.name, true);
   }
 
   function stopClickHandler() {
@@ -59,7 +58,7 @@ export default function AnimationSettings({ anim, spine }: AnimationSettingsProp
   }
 
   function removeClickHandler() {
-    delete spineAnimations[anim]; // TODO: перенести удаление в редюсер
+    delete spineAnimations[spine.name]; // TODO: перенести удаление в редюсер
     setCurrentElement(null);
     app.stage.removeChild(spine);
     spine.destroy();

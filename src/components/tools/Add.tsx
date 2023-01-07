@@ -2,14 +2,15 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useElementsContext, useThemeContext } from '../../contexts';
-import { SpinesModal, BitmapFontsModal, WebFontsModal } from '../modals';
+import { SpinesModal, BitmapFontsModal, WebFontsModal, TextureModal } from '../modals';
 
 export default function Add() {
   const { mainColor, mainColorHover, specialColorHover } = useThemeContext();
-  const { addAnimation, addBitmapText, addText } = useElementsContext();
+  const { addAnimation, addSprite, addBitmapText, addText } = useElementsContext();
   const [animationModalOpen, setAnimationModalOpen] = useState(false);
   const [bitmapFontModalOpen, setBitmapFontModalOpen] = useState(false);
   const [webFontModalOpen, setWebFontModalOpen] = useState(false);
+  const [textureModalOpen, setTextureModalOpen] = useState(false);
 
   function animationModalHandler() {
     setAnimationModalOpen((prev: boolean) => !prev);
@@ -21,6 +22,10 @@ export default function Add() {
 
   function webFontModalHandler() {
     setWebFontModalOpen((prev: boolean) => !prev);
+  }
+
+  function textureModalHandler() {
+    setTextureModalOpen((prev: boolean) => !prev);
   }
 
   return (
@@ -35,7 +40,7 @@ export default function Add() {
         Add to scene
       </MenuButton>
       <MenuList bg={mainColor}>
-        <MenuItem bg={mainColor} _hover={{ bg: specialColorHover }} textDecoration="line-through">
+        <MenuItem onClick={textureModalHandler} bg={mainColor} _hover={{ bg: specialColorHover }}>
           Texture
         </MenuItem>
         <MenuItem onClick={animationModalHandler} bg={mainColor} _hover={{ bg: specialColorHover }}>
@@ -68,6 +73,12 @@ export default function Add() {
         isOpen={webFontModalOpen}
         onClose={webFontModalHandler}
         itemClick={addText}
+        colorHover={mainColorHover}
+      />
+      <TextureModal
+        isOpen={textureModalOpen}
+        onClose={textureModalHandler}
+        itemClick={addSprite}
         colorHover={mainColorHover}
       />
     </Menu>

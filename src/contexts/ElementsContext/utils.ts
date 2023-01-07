@@ -1,9 +1,10 @@
 import { Spine } from '@pixi-spine/runtime-4.1';
-import { Application, BitmapText, Text } from 'pixi.js';
+import { Application, BitmapText, Sprite, Text } from 'pixi.js';
 import { getHalf } from '../../utils';
 import {
   AddAnimationPayload,
   AddBitmapTextPayload,
+  AddSpritePayload,
   AddTextPayload,
   CurrentElementPayload,
   ElementsReducerState,
@@ -21,7 +22,7 @@ export function makeAddAnimationState(
   return {
     ...state,
     spineAnimations: { ...state.spineAnimations, [anim]: spine },
-    currentElement: [anim, spine],
+    currentElement: spine,
   };
 }
 
@@ -55,6 +56,23 @@ export function makeAddTextState(
     ...state,
     texts: [...state.texts, text],
     currentElement: text,
+  };
+}
+
+export function makeAddSpriteState(
+  state: ElementsReducerState,
+  [name, texture]: AddSpritePayload,
+  { stage, screen }: Application,
+): ElementsReducerState {
+  const sprite = new Sprite(texture);
+  sprite.name = name;
+  sprite.anchor.set(0.5, 0.5);
+  sprite.position.set(getHalf(screen.width), getHalf(screen.height));
+  stage.addChild(sprite);
+  return {
+    ...state,
+    sprites: { ...state.sprites, [name]: sprite },
+    currentElement: sprite,
   };
 }
 

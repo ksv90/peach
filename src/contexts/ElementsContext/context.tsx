@@ -9,6 +9,7 @@ import {
   CurrentElementPayload,
   AddTextPayload,
   AppProviderProps,
+  AddSpritePayload,
 } from './types';
 
 export const ElementsContext = createContext({} as ElementsContextState);
@@ -29,6 +30,9 @@ export const ElementsProvider = ({ children }: AppProviderProps) => {
     },
     addText(payload: AddTextPayload) {
       dispatch({ type: ElementsReducerTypes.AddText, payload, app });
+    },
+    addSprite(payload: AddSpritePayload) {
+      dispatch({ type: ElementsReducerTypes.AddSprite, payload, app });
     },
     setCurrentElement(payload: CurrentElementPayload) {
       dispatch({ type: ElementsReducerTypes.SetCurrentElement, payload });
