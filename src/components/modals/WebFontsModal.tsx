@@ -27,7 +27,7 @@ export type WebFontsModalProps = Pick<ElementsReducerState, 'webFonts'> & {
 export default function WebFontsModal(props: WebFontsModalProps) {
   const { webFonts, isOpen, onClose, itemClick } = props;
   const { specialColor, specialColorHover } = useThemeContext();
-  const { assets, setFilesUploaded } = useAppContext();
+  const { assets, loader, setFilesUploaded } = useAppContext();
   const elementsContext = useElementsContext();
   const [content, setContent] = useState('');
   const [systemFont, setSystemFont] = useState('');
@@ -35,7 +35,7 @@ export default function WebFontsModal(props: WebFontsModalProps) {
   const [invalid, setInvalid] = useState(false);
 
   function uploadCkickHandler() {
-    uploadFiles(assets, elementsContext, setFilesUploaded).catch(
+    uploadFiles(assets, loader, elementsContext, setFilesUploaded).catch(
       () => new Error('Files not loaded'),
     );
   }

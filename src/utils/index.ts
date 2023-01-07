@@ -1,5 +1,5 @@
 import { ElementsContextState } from '../contexts';
-import { Assets } from '../core';
+import { Assets, Loader } from '../core';
 
 const devices = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
 
@@ -25,19 +25,18 @@ export function createSelectFile(accept: string, selectFiles: (files: FileList) 
 // TODO: убрать обновление елементов
 export async function uploadFiles(
   assets: Assets,
+  loader: Loader,
   elementsContext: ElementsContextState,
   cb?: () => void,
 ) {
   const { updateSkeletons, updateBitmapFonts, updateWebFonts } = elementsContext;
-  createSelectFile(assets.getAccept(), async (files) => {
+  createSelectFile(loader.getAccept(), async (files) => {
     try {
-      await assets.loadFiles(files);
+      await loader.loadFiles(files);
     } finally {
       updateSkeletons(assets.getSkeletonDatas());
       updateBitmapFonts(assets.getBitmapFontsNames());
       updateWebFonts(assets.getWebFontNames());
-      console.log(123);
-
       cb?.();
     }
   });

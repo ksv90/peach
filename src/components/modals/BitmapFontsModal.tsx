@@ -26,13 +26,13 @@ export type BitmapFontsModalProps = Pick<ElementsReducerState, 'bitmapFonts'> & 
 export default function BitmapFontsModal(props: BitmapFontsModalProps) {
   const { bitmapFonts, isOpen, onClose, itemClick, colorHover } = props;
   const { specialColor, specialColorHover } = useThemeContext();
-  const { assets, setFilesUploaded } = useAppContext();
+  const { assets, loader, setFilesUploaded } = useAppContext();
   const elementsContext = useElementsContext();
   const [invalid, setInvalid] = useState(false);
   const [content, setContent] = useState('');
 
   function uploadCkickHandler() {
-    uploadFiles(assets, elementsContext, setFilesUploaded).catch(
+    uploadFiles(assets, loader, elementsContext, setFilesUploaded).catch(
       () => new Error('Files not loaded'),
     );
   }

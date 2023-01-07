@@ -1,30 +1,17 @@
 import { TextureAtlas } from '@pixi-spine/base';
 import { AtlasAttachmentLoader, SkeletonData, SkeletonJson } from '@pixi-spine/runtime-4.1';
 import { BaseTexture, BitmapFont, Texture, XMLFormat } from 'pixi.js';
+import { getBaseName, makeAtlasName } from './utils';
 
-const JSON_TYPES = ['application/json'];
-const IMAGES_TYPES = ['image/png', 'image/jpg'];
-const XML_TYPES = ['text/xml', 'application/xml'];
-const FONT_TYPES = ['font/ttf'];
-
-const ATLAS = 'atlas';
-const FNT = 'fnt';
-const PARSER = new DOMParser();
-
-type AssetsFile = 'json' | 'image' | 'xml' | 'atlas' | 'font';
-
-type AssetsGroups = Record<AssetsFile, Array<File>>;
-
-async function loadFile(file: File): Promise<Response> {
-  const objectURL = URL.createObjectURL(file);
-  try {
-    return await fetch(objectURL);
-  } catch {
-    throw new Error(`The file ${file.name} is not uploaded`);
-  } finally {
-    URL.revokeObjectURL(objectURL);
-  }
+export const enum ParserType {
+  ApplicationXHTML_XML = 'application/xhtml+xml',
+  ApplicationXML = 'application/xml',
+  ImageSVG_XML = 'image/svg+xml',
+  TextHTML = 'text/html',
+  TextXML = 'text/xml',
 }
+
+const PARSER = new DOMParser();
 
 //! Конструктор BaseTexture выполняет работу с imageURL асинхронно, поэтому нужна обертка для удаления
 async function createBaseTexture(blob: Blob): Promise<BaseTexture> {
@@ -34,35 +21,7 @@ async function createBaseTexture(blob: Blob): Promise<BaseTexture> {
   );
 }
 
-function getBaseName(name: string): string {
-  return name.split('.').slice(0, -1).join('.');
-}
-
-function makeExtension(name: string) {
-  return '.'.concat(name);
-}
-
-function makeAtlasName(name: string): string {
-  return getBaseName(name).concat(makeExtension(ATLAS));
-}
-
-function getExtension(name: string): string {
-  return name.split('.').at(-1) ?? '';
-}
-
-function isAtlas(name: string): boolean {
-  return getExtension(name) === ATLAS;
-}
-
-function isXml(name: string): boolean {
-  return getExtension(name) === FNT;
-}
-
 export default class Assets {
-  private cache: Array<string> = [];
-
-  private loadingQueue: Record<string, File> = {};
-
   private textureData: Record<string, BaseTexture> = {};
 
   private atlasData: Record<string, string> = {};
@@ -71,65 +30,13 @@ export default class Assets {
 
   private xmlData: Record<string, Document> = {};
 
-  private fontData: Record<string, FontFace> = {};
-
-  public addToUpload(file: File) {
-    this.loadingQueue[file.name] = file;
-  }
-
-  public async loadFiles(fileList: FileList): Promise<void> {
-    const splitFiles = this.splitFiles(fileList);
-
-    Object.values(splitFiles)
-      .flat()
-      .forEach((file) => this.addToUpload(file));
-
-    const responseFiles = await this.loadQueue();
-
-    const imageQueue = splitFiles.image.map(({ name }) => {
-      if (this.cache.includes(name)) return;
-      const response = responseFiles.find(([responseName]) => responseName === name);
-      if (!response) throw new Error(`Response ${name} is not defined`);
-      return this.setTexture(...response);
-    });
-
-    const atlasQueue = splitFiles.atlas.map(({ name }) => {
-      if (this.cache.includes(name)) return;
-      const response = responseFiles.find(([responseName]) => responseName === name);
-      if (!response) throw new Error(`Response ${name} is not defined`);
-      return this.setAtlas(...response);
-    });
-
-    const jsonQueue = splitFiles.json.map(({ name }) => {
-      if (this.cache.includes(name)) return;
-      const response = responseFiles.find(([responseName]) => responseName === name);
-      if (!response) throw new Error(`Response ${name} is not defined`);
-      return this.setJson(...response);
-    });
-
-    const xmlQueue = splitFiles.xml.map(({ name }) => {
-      if (this.cache.includes(name)) return;
-      const response = responseFiles.find(([responseName]) => responseName === name);
-      if (!response) throw new Error(`Response ${name} is not defined`);
-      return this.setXml(...response);
-    });
-
-    const fontQueue = splitFiles.font.map(({ name }) => {
-      if (this.cache.includes(name)) return;
-      const response = responseFiles.find(([responseName]) => responseName === name);
-      if (!response) throw new Error(`Response ${name} is not defined`);
-      return this.setFont(...response);
-    });
-
-    await Promise.all([...imageQueue, ...atlasQueue, ...jsonQueue, ...xmlQueue, ...fontQueue]);
-  }
+  private fontData: Array<string> = [];
 
   public async setTexture(name: string, response: Response) {
     if (this.textureData[name]) return;
     try {
       const texture = await createBaseTexture(await response.blob());
       this.textureData[name] = texture;
-      this.cache.push(name);
     } catch (err) {
       new Error(`File ${name} cannot be read as image`);
     }
@@ -140,7 +47,6 @@ export default class Assets {
     try {
       const atlas = await response.text();
       this.atlasData[name] = atlas;
-      this.cache.push(name);
     } catch (err) {
       new Error(`File ${name} cannot be read as atlas`);
     }
@@ -151,7 +57,6 @@ export default class Assets {
     try {
       const json = await response.json();
       this.jsonData[name] = json;
-      this.cache.push(name);
     } catch (err) {
       new Error(`File ${name} cannot be read as json`);
     }
@@ -160,33 +65,23 @@ export default class Assets {
   public async setXml(name: string, response: Response) {
     if (this.xmlData[name]) return;
     try {
-      const text = await response.text();
-      const xml = Assets.parseXML(text);
+      const xml = Assets.parse(await response.text(), ParserType.TextXML);
       this.xmlData[name] = xml;
-      this.cache.push(name);
     } catch (err) {
       new Error(`File ${name} cannot be read as xml`);
     }
   }
 
   public async setFont(name: string, response: Response, descriptors?: FontFaceDescriptors) {
-    if (this.fontData[name]) return;
+    const fontName = getBaseName(name);
+    if (this.fontData.includes(fontName)) return;
     try {
-      const font = new FontFace(getBaseName(name), await response.arrayBuffer(), descriptors);
+      const font = new FontFace(fontName, await response.arrayBuffer(), descriptors);
       document.fonts.add(font);
-      this.fontData[font.family] = font;
-      this.cache.push(name);
+      this.fontData.push(fontName);
     } catch (err) {
       new Error(`File ${name} cannot be read as font`);
     }
-  }
-
-  public async loadQueue(): Promise<ReadonlyArray<[string, Response]>> {
-    const queue = Object.entries(this.loadingQueue)
-      .filter(([name]) => !this.cache.includes(name))
-      .map<Promise<[string, Response]>>(async ([name, file]) => [name, await loadFile(file)]);
-    this.loadingQueue = {};
-    return Promise.all(queue);
   }
 
   public getSkeletonDatas(): ReadonlyArray<[string, SkeletonData]> {
@@ -223,43 +118,10 @@ export default class Assets {
   }
 
   public getWebFontNames(): ReadonlyArray<string> {
-    return Object.keys(this.fontData);
+    return [...this.fontData];
   }
 
-  public getAccept(): string {
-    return Assets.accept.join(', ');
-  }
-
-  private splitFiles(fileList: FileList): AssetsGroups {
-    return [...fileList].reduce<AssetsGroups>(
-      (files, curr) => {
-        if (JSON_TYPES.includes(curr.type)) files.json.push(curr);
-        else if (IMAGES_TYPES.includes(curr.type)) files.image.push(curr);
-        else if (XML_TYPES.includes(curr.type)) files.xml.push(curr);
-        else if (FONT_TYPES.includes(curr.type)) files.font.push(curr);
-        else {
-          if (isAtlas(curr.name)) files.atlas.push(curr);
-          else if (isXml(curr.name)) files.xml.push(curr);
-          else console.warn(`Unknown file type ${curr.name}`);
-        }
-        return files;
-      },
-      { json: [], atlas: [], image: [], xml: [], font: [] },
-    );
-  }
-
-  static accept = [
-    ...JSON_TYPES,
-    ...IMAGES_TYPES,
-    ...XML_TYPES,
-    ...FONT_TYPES,
-    makeExtension(ATLAS),
-    makeExtension(FNT),
-  ];
-
-  static parseXML(textXML: string, typeIndex = 0): Document {
-    const type = XML_TYPES[typeIndex];
-    if (!type) throw new Error(`ParseXML error: typeIndex ${typeIndex} does not exist`);
-    return PARSER.parseFromString(textXML, type as DOMParserSupportedType);
+  static parse(text: string, type: DOMParserSupportedType): Document {
+    return PARSER.parseFromString(text, type);
   }
 }
