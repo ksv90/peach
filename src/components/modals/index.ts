@@ -1,2 +1,3 @@
 export { default as SpinesModal } from './SpinesModal';
-export { default as BitmapFontModal } from './BitmapFontModal';
+export { default as BitmapFontsModal } from './BitmapFontsModal';
+export { default as WebFontsModal } from './WebFontsModal';

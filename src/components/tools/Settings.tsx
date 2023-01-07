@@ -8,25 +8,17 @@ import {
 } from '@chakra-ui/icons';
 import { IconButton, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useAppContext, useElementsContext, useThemeContext } from '../../contexts';
-import { createSelectFile } from '../../utils';
+import { uploadFiles } from '../../utils';
 
 export default function Settings() {
   const { mainColor, specialColorHover } = useThemeContext();
   const { assets, setFilesUploaded } = useAppContext();
-  const { updateSkeletons, updateBitmapFonts } = useElementsContext();
+  const elementsContext = useElementsContext();
 
   function uploadCkickHandler() {
-    createSelectFile(assets.getAccept(), async (files) => {
-      try {
-        await assets.loadFiles(files);
-      } catch (err) {
-        new Error(`Files not loaded ${err}`);
-      } finally {
-        updateSkeletons(assets.getSkeletonDatas());
-        updateBitmapFonts(assets.getBitmapFontsNames());
-        setFilesUploaded();
-      }
-    });
+    uploadFiles(assets, elementsContext)
+      .then(() => setFilesUploaded())
+      .catch(() => new Error('Files not loaded'));
   }
 
   return (

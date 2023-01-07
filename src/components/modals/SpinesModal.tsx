@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react';
 import type { AddAnimationPayload, ElementsReducerState } from '../../contexts';
 import { useAppContext, useElementsContext, useThemeContext } from '../../contexts';
-import { createSelectFile } from '../../utils';
+import { uploadFiles } from '../../utils';
 
 export type SpinesModalProps = Pick<ElementsReducerState, 'skeletons'> & {
   isOpen: boolean;
@@ -28,20 +28,12 @@ export default function SpinesModal(props: SpinesModalProps) {
   const { skeletons, isOpen, onClose, itemClick, colorHover } = props;
   const { specialColor, specialColorHover } = useThemeContext();
   const { assets, setFilesUploaded } = useAppContext();
-  const { updateSkeletons, updateBitmapFonts } = useElementsContext();
+  const elementsContext = useElementsContext();
 
   function uploadCkickHandler() {
-    createSelectFile(assets.getAccept(), async (files) => {
-      try {
-        await assets.loadFiles(files);
-      } catch (err) {
-        new Error(`Files not loaded ${err}`);
-      } finally {
-        updateSkeletons(assets.getSkeletonDatas());
-        updateBitmapFonts(assets.getBitmapFontsNames());
-        setFilesUploaded();
-      }
-    });
+    uploadFiles(assets, elementsContext)
+      .then(() => setFilesUploaded())
+      .catch(() => new Error('Files not loaded'));
   }
 
   function clickHandler(name: string, anim: string) {
@@ -53,7 +45,7 @@ export default function SpinesModal(props: SpinesModalProps) {
 
   const modalContentNotAnimations = (
     <>
-      <ModalHeader>Animations not loaded</ModalHeader>
+      <ModalHeader textTransform="uppercase">Animations not loaded</ModalHeader>
       <ModalBody>
         <Flex justifyContent="space-between" alignItems="center" gap="10px">
           <Text>Upload the animations to create it</Text>

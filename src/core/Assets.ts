@@ -5,14 +5,15 @@ import { BaseTexture, BitmapFont, Texture, XMLFormat } from 'pixi.js';
 const JSON_TYPES = ['application/json'];
 const IMAGES_TYPES = ['image/png', 'image/jpg'];
 const XML_TYPES = ['text/xml', 'application/xml'];
+const FONT_TYPES = ['font/ttf'];
 
 const ATLAS = 'atlas';
 const FNT = 'fnt';
 const PARSER = new DOMParser();
 
-type AssetsFile = 'json' | 'image' | 'xml' | 'atlas';
+type AssetsFile = 'json' | 'image' | 'xml' | 'atlas' | 'font';
 
-type AssetsSplitFiles = Record<AssetsFile, Array<File>>;
+type AssetsGroups = Record<AssetsFile, Array<File>>;
 
 async function loadFile(file: File): Promise<Response> {
   const objectURL = URL.createObjectURL(file);
@@ -70,6 +71,8 @@ export default class Assets {
 
   private xmlData: Record<string, Document> = {};
 
+  private fontData: Record<string, FontFace> = {};
+
   public addToUpload(file: File) {
     this.loadingQueue[file.name] = file;
   }
@@ -111,7 +114,14 @@ export default class Assets {
       return this.setXml(...response);
     });
 
-    await Promise.all([...imageQueue, ...atlasQueue, ...jsonQueue, ...xmlQueue]);
+    const fontQueue = splitFiles.font.map(({ name }) => {
+      if (this.cache.includes(name)) return;
+      const response = responseFiles.find(([responseName]) => responseName === name);
+      if (!response) throw new Error(`Response ${name} is not defined`);
+      return this.setFont(...response);
+    });
+
+    await Promise.all([...imageQueue, ...atlasQueue, ...jsonQueue, ...xmlQueue, ...fontQueue]);
   }
 
   public async setTexture(name: string, response: Response) {
@@ -159,6 +169,18 @@ export default class Assets {
     }
   }
 
+  public async setFont(name: string, response: Response, descriptors?: FontFaceDescriptors) {
+    if (this.fontData[name]) return;
+    try {
+      const font = new FontFace(getBaseName(name), await response.arrayBuffer(), descriptors);
+      document.fonts.add(font);
+      this.fontData[font.family] = font;
+      this.cache.push(name);
+    } catch (err) {
+      new Error(`File ${name} cannot be read as font`);
+    }
+  }
+
   public async loadQueue(): Promise<ReadonlyArray<[string, Response]>> {
     const queue = Object.entries(this.loadingQueue)
       .filter(([name]) => !this.cache.includes(name))
@@ -200,16 +222,21 @@ export default class Assets {
       });
   }
 
+  public getWebFontNames(): ReadonlyArray<string> {
+    return Object.keys(this.fontData);
+  }
+
   public getAccept(): string {
     return Assets.accept.join(', ');
   }
 
-  private splitFiles(fileList: FileList): AssetsSplitFiles {
-    return [...fileList].reduce<AssetsSplitFiles>(
+  private splitFiles(fileList: FileList): AssetsGroups {
+    return [...fileList].reduce<AssetsGroups>(
       (files, curr) => {
         if (JSON_TYPES.includes(curr.type)) files.json.push(curr);
         else if (IMAGES_TYPES.includes(curr.type)) files.image.push(curr);
         else if (XML_TYPES.includes(curr.type)) files.xml.push(curr);
+        else if (FONT_TYPES.includes(curr.type)) files.font.push(curr);
         else {
           if (isAtlas(curr.name)) files.atlas.push(curr);
           else if (isXml(curr.name)) files.xml.push(curr);
@@ -217,7 +244,7 @@ export default class Assets {
         }
         return files;
       },
-      { json: [], atlas: [], image: [], xml: [] },
+      { json: [], atlas: [], image: [], xml: [], font: [] },
     );
   }
 
@@ -225,6 +252,7 @@ export default class Assets {
     ...JSON_TYPES,
     ...IMAGES_TYPES,
     ...XML_TYPES,
+    ...FONT_TYPES,
     makeExtension(ATLAS),
     makeExtension(FNT),
   ];

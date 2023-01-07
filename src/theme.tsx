@@ -5,7 +5,7 @@ const config: ThemeConfig = {
   useSystemColorMode: true,
 };
 
-const chakraTheme = extendTheme({
+const theme = extendTheme({
   config,
   components: {
     Button: {
@@ -21,4 +21,4 @@ const chakraTheme = extendTheme({
   },
 });
 
-export default chakraTheme;
+export default theme;

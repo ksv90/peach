@@ -1,3 +1,3 @@
-export * from './ElementsContext';
-export * from './ThemeContext';
-export * from './AppContext';
+export * from './elementsContext';
+export * from './themeContext';
+export * from './appContext';

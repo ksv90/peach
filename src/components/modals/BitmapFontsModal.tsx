@@ -10,39 +10,31 @@ import {
   Flex,
   Button,
 } from '@chakra-ui/react';
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import type { AddBitmapTextPayload, ElementsReducerState } from '../../contexts';
 import { useElementsContext, useThemeContext, useAppContext } from '../../contexts';
-import { createSelectFile } from '../../utils';
+import { uploadFiles } from '../../utils';
 import { InputProp } from '../properties';
 
-export type BitmapFontModalProps = Pick<ElementsReducerState, 'bitmapFonts'> & {
+export type BitmapFontsModalProps = Pick<ElementsReducerState, 'bitmapFonts'> & {
   isOpen: boolean;
   onClose(): void;
   itemClick(payload: AddBitmapTextPayload): void;
   colorHover?: string;
 };
 
-export default function BitmapFontModal(props: BitmapFontModalProps) {
+export default function BitmapFontsModal(props: BitmapFontsModalProps) {
   const { bitmapFonts, isOpen, onClose, itemClick, colorHover } = props;
   const { specialColor, specialColorHover } = useThemeContext();
   const { assets, setFilesUploaded } = useAppContext();
-  const { updateSkeletons, updateBitmapFonts } = useElementsContext();
+  const elementsContext = useElementsContext();
   const [invalid, setInvalid] = useState(false);
   const [content, setContent] = useState('');
 
   function uploadCkickHandler() {
-    createSelectFile(assets.getAccept(), async (files) => {
-      try {
-        await assets.loadFiles(files);
-      } catch (err) {
-        new Error(`Files not loaded ${err}`);
-      } finally {
-        updateSkeletons(assets.getSkeletonDatas());
-        updateBitmapFonts(assets.getBitmapFontsNames());
-        setFilesUploaded();
-      }
-    });
+    uploadFiles(assets, elementsContext)
+      .then(() => setFilesUploaded())
+      .catch(() => new Error('Files not loaded'));
   }
 
   function clickHandler(font: string) {
@@ -56,8 +48,8 @@ export default function BitmapFontModal(props: BitmapFontModalProps) {
     onClose();
   }
 
-  function changeHandler({ currentTarget }: ChangeEvent<HTMLInputElement>) {
-    setContent(currentTarget.value);
+  function changeHandler(value: string) {
+    setContent(value);
   }
 
   const modalContentNotFonts = (
@@ -76,7 +68,7 @@ export default function BitmapFontModal(props: BitmapFontModalProps) {
 
   const modalContent = (
     <>
-      <ModalHeader>Creating bitmapText</ModalHeader>
+      <ModalHeader textTransform="uppercase">Creating bitmapText</ModalHeader>
       <ModalCloseButton />
       <ModalBody>
         <InputProp

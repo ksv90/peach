@@ -1,11 +1,11 @@
 import { ChakraProvider } from '@chakra-ui/react';
-import chakraTheme from '../chakraTheme';
+import theme from '../theme';
 import { AppProvider, ElementsProvider, ThemeProvider } from '../contexts';
 import Main from './Main';
 
 export default function App() {
   return (
-    <ChakraProvider theme={chakraTheme}>
+    <ChakraProvider theme={theme}>
       <ThemeProvider>
         <AppProvider>
           <ElementsProvider>
