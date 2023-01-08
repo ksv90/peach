@@ -1,8 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import { BitmapText } from 'pixi.js';
 import { useEffect, useState } from 'react';
-import { InputProp } from '../properties';
-import BaseSettings from './BaseSettings';
+import { BaseSettings, InputProp } from '@peach/components';
 
 export type BitmapTextSettingsProps = {
   bitmapText: BitmapText;

@@ -1,5 +1,5 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
-import NumberInputProp from './NumberInputProp';
+import { NumberInputProp } from '@peach/components';
 
 export type ZIndexPropProps = {
   value: number;

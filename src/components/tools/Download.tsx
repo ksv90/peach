@@ -1,6 +1,6 @@
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
-import { useThemeContext } from '../../contexts';
+import { useThemeContext } from '@peach/contexts';
 
 export default function Download() {
   const { mainColor, specialColorHover } = useThemeContext();

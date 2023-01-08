@@ -7,8 +7,8 @@ import {
   RepeatIcon,
 } from '@chakra-ui/icons';
 import { IconButton, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
-import { useAppContext, useThemeContext } from '../../contexts';
-import { uploadFiles } from '../../utils';
+import { useAppContext, useThemeContext } from '@peach/contexts';
+import { uploadFiles } from '@peach/utils';
 
 export default function Settings() {
   const { mainColor, specialColorHover } = useThemeContext();

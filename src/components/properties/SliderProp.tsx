@@ -7,7 +7,7 @@ import {
   SliderThumb,
   SliderTrack,
 } from '@chakra-ui/react';
-import { useThemeContext } from '../../contexts';
+import { useThemeContext } from '@peach/contexts';
 
 export type SliderPropProps = {
   readonly content: string;

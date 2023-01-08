@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer } from 'react';
-import { useAppContext } from '../AppContext';
+import { useAppContext } from '@peach/contexts';
 import { elementsReducer, createElementsReducerState } from './reducer';
 import {
   AddAnimationPayload,

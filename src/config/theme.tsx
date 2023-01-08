@@ -5,7 +5,7 @@ const config: ThemeConfig = {
   useSystemColorMode: true,
 };
 
-const theme = extendTheme({
+export const theme = extendTheme({
   config,
   components: {
     Button: {
@@ -20,5 +20,3 @@ const theme = extendTheme({
     },
   },
 });
-
-export default theme;

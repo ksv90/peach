@@ -1,6 +1,6 @@
 import { Flex } from '@chakra-ui/react';
+import { useAppContext } from '@peach/contexts';
 import { useEffect, useRef } from 'react';
-import { useAppContext } from '../contexts';
 
 export default function Scene() {
   const ref = useRef<HTMLDivElement>(null);

@@ -1,9 +1,8 @@
 import { Flex } from '@chakra-ui/react';
 import { Spine } from '@pixi-spine/runtime-4.1';
 import { useEffect } from 'react';
-import { useAppContext, useElementsContext } from '../../contexts';
-import { ButtonProp } from '../properties';
-import BaseSettings from './BaseSettings';
+import { useAppContext, useElementsContext } from '@peach/contexts';
+import { BaseSettings, ButtonProp } from '@peach/components';
 
 export type AnimationSettingsProps = {
   spine: Spine;

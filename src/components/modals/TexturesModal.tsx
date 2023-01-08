@@ -11,9 +11,9 @@ import {
   Button,
 } from '@chakra-ui/react';
 import { Texture } from 'pixi.js';
-import type { AddSpritePayload } from '../../contexts';
-import { useAppContext, useThemeContext } from '../../contexts';
-import { uploadFiles } from '../../utils';
+import type { AddSpritePayload } from '@peach/contexts';
+import { useAppContext, useThemeContext } from '@peach/contexts';
+import { uploadFiles } from '@peach/utils';
 
 export type TexturesModalProps = {
   isOpen: boolean;

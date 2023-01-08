@@ -1,8 +1,8 @@
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useState } from 'react';
-import { useElementsContext, useThemeContext } from '../../contexts';
-import { SkeletonsModal, BitmapFontsModal, WebFontsModal, TexturesModal } from '../modals';
+import { useElementsContext, useThemeContext } from '@peach/contexts';
+import { SkeletonsModal, BitmapFontsModal, WebFontsModal, TexturesModal } from '@peach/components';
 
 export default function Add() {
   const { mainColor, mainColorHover, specialColorHover } = useThemeContext();
