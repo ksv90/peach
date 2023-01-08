@@ -34,6 +34,10 @@ export default function TexturesModal(props: TexturesModalProps) {
 
   function clickHandler(name: string, texture: Texture) {
     itemClick([name, texture]);
+    close();
+  }
+
+  function close() {
     onClose();
   }
 

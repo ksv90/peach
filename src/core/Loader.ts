@@ -1,5 +1,6 @@
 import {
   isAtlas,
+  isSystemFile,
   isXml,
   join,
   loadFile,
@@ -66,7 +67,7 @@ export default class Loader {
         else {
           if (isAtlas(curr.name)) files.atlas.push(curr);
           else if (isXml(curr.name)) files.xml.push(curr);
-          else console.warn(`Unknown file type ${curr.name}`);
+          else if (!isSystemFile(curr.name)) console.warn(`Unknown file type ${curr.name}`);
         }
         return files;
       },

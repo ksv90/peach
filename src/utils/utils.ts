@@ -1,8 +1,10 @@
 import { Concat } from './type';
 
 const enum Files {
+  Dot = '.',
   Atlas = 'atlas',
   Fnt = 'fnt',
+  Ini = 'ini',
 }
 
 export function getHalf(value: number) {
@@ -10,7 +12,7 @@ export function getHalf(value: number) {
 }
 
 function getExtension(name: string): string {
-  return name.split('.').at(-1) ?? '';
+  return name.split(Files.Dot).at(-1) ?? '';
 }
 
 export function isAtlas(name: string): boolean {
@@ -21,12 +23,16 @@ export function isXml(name: string): boolean {
   return getExtension(name) === Files.Fnt;
 }
 
+export function isSystemFile(name: string): boolean {
+  return name.at(0) === Files.Dot || getExtension(name) === Files.Ini;
+}
+
 export function getBaseName(name: string): string {
-  return name.split('.').slice(0, -1).join('.');
+  return name.split(Files.Dot).slice(0, -1).join(Files.Dot);
 }
 
 export function makeExtension(name: string) {
-  return '.'.concat(name);
+  return Files.Dot.concat(name);
 }
 
 export function makeAtlasExtension() {

@@ -27,11 +27,11 @@ export default function SliderProp(props: SliderPropProps) {
 
   return (
     <Box padding="5px 0" borderTopWidth="1px">
-      <Flex>
+      <Flex gap="5px">
         <Text fontWeight="bold" fontFamily="Inter">
-          {`${content}: `}
+          {`${content}:`}
         </Text>
-        <Text marginLeft="5px">{value}</Text>
+        <Text>{value}</Text>
       </Flex>
       <Slider value={value} min={min} max={max} step={step} onChange={onChange}>
         <SliderTrack bg={sliderColor}>

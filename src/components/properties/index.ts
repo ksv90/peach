@@ -5,3 +5,5 @@ export { default as SliderProp } from './SliderProp';
 export { default as ButtonProp } from './ButtonProp';
 export { default as InputProp } from './InputProp';
 export { default as FormControlProp } from './FormControlProp';
+export { default as NumberInputProp } from './NumberInputProp';
+export { default as ZIndexProp } from './ZIndexProp';
