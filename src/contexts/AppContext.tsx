@@ -18,17 +18,21 @@ export const AppContext = createContext({} as AppContextState);
 
 export const useAppContext = () => useContext(AppContext);
 
-const memo = <T extends unknown>(t: T): T => useMemo(() => t, []);
-
 export const AppProvider = ({ children }: AppContextProps) => {
   const { mainColorHover } = useThemeContext();
   const [filesUploaded, setFilesUploaded] = useState(false);
-  const assets = memo(new Assets());
+  const assets = useMemo(() => new Assets(), []);
   const appContext: AppContextState = {
     assets,
     filesUploaded,
-    app: memo(new Application({ backgroundColor: parseInt(mainColorHover.slice(1), 16) })),
-    loader: memo(new Loader(assets)),
+    loader: useMemo(() => new Loader(assets), []),
+    app: useMemo(() => {
+      const application = new Application({
+        backgroundColor: parseInt(mainColorHover.slice(1), 16),
+      });
+      application.stage.sortableChildren = true;
+      return application;
+    }, []),
     setFilesUploaded: () => {
       setTimeout(() => setFilesUploaded(true), 300);
       setTimeout(() => setFilesUploaded(false), 2300);

@@ -1,5 +1,6 @@
 import {
   isAtlas,
+  isSystemFile,
   isXml,
   join,
   loadFile,
@@ -16,7 +17,7 @@ const FONT_TYPES = ['font/ttf'];
 type LoaderFile = 'texture' | 'atlas' | 'json' | 'xml' | 'font';
 type LoaderGroups = Record<LoaderFile, Array<File>>;
 type LoaderResponses = ReadonlyArray<[string, Response]>;
-type LoaderAssets = Record<
+type LoaderAssets = { updateCache(): void } & Record<
   `set${Capitalize<LoaderFile>}`,
   (name: string, response: Response) => Promise<void>
 >;
@@ -41,6 +42,7 @@ export default class Loader {
       return this.setAsset(files, responseFiles, method);
     });
     await Promise.all(queue);
+    this.assets.updateCache();
   }
 
   public async loadQueue(): Promise<LoaderResponses> {
@@ -65,7 +67,7 @@ export default class Loader {
         else {
           if (isAtlas(curr.name)) files.atlas.push(curr);
           else if (isXml(curr.name)) files.xml.push(curr);
-          else console.warn(`Unknown file type ${curr.name}`);
+          else if (!isSystemFile(curr.name)) console.warn(`Unknown file type ${curr.name}`);
         }
         return files;
       },

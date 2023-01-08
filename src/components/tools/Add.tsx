@@ -2,7 +2,7 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useElementsContext, useThemeContext } from '../../contexts';
-import { SpinesModal, BitmapFontsModal, WebFontsModal, TextureModal } from '../modals';
+import { SkeletonsModal, BitmapFontsModal, WebFontsModal, TexturesModal } from '../modals';
 
 export default function Add() {
   const { mainColor, mainColorHover, specialColorHover } = useThemeContext();
@@ -57,7 +57,7 @@ export default function Add() {
           Text
         </MenuItem>
       </MenuList>
-      <SpinesModal
+      <SkeletonsModal
         isOpen={animationModalOpen}
         onClose={animationModalHandler}
         itemClick={addAnimation}
@@ -75,7 +75,7 @@ export default function Add() {
         itemClick={addText}
         colorHover={mainColorHover}
       />
-      <TextureModal
+      <TexturesModal
         isOpen={textureModalOpen}
         onClose={textureModalHandler}
         itemClick={addSprite}

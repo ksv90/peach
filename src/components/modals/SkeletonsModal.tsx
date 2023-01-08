@@ -18,14 +18,14 @@ import type { AddAnimationPayload } from '../../contexts';
 import { useAppContext, useThemeContext } from '../../contexts';
 import { uploadFiles } from '../../utils';
 
-export type SpinesModalProps = {
+export type SkeletonsModalProps = {
   isOpen: boolean;
   onClose(): void;
   itemClick(payload: AddAnimationPayload): void;
   colorHover?: string;
 };
 
-export default function SpinesModal(props: SpinesModalProps) {
+export default function SkeletonsModal(props: SkeletonsModalProps) {
   const { isOpen, onClose, itemClick, colorHover } = props;
   const { specialColor, specialColorHover } = useThemeContext();
   const { assets, loader, setFilesUploaded } = useAppContext();

@@ -15,14 +15,14 @@ import type { AddSpritePayload } from '../../contexts';
 import { useAppContext, useThemeContext } from '../../contexts';
 import { uploadFiles } from '../../utils';
 
-export type TextureModalProps = {
+export type TexturesModalProps = {
   isOpen: boolean;
   onClose(): void;
   itemClick(payload: AddSpritePayload): void;
   colorHover?: string;
 };
 
-export default function TextureModal(props: TextureModalProps) {
+export default function TexturesModal(props: TexturesModalProps) {
   const { isOpen, onClose, itemClick, colorHover } = props;
   const { specialColor, specialColorHover } = useThemeContext();
   const { assets, loader, setFilesUploaded } = useAppContext();
@@ -34,6 +34,10 @@ export default function TextureModal(props: TextureModalProps) {
 
   function clickHandler(name: string, texture: Texture) {
     itemClick([name, texture]);
+    close();
+  }
+
+  function close() {
     onClose();
   }
 

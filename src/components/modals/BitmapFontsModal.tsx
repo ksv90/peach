@@ -29,7 +29,7 @@ export default function BitmapFontsModal(props: BitmapFontsModalProps) {
   const { assets, loader, setFilesUploaded } = useAppContext();
   const [invalid, setInvalid] = useState(false);
   const [content, setContent] = useState('');
-  const bitmapFonts = assets.getBitmapFontsNames();
+  const bitmapFonts = assets.getBitmapFonts();
 
   function uploadCkickHandler() {
     uploadFiles(loader, setFilesUploaded);

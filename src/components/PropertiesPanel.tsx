@@ -8,8 +8,8 @@ import SpriteSettings from './settings/SpriteSettings';
 
 function getSettingsСomponent(element: CurrentElementPayload) {
   if (element instanceof BitmapText) return <BitmapTextSettings bitmapText={element} />;
-  if (element instanceof Sprite) return <SpriteSettings sprite={element} />;
   if (element instanceof Text) return <TextSettings text={element} />;
+  if (element instanceof Sprite) return <SpriteSettings sprite={element} />;
   if (element instanceof Spine) return <AnimationSettings spine={element} />;
   return <></>;
 }
