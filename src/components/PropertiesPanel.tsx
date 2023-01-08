@@ -1,10 +1,14 @@
 import { Container } from '@chakra-ui/react';
+import { CurrentElementPayload, useElementsContext } from '@peach/contexts';
 import { Spine } from '@pixi-spine/runtime-4.1';
 import { BitmapText, Sprite, Text } from 'pixi.js';
-import { CurrentElementPayload, useElementsContext } from '../contexts';
-import PanelsTitel from './PanelsTitel';
-import { AnimationSettings, BitmapTextSettings, TextSettings } from './settings';
-import SpriteSettings from './settings/SpriteSettings';
+import {
+  AnimationSettings,
+  BitmapTextSettings,
+  TextSettings,
+  SpriteSettings,
+  PanelsTitel,
+} from '@peach/components';
 
 function getSettingsСomponent(element: CurrentElementPayload) {
   if (element instanceof BitmapText) return <BitmapTextSettings bitmapText={element} />;

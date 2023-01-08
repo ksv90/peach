@@ -1,10 +1,14 @@
 {
   "extends": "@releaseband/typescript-config",
-  "buildOptions": {
-    "baseUrl": "./",
+  "compilerOptions": {
+    "target": "ESNext",
+    "baseUrl": "src",
     "paths": {
-      "@peach/components": ["src/components"],
-      "@peach/contexts": ["src/contexts"]
+      "@peach/components": ["components"],
+      "@peach/config": ["config"],
+      "@peach/contexts": ["contexts"],
+      "@peach/core": ["core"],
+      "@peach/utils": ["utils"]
     }
   },
   "include": ["src/**/*", "vite.config.ts"]

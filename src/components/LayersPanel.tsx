@@ -1,8 +1,7 @@
 import { CalendarIcon, ChatIcon, EditIcon, StarIcon } from '@chakra-ui/icons';
 import { Container } from '@chakra-ui/react';
-import { useElementsContext } from '../contexts';
-import PanelsTitel from './PanelsTitel';
-import LayerItem from './LayerItem';
+import { useElementsContext } from '@peach/contexts';
+import { LayerItem, PanelsTitel } from '@peach/components';
 
 const ICON_OPTIONS = {
   boxSize: 6,

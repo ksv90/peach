@@ -1,8 +1,7 @@
 import { Application } from 'pixi.js';
 import { createContext, PropsWithChildren, useContext, useMemo, useState } from 'react';
-import { Loader } from '../core';
-import Assets from '../core/Assets';
-import { useThemeContext } from './ThemeContext';
+import { Assets, Loader } from '@peach/core';
+import { useThemeContext } from '@peach/contexts';
 
 export type AppContextState = {
   readonly app: Application;

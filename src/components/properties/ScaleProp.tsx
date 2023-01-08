@@ -1,4 +1,4 @@
-import SliderProp from './SliderProp';
+import { SliderProp } from '@peach/components';
 
 export type ScalePropProps = {
   value: number;

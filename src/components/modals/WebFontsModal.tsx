@@ -12,10 +12,10 @@ import {
   Select,
 } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
-import type { AddTextPayload } from '../../contexts';
-import { useThemeContext, useAppContext } from '../../contexts';
-import { uploadFiles } from '../../utils';
-import { FormControlProp } from '../properties';
+import type { AddTextPayload } from '@peach/contexts';
+import { useThemeContext, useAppContext } from '@peach/contexts';
+import { uploadFiles } from '@peach/utils';
+import { FormControlProp } from '@peach/components';
 
 export type WebFontsModalProps = {
   isOpen: boolean;

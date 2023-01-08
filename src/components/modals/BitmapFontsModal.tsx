@@ -10,11 +10,11 @@ import {
   Flex,
   Button,
 } from '@chakra-ui/react';
+import type { AddBitmapTextPayload } from '@peach/contexts';
+import { useThemeContext, useAppContext } from '@peach/contexts';
+import { uploadFiles } from '@peach/utils';
 import { useState } from 'react';
-import type { AddBitmapTextPayload } from '../../contexts';
-import { useThemeContext, useAppContext } from '../../contexts';
-import { uploadFiles } from '../../utils';
-import { InputProp } from '../properties';
+import { InputProp } from '@peach/components';
 
 export type BitmapFontsModalProps = {
   isOpen: boolean;

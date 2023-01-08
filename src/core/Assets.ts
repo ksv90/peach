@@ -1,7 +1,7 @@
+import { getBaseName, makeAtlasName } from '@peach/utils';
 import { TextureAtlas } from '@pixi-spine/base';
 import { AtlasAttachmentLoader, SkeletonData, SkeletonJson } from '@pixi-spine/runtime-4.1';
 import { BaseTexture, BitmapFont, Texture, XMLFormat } from 'pixi.js';
-import { getBaseName, makeAtlasName } from '../utils';
 
 export const enum ParserType {
   ApplicationXHTML_XML = 'application/xhtml+xml',

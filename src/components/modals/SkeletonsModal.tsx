@@ -14,9 +14,9 @@ import {
   Button,
 } from '@chakra-ui/react';
 import { SkeletonData } from '@pixi-spine/runtime-4.1';
-import type { AddAnimationPayload } from '../../contexts';
-import { useAppContext, useThemeContext } from '../../contexts';
-import { uploadFiles } from '../../utils';
+import type { AddAnimationPayload } from '@peach/contexts';
+import { useAppContext, useThemeContext } from '@peach/contexts';
+import { uploadFiles } from '@peach/utils';
 
 export type SkeletonsModalProps = {
   isOpen: boolean;

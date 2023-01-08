@@ -7,7 +7,7 @@ import {
   makeAtlasExtension,
   makeFntExtension,
   toFirstCapitalize,
-} from '../utils';
+} from '@peach/utils';
 
 const JSON_TYPES = ['application/json'];
 const IMAGES_TYPES = ['image/png', 'image/jpg'];

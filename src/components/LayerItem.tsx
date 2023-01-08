@@ -1,5 +1,5 @@
 import { Flex, Text } from '@chakra-ui/react';
-import { useThemeContext } from '../contexts';
+import { useThemeContext } from '@peach/contexts';
 
 interface LayerItemProps {
   name: string;

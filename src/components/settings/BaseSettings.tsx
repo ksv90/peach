@@ -1,8 +1,8 @@
 import { Flex } from '@chakra-ui/react';
 import { DisplayObject } from 'pixi.js';
 import { useEffect, useState } from 'react';
-import { useAppContext } from '../../contexts';
-import { AlphaProp, PositionProp, ScaleProp, ZIndexProp } from '../properties';
+import { useAppContext } from '@peach/contexts';
+import { AlphaProp, PositionProp, ScaleProp, ZIndexProp } from '@peach/components';
 
 export type BaseSettingsProps = {
   element: DisplayObject;

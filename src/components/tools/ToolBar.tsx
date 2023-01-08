@@ -1,8 +1,5 @@
 import { Flex } from '@chakra-ui/react';
-import Add from './Add';
-import Download from './Download';
-import Settings from './Settings';
-import UploadInfo from './UploadInfo';
+import { Add, Download, Settings, UploadInfo } from '@peach/components';
 
 export default function ToolBar() {
   return (
