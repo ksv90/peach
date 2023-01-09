@@ -54,9 +54,9 @@ export default function BaseSettings({ element }: BaseSettingsProps) {
     <Flex flexDirection="column" gap="5px">
       <AlphaProp value={alpha} onChange={alphaHandler} />
       <ScaleProp value={scale} onChange={scaleHandler} />
+      <ZIndexProp value={zIndex} onChange={zIndexHandler} />
       <PositionProp axis="x" value={x} max={app.screen.width} onChange={xHandler} />
       <PositionProp axis="y" value={y} max={app.screen.height} onChange={yHandler} />
-      <ZIndexProp value={zIndex} onChange={zIndexHandler} />
     </Flex>
   );
 }

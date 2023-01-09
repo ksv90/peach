@@ -13,11 +13,11 @@ export const enum ParserType {
 
 const PARSER = new DOMParser();
 
-type AssetsSkeletons = ReadonlyArray<[string, SkeletonData]>;
-type AssetsTextStyles = ReadonlyArray<[string, TextStyle]>;
-type AssetsTextures = ReadonlyArray<[string, Texture]>;
-type AssetsBitmapFonts = ReadonlyArray<string>;
-type AssetsWebFonts = ReadonlyArray<string>;
+export type AssetsSkeletons = ReadonlyArray<[string, SkeletonData]>;
+export type AssetsTextStyles = ReadonlyArray<[string, TextStyle]>;
+export type AssetsTextures = ReadonlyArray<[string, Texture]>;
+export type AssetsBitmapFonts = ReadonlyArray<string>;
+export type AssetsWebFonts = ReadonlyArray<string>;
 
 type AssetsCache = {
   readonly skeletons: AssetsSkeletons;
@@ -164,7 +164,7 @@ export default class Assets {
   private createTextStyles(): AssetsTextStyles {
     return Object.entries(this.jsonData)
       .filter(([, assetsJson]) => !assetsJson.inUse && textStyleTest(assetsJson.json))
-      .map(([name, assetsJson]) => [name, new TextStyle(assetsJson.json)]);
+      .map(([name, assetsJson]) => [getBaseName(name), new TextStyle(assetsJson.json)]);
   }
 
   private createTextures(): AssetsTextures {

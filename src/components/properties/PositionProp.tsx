@@ -1,4 +1,4 @@
-import { SliderProp } from '@peach/components';
+import { NumberTitleProp } from '@peach/components';
 
 export type PositionPropProps = {
   axis: string;
@@ -9,12 +9,17 @@ export type PositionPropProps = {
 
 export default function PositionProp(props: PositionPropProps) {
   const { axis, value, max, onChange } = props;
+
   return (
-    <SliderProp
-      content={`position ${axis}`}
+    <NumberTitleProp
+      content={`position ${axis}:`}
       value={value}
-      sliderOptions={{ max: max }}
+      min={0}
+      max={max}
       onChange={onChange}
+      maxW={150}
+      input
+      slider
     />
   );
 }

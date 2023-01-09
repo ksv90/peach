@@ -1,9 +1,12 @@
 export { default as AlphaProp } from './AlphaProp';
 export { default as ScaleProp } from './ScaleProp';
 export { default as PositionProp } from './PositionProp';
-export { default as SliderProp } from './SliderProp';
 export { default as ButtonProp } from './ButtonProp';
 export { default as InputProp } from './InputProp';
 export { default as FormControlProp } from './FormControlProp';
 export { default as NumberInputProp } from './NumberInputProp';
 export { default as ZIndexProp } from './ZIndexProp';
+export { default as TextStyleProp } from './TextStyleProp';
+export { default as UploadTextStyleProp } from './UploadTextStyleProp';
+export { default as NumberTitleProp } from './NumberTitleProp';
+export { default as FontSizeProp } from './FontSizeProp';
