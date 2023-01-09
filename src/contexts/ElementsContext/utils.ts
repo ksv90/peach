@@ -47,7 +47,7 @@ export function makeAddTextState(
   [content, font]: AddTextPayload,
   { stage, screen }: Application,
 ): ElementsReducerState {
-  const text = new Text(content, { fontSize: 100, fontFamily: font, fill: '0xffffff' });
+  const text = new Text(content, { fontFamily: font });
   text.name = font || 'text';
   text.anchor.set(0.5, 0.5);
   text.position.set(getHalf(screen.width), getHalf(screen.height));

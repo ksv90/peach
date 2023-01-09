@@ -9,18 +9,21 @@ import {
 export type NumberInputPropProps = {
   value: number;
   min?: number;
+  max?: number;
+  maxW?: number;
+  step?: number;
   onChange(value: number): void;
 };
 
 export default function NumberInputProp(props: NumberInputPropProps) {
-  const { value, min, onChange } = props;
+  const { value, min, max, step, onChange, maxW } = props;
 
   function changeHandler(_: unknown, value: number) {
     onChange(value);
   }
 
   return (
-    <NumberInput value={value} onChange={changeHandler} min={min}>
+    <NumberInput maxW={maxW} value={value} onChange={changeHandler} min={min} max={max} step={step}>
       <NumberInputField></NumberInputField>
       <NumberInputStepper>
         <NumberIncrementStepper />

@@ -7,6 +7,22 @@ const enum Files {
   Ini = 'ini',
 }
 
+const textStyleKeys = [
+  'align',
+  'dropShadow',
+  'fill',
+  'fillGradientStops',
+  'fontFamily',
+  'fontSize',
+  'fontStyle',
+  'fontVariant',
+  'fontWeight',
+  'letterSpacing',
+  'lineHeight',
+  'padding',
+  'stroke',
+];
+
 export function getHalf(value: number) {
   return Math.round(value / 2);
 }
@@ -53,4 +69,8 @@ export function toFirstCapitalize<T extends string>(str: T): Capitalize<T> {
 
 export function join<T extends ReadonlyArray<string>>(...strings: T): Concat<T> {
   return strings.join('') as Concat<T>;
+}
+
+export function textStyleTest(json: Record<string, unknown>): boolean {
+  return Object.keys(json).some((key) => textStyleKeys.includes(key));
 }

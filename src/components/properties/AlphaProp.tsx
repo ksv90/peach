@@ -1,4 +1,4 @@
-import { SliderProp } from '@peach/components';
+import { NumberTitleProp } from '@peach/components';
 
 export type AlphaPropProps = {
   value: number;
@@ -7,12 +7,16 @@ export type AlphaPropProps = {
 
 export default function AlphaProp(props: AlphaPropProps) {
   const { value, onChange } = props;
+
   return (
-    <SliderProp
-      content="alpha value"
+    <NumberTitleProp
+      content="alpha:"
       value={value}
-      sliderOptions={{ min: 0, max: 1, step: 0.01 }}
+      min={0}
+      max={1}
+      step={0.01}
       onChange={onChange}
+      slider
     />
   );
 }
