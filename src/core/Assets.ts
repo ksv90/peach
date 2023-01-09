@@ -151,7 +151,11 @@ export default class Assets {
           const assetsTexture = this.textureData[textureName];
           if (!assetsTexture) throw new Error(`Texture ${textureName} not loaded`);
           assetsTexture.inUse = true;
-          loader(assetsTexture.texture);
+          try {
+            loader(assetsTexture.texture);
+          } catch (e) {
+            throw console.error(`Texture atlas ${textureName} error. ${e}`);
+          }
         });
         const atlasAttachmentLoader = new AtlasAttachmentLoader(textureAtlas);
         const skeletonJson = new SkeletonJson(atlasAttachmentLoader);
