@@ -28,11 +28,11 @@ export type SkeletonsModalProps = {
 export default function SkeletonsModal(props: SkeletonsModalProps) {
   const { isOpen, onClose, itemClick, colorHover } = props;
   const { specialColor, specialColorHover } = useThemeContext();
-  const { assets, loader, setFilesUploaded } = useAppContext();
+  const { assets, setFilesUploaded } = useAppContext();
   const skeletons = assets.getSkeletonDatas();
 
   function uploadCkickHandler() {
-    uploadFiles(loader, setFilesUploaded);
+    uploadFiles(assets, setFilesUploaded);
   }
 
   function clickHandler(anim: string, skeleton: SkeletonData) {

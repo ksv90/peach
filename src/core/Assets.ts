@@ -1,17 +1,9 @@
-import { getBaseName, makeAtlasName, textStyleTest } from '@peach/utils';
+import { getBaseName, getBasePath, makeExtension } from '@peach/utils';
 import { TextureAtlas } from '@pixi-spine/base';
 import { AtlasAttachmentLoader, SkeletonData, SkeletonJson } from '@pixi-spine/runtime-4.1';
 import { BaseTexture, BitmapFont, TextStyle, Texture, XMLFormat } from 'pixi.js';
 
-export const enum ParserType {
-  ApplicationXHTML_XML = 'application/xhtml+xml',
-  ApplicationXML = 'application/xml',
-  ImageSVG_XML = 'image/svg+xml',
-  TextHTML = 'text/html',
-  TextXML = 'text/xml',
-}
-
-const PARSER = new DOMParser();
+const ATLAS = 'atlas';
 
 export type AssetsSkeletons = ReadonlyArray<[string, SkeletonData]>;
 export type AssetsTextStyles = ReadonlyArray<[string, TextStyle]>;
@@ -27,31 +19,45 @@ type AssetsCache = {
   readonly textStyle: AssetsTextStyles;
 };
 
-type TextureData = Record<string, { readonly texture: BaseTexture; inUse?: boolean }>;
-type AtlasData = Record<string, string>;
-type JsonData = Record<string, { json: Record<string, unknown>; inUse?: boolean }>;
-type XmlData = Record<string, Document>;
-type FontData = Array<string>;
+const textStyleKeys = [
+  'align',
+  'dropShadow',
+  'fill',
+  'fillGradientStops',
+  'fontFamily',
+  'fontSize',
+  'fontStyle',
+  'fontVariant',
+  'fontWeight',
+  'letterSpacing',
+  'lineHeight',
+  'padding',
+  'stroke',
+];
 
-//! Конструктор BaseTexture выполняет работу с imageURL асинхронно, поэтому нужна обертка для удаления
-async function createBaseTexture(blob: Blob): Promise<BaseTexture> {
-  const imageURL = URL.createObjectURL(blob);
-  return new Promise<BaseTexture>((resolve) => resolve(new BaseTexture(imageURL))).finally(() =>
-    URL.revokeObjectURL(imageURL),
-  );
+function makeAtlasName(path: string): string {
+  return getBasePath(path).concat(makeExtension(ATLAS));
+}
+
+function makeTextureName(path: string, name: string): string {
+  return path.split('/').slice(0, -1).concat(name).join('/');
+}
+
+export function textStyleTest(json: Record<string, unknown>): boolean {
+  return Object.keys(json).some((key) => textStyleKeys.includes(key));
+}
+
+interface LoaderInterface {
+  readonly constructor: any & { readonly accept: ReadonlyArray<string> };
+  loadFiles(fileList: FileList): Promise<void>;
+  getJsons(): Record<string, Record<string, unknown>>;
+  getTextures(): Record<string, BaseTexture>;
+  getAtlases(): Record<string, string>;
+  getXmls(): Record<string, XMLDocument>;
+  getFonts(): Record<string, FontFace>;
 }
 
 export default class Assets {
-  private textureData: TextureData = {};
-
-  private atlasData: AtlasData = {};
-
-  private jsonData: JsonData = {};
-
-  private xmlData: XmlData = {};
-
-  private fontData: FontData = [];
-
   private cache: AssetsCache = {
     skeletons: [],
     textStyle: [],
@@ -60,56 +66,30 @@ export default class Assets {
     webFonts: [],
   };
 
-  public async setTexture(name: string, response: Response) {
-    if (this.textureData[name]) return;
-    try {
-      const texture = await createBaseTexture(await response.blob());
-      this.textureData[name] = { texture };
-    } catch (err) {
-      new Error(`File ${name} cannot be read as texture`);
-    }
+  private jsonSkeletonList = new Set<string>();
+
+  private spineTextureList = new Set<string>();
+
+  private bitmapTextureList = new Set<string>();
+
+  constructor(private readonly loader: LoaderInterface) {}
+
+  public async loadFiles(fileList: FileList): Promise<void> {
+    await this.loader.loadFiles(fileList);
+    await this.updateResources();
   }
 
-  public async setAtlas(name: string, response: Response) {
-    if (this.atlasData[name]) return;
-    try {
-      const atlas = await response.text();
-      this.atlasData[name] = atlas;
-    } catch (err) {
-      new Error(`File ${name} cannot be read as atlas`);
-    }
-  }
-
-  public async setJson(name: string, response: Response) {
-    if (this.jsonData[name]) return;
-    try {
-      const json = await response.json();
-      this.jsonData[name] = { json };
-    } catch (err) {
-      new Error(`File ${name} cannot be read as json`);
-    }
-  }
-
-  public async setXml(name: string, response: Response) {
-    if (this.xmlData[name]) return;
-    try {
-      const xml = Assets.parse(await response.text(), ParserType.TextXML);
-      this.xmlData[name] = xml;
-    } catch (err) {
-      new Error(`File ${name} cannot be read as xml`);
-    }
-  }
-
-  public async setFont(name: string, response: Response, descriptors?: FontFaceDescriptors) {
-    const font = getBaseName(name);
-    if (this.fontData.includes(font)) return;
-    try {
-      const fontFace = new FontFace(font, await response.arrayBuffer(), descriptors);
-      document.fonts.add(fontFace);
-      this.fontData.push(font);
-    } catch (err) {
-      new Error(`File ${name} cannot be read as font`);
-    }
+  public async updateResources(): Promise<void> {
+    this.jsonSkeletonList.clear();
+    this.spineTextureList.clear();
+    this.bitmapTextureList.clear();
+    this.cache = {
+      skeletons: await this.createSkeletonDatas(),
+      bitmapFonts: this.createBitmapFonts(),
+      textures: this.createTextures(),
+      webFonts: this.createWebFonts(),
+      textStyle: this.createTextStyles(),
+    };
   }
 
   public getSkeletonDatas(): AssetsSkeletons {
@@ -132,61 +112,68 @@ export default class Assets {
     return this.cache.webFonts;
   }
 
-  public updateCache(): void {
-    this.cache = {
-      skeletons: this.createSkeletonDatas(),
-      bitmapFonts: this.createBitmapFonts(),
-      textures: this.createTextures(),
-      webFonts: this.createWebFonts(),
-      textStyle: this.createTextStyles(),
-    };
-  }
-
-  private createSkeletonDatas(): AssetsSkeletons {
-    return Object.entries(this.jsonData)
-      .filter(([, assetsJson]) => 'skeleton' in assetsJson.json)
-      .map(([name, assetsJson]) => {
-        const atlas = this.atlasData[makeAtlasName(name)];
-        const textureAtlas = new TextureAtlas(atlas, (textureName, loader) => {
-          const assetsTexture = this.textureData[textureName];
-          if (!assetsTexture) throw new Error(`Texture ${textureName} not loaded`);
-          assetsTexture.inUse = true;
-          try {
-            loader(assetsTexture.texture);
-          } catch (e) {
-            throw console.error(`Texture atlas ${textureName} error. ${e}`);
-          }
-        });
-        const atlasAttachmentLoader = new AtlasAttachmentLoader(textureAtlas);
-        const skeletonJson = new SkeletonJson(atlasAttachmentLoader);
-        const skeletonData = skeletonJson.readSkeletonData(assetsJson.json);
-        assetsJson.inUse = true;
-        return [getBaseName(name), skeletonData];
-      });
+  private async createSkeletonDatas(): Promise<AssetsSkeletons> {
+    const jsons = this.loader.getJsons();
+    const textures = this.loader.getTextures();
+    const atlases = this.loader.getAtlases();
+    const queue = Object.entries(jsons)
+      .filter(([, json]) => 'skeleton' in json && 'bones' in json)
+      .map(
+        ([path, json]) =>
+          new Promise<[string, SkeletonData]>((resolve) => {
+            this.jsonSkeletonList.add(path);
+            const atlasName = makeAtlasName(path);
+            new TextureAtlas().addSpineAtlas(
+              atlases[atlasName] ?? '',
+              (name, loaderFunction) => {
+                const textureName = makeTextureName(path, name);
+                this.spineTextureList.add(textureName);
+                const baseTexture = textures[textureName];
+                if (!baseTexture) throw new Error(`Texture ${name} not founf`);
+                try {
+                  loaderFunction(baseTexture);
+                } catch (err) {
+                  throw new Error(`Texture atlas ${name} error. ${err}`);
+                }
+              },
+              (textureAtlas) => {
+                const atlasAttachmentLoader = new AtlasAttachmentLoader(textureAtlas);
+                const skeletonJson = new SkeletonJson(atlasAttachmentLoader);
+                resolve([getBaseName(path), skeletonJson.readSkeletonData(json)]);
+              },
+            );
+          }),
+      );
+    return await Promise.all(queue);
   }
 
   private createTextStyles(): AssetsTextStyles {
-    return Object.entries(this.jsonData)
-      .filter(([, assetsJson]) => !assetsJson.inUse && textStyleTest(assetsJson.json))
-      .map(([name, assetsJson]) => [getBaseName(name), new TextStyle(assetsJson.json)]);
+    const jsons = this.loader.getJsons();
+    return Object.entries(jsons)
+      .filter(([path, json]) => !this.jsonSkeletonList.has(path) || !textStyleTest(json))
+      .map(([name, json]) => [getBaseName(name), new TextStyle(json)]);
   }
 
   private createTextures(): AssetsTextures {
-    return Object.entries(this.textureData)
-      .filter(([, assetsTexture]) => !assetsTexture.inUse)
-      .map(([name, assetsTexture]) => [getBaseName(name), new Texture(assetsTexture.texture)]);
+    const textures = this.loader.getTextures();
+    return Object.entries(textures)
+      .filter(([path]) => !this.spineTextureList.has(path) && !this.bitmapTextureList.has(path))
+      .map(([path, texture]) => [getBaseName(path), new Texture(texture)]);
   }
 
   private createBitmapFonts(): AssetsBitmapFonts {
-    return Object.values(this.xmlData)
-      .filter((xml) => XMLFormat.test(xml))
-      .map((xml) => {
+    const xmls = this.loader.getXmls();
+    const baseTextures = this.loader.getTextures();
+    return Object.entries(xmls)
+      .filter(([, xml]) => XMLFormat.test(xml))
+      .map(([path, xml]) => {
         const bitmapFontData = XMLFormat.parse(xml);
         const textures = bitmapFontData.page.reduce<Record<string, Texture>>((acc, { file }) => {
-          const assetsTexture = this.textureData[file];
+          const textureName = makeTextureName(path, file);
+          this.bitmapTextureList.add(textureName);
+          const assetsTexture = baseTextures[textureName];
           if (!assetsTexture) throw new Error(`Texture ${file} is not defined`);
-          assetsTexture.inUse = true;
-          const texture = new Texture(assetsTexture.texture);
+          const texture = new Texture(assetsTexture);
           return { ...acc, [file]: texture };
         }, {});
         const { font } = BitmapFont.install(bitmapFontData, textures);
@@ -195,10 +182,14 @@ export default class Assets {
   }
 
   private createWebFonts(): AssetsWebFonts {
-    return [...this.fontData];
+    const fonts = this.loader.getFonts();
+    return Object.entries(fonts).map(([name, fontFace]) => {
+      if (!document.fonts.has(fontFace)) document.fonts.add(fontFace);
+      return getBaseName(name);
+    });
   }
 
-  static parse(text: string, type: DOMParserSupportedType): Document {
-    return PARSER.parseFromString(text, type);
+  public getAccept(): string {
+    return this.loader.constructor.accept.join(',');
   }
 }

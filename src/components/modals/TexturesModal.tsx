@@ -25,11 +25,11 @@ export type TexturesModalProps = {
 export default function TexturesModal(props: TexturesModalProps) {
   const { isOpen, onClose, itemClick, colorHover } = props;
   const { specialColor, specialColorHover } = useThemeContext();
-  const { assets, loader, setFilesUploaded } = useAppContext();
+  const { assets, setFilesUploaded } = useAppContext();
   const textures = assets.getTextures();
 
   function uploadCkickHandler() {
-    uploadFiles(loader, setFilesUploaded);
+    uploadFiles(assets, setFilesUploaded);
   }
 
   function clickHandler(name: string, texture: Texture) {

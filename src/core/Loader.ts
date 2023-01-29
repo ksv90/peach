@@ -1,94 +1,149 @@
 import {
-  isAtlas,
-  isSystemFile,
-  isXml,
-  join,
+  getBaseName,
+  getFileName,
   loadFile,
-  makeAtlasExtension,
-  makeFntExtension,
-  toFirstCapitalize,
+  loadTexture,
+  getExtension,
+  makeExtension,
 } from '@peach/utils';
+import { BaseTexture } from 'pixi.js';
+
+const enum Ext {
+  Atlas = 'atlas',
+  Fnt = 'fnt',
+  Ini = 'ini',
+}
+
+export const enum ParserType {
+  ApplicationXHTML_XML = 'application/xhtml+xml',
+  ApplicationXML = 'application/xml',
+  ImageSVG_XML = 'image/svg+xml',
+  TextHTML = 'text/html',
+  TextXML = 'text/xml',
+}
+
+const PARSER = new DOMParser();
 
 const JSON_TYPES = ['application/json'];
-const IMAGES_TYPES = ['image/png', 'image/jpg'];
+const IMAGES_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/avif'];
 const XML_TYPES = ['text/xml', 'application/xml'];
-const FONT_TYPES = ['font/ttf'];
+const FONT_TYPES = ['image/tiff', 'font/ttf', 'font/woff', 'font/woff2', 'font/otf'];
 
-type LoaderFile = 'texture' | 'atlas' | 'json' | 'xml' | 'font';
-type LoaderGroups = Record<LoaderFile, Array<File>>;
-type LoaderResponses = ReadonlyArray<[string, Response]>;
-type LoaderAssets = { updateCache(): void } & Record<
-  `set${Capitalize<LoaderFile>}`,
-  (name: string, response: Response) => Promise<void>
->;
+export type LoaderJsons = Record<string, Record<string, unknown>>;
+export type LoaderTextures = Record<string, BaseTexture>;
+export type LoaderAtlases = Record<string, string>;
+export type LoaderXmls = Record<string, XMLDocument>;
+export type LoaderFonts = Record<string, FontFace>;
+
+type LoaderCache = {
+  readonly jsons: LoaderJsons;
+  readonly textures: LoaderTextures;
+  readonly atlases: LoaderAtlases;
+  readonly xmls: LoaderXmls;
+  readonly fonts: LoaderFonts;
+};
+
+type LoaderFile = { type: string; name: string };
+
+function isJsonFile({ type }: LoaderFile): boolean {
+  return JSON_TYPES.includes(type);
+}
+
+function isImageFile({ type }: LoaderFile): boolean {
+  return IMAGES_TYPES.includes(type);
+}
+
+function isAtlasFile({ name }: LoaderFile): boolean {
+  return getExtension(name) === Ext.Atlas;
+}
+
+function isXmlFile({ type, name }: LoaderFile): boolean {
+  return XML_TYPES.includes(type) || getExtension(name) === Ext.Fnt;
+}
+
+function isFontFile({ type }: LoaderFile): boolean {
+  return FONT_TYPES.includes(type);
+}
+
+export function isSystemFile({ name }: LoaderFile): boolean {
+  return name.at(0) === '.' || getExtension(name) === Ext.Ini;
+}
 
 export default class Loader {
-  private cache: Array<string> = [];
-
-  private loadingQueue: Record<string, File> = {};
-
-  constructor(protected readonly assets: LoaderAssets) {}
-
-  public addToUpload(...files: ReadonlyArray<File>) {
-    files.forEach((file) => (this.loadingQueue[file.name] = file));
-  }
+  private cache: LoaderCache = { jsons: {}, textures: {}, atlases: {}, xmls: {}, fonts: {} };
 
   public async loadFiles(fileList: FileList): Promise<void> {
-    const splitFiles = this.splitFiles(fileList);
-    this.addToUpload(...Object.values(splitFiles).flat());
-    const responseFiles = await this.loadQueue();
-    const queue = Object.entries(splitFiles).map(([asset, files]) => {
-      const method = join('set', toFirstCapitalize(asset as LoaderFile));
-      return this.setAsset(files, responseFiles, method);
-    });
+    const queue = new Array<Promise<void>>();
+    for (const file of fileList) {
+      if (isJsonFile(file)) queue.push(this.loadJson(file));
+      else if (isImageFile(file)) queue.push(this.loadTexture(file));
+      else if (isXmlFile(file)) queue.push(this.loadXml(file));
+      else if (isFontFile(file)) queue.push(this.loadFont(file));
+      else if (isAtlasFile(file)) queue.push(this.loadAtlas(file));
+      else if (!isSystemFile(file)) console.warn(`Unknown file type ${file.name}`);
+    }
     await Promise.all(queue);
-    this.assets.updateCache();
   }
 
-  public async loadQueue(): Promise<LoaderResponses> {
-    const queue = Object.entries(this.loadingQueue)
-      .filter(([name]) => !this.cache.includes(name))
-      .map<Promise<[string, Response]>>(async ([name, file]) => [name, await loadFile(file)]);
-    this.loadingQueue = {};
-    return Promise.all(queue);
+  protected async loadJson(file: File): Promise<void> {
+    const name = getFileName(file);
+    if (this.cache.jsons[name]) return;
+    const response = await loadFile(file);
+    this.cache.jsons[name] = await response.json();
   }
 
-  public getAccept(): string {
-    return Loader.accept.join(',');
+  protected async loadTexture(file: File): Promise<void> {
+    const name = getFileName(file);
+    if (this.cache.textures[name]) return;
+    this.cache.textures[name] = await loadTexture(file);
   }
 
-  private splitFiles(fileList: FileList): LoaderGroups {
-    return [...fileList].reduce<LoaderGroups>(
-      (files, curr) => {
-        if (JSON_TYPES.includes(curr.type)) files.json.push(curr);
-        else if (IMAGES_TYPES.includes(curr.type)) files.texture.push(curr);
-        else if (XML_TYPES.includes(curr.type)) files.xml.push(curr);
-        else if (FONT_TYPES.includes(curr.type)) files.font.push(curr);
-        else {
-          if (isAtlas(curr.name)) files.atlas.push(curr);
-          else if (isXml(curr.name)) files.xml.push(curr);
-          else if (!isSystemFile(curr.name)) console.warn(`Unknown file type ${curr.name}`);
-        }
-        return files;
-      },
-      { json: [], atlas: [], texture: [], xml: [], font: [] },
-    );
+  protected async loadAtlas(file: File): Promise<void> {
+    const name = getFileName(file);
+    if (this.cache.atlases[name]) return;
+    const response = await loadFile(file);
+    this.cache.atlases[name] = await response.text();
   }
 
-  private async setAsset(
-    files: ReadonlyArray<File>,
-    responses: LoaderResponses,
-    method: keyof LoaderAssets,
-  ): Promise<void> {
-    const queue = files
-      .filter(({ name }) => !this.cache.includes(name))
-      .map(({ name }) => {
-        const response = responses.find(([responseName]) => responseName === name);
-        if (!response) throw new Error(`Response ${name} is not defined`);
-        this.cache.push(name);
-        return this.assets[method](...response);
-      });
-    await Promise.all(queue);
+  protected async loadXml(file: File): Promise<void> {
+    const name = getFileName(file);
+    if (this.cache.xmls[name]) return;
+    const response = await loadFile(file);
+    const xml = Loader.parse(await response.text(), ParserType.TextXML);
+    this.cache.xmls[name] = xml;
+  }
+
+  protected async loadFont(file: File, descriptors?: FontFaceDescriptors): Promise<void> {
+    const name = getFileName(file);
+    if (this.cache.fonts[name]) return;
+    const font = getBaseName(file.name);
+    const response = await loadFile(file);
+    const fontFace = new FontFace(font, await response.arrayBuffer(), descriptors);
+    this.cache.fonts[name] = fontFace;
+  }
+
+  public getJsons(): LoaderJsons {
+    return this.cache.jsons;
+  }
+
+  public getTextures(): LoaderTextures {
+    return this.cache.textures;
+  }
+
+  public getAtlases(): LoaderAtlases {
+    return this.cache.atlases;
+  }
+
+  public getXmls(): LoaderXmls {
+    return this.cache.xmls;
+  }
+
+  public getFonts(): LoaderFonts {
+    return this.cache.fonts;
+  }
+
+  static parse(text: string, type: DOMParserSupportedType): Document {
+    return PARSER.parseFromString(text, type);
   }
 
   static accept = [
@@ -96,7 +151,7 @@ export default class Loader {
     ...IMAGES_TYPES,
     ...XML_TYPES,
     ...FONT_TYPES,
-    makeAtlasExtension(),
-    makeFntExtension(),
+    makeExtension(Ext.Atlas),
+    makeExtension(Ext.Fnt),
   ];
 }
