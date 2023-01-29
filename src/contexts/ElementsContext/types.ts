@@ -7,14 +7,28 @@ export const enum ElementsReducerTypes {
   AddBitmapText = 'addBitmapText',
   AddText = 'addText',
   AddSprite = 'addSprite',
+  AddHideAndShowTextureScript = 'addHideAndShowTextureScript',
   SetCurrentElement = 'setCurrentElement',
 }
+
+export type HideAndShowTextureScript = {
+  spine: Spine;
+  sprite: Sprite;
+  animationName: string;
+};
 
 export type AddAnimationPayload = [string, SkeletonData];
 export type AddBitmapTextPayload = [string, string];
 export type AddTextPayload = [string, string];
 export type AddSpritePayload = [string, Texture];
-export type CurrentElementPayload = Spine | Sprite | BitmapText | Text | null;
+export type AddHideAndShowTextureScriptPayload = [string, string];
+export type CurrentElementPayload =
+  | Spine
+  | Sprite
+  | BitmapText
+  | Text
+  | HideAndShowTextureScript
+  | null;
 
 export interface AddAnimationAction {
   type: ElementsReducerTypes.AddAnimation;
@@ -40,6 +54,11 @@ export interface AddSpriteAction {
   app: Application;
 }
 
+export interface AddHideAndShowTextureScriptAction {
+  type: ElementsReducerTypes.AddHideAndShowTextureScript;
+  payload: AddHideAndShowTextureScriptPayload;
+}
+
 export interface CurrentElementAction {
   type: ElementsReducerTypes.SetCurrentElement;
   payload: CurrentElementPayload;
@@ -50,6 +69,7 @@ export type ElementsReducerAction =
   | AddBitmapTextAction
   | AddTextAction
   | AddSpriteAction
+  | AddHideAndShowTextureScriptAction
   | CurrentElementAction;
 
 export interface ElementsReducerState {
@@ -57,7 +77,8 @@ export interface ElementsReducerState {
   readonly bitmapTexts: ReadonlyArray<BitmapText>;
   readonly texts: ReadonlyArray<Text>;
   readonly sprites: Record<string, Sprite>;
-  readonly currentElement: Spine | Sprite | BitmapText | Text | null;
+  readonly scripts: Array<HideAndShowTextureScript>;
+  readonly currentElement: CurrentElementPayload;
 }
 
 export interface ElementsContextState extends ElementsReducerState {
@@ -65,6 +86,7 @@ export interface ElementsContextState extends ElementsReducerState {
   addBitmapText(payload: AddBitmapTextPayload): void;
   addText(payload: AddTextPayload): void;
   addSprite(payload: AddSpritePayload): void;
+  addHideAndShowTextureScript(payload: AddHideAndShowTextureScriptPayload): void;
   setCurrentElement(payload: CurrentElementPayload): void;
 }
 

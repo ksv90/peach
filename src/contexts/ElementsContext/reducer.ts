@@ -5,6 +5,7 @@ import {
   makeAddTextState,
   makeAddSpriteState,
   makeSetCurrentElementState,
+  makeAddHideAndShowTextureScriptState,
 } from './utils';
 
 export function createElementsReducerState(): ElementsReducerState {
@@ -13,6 +14,7 @@ export function createElementsReducerState(): ElementsReducerState {
     sprites: {},
     bitmapTexts: [],
     texts: [],
+    scripts: [],
     currentElement: null,
   };
 }
@@ -33,6 +35,9 @@ export function elementsReducer(
     }
     case ElementsReducerTypes.AddSprite: {
       return makeAddSpriteState(state, action.payload, action.app);
+    }
+    case ElementsReducerTypes.AddHideAndShowTextureScript: {
+      return makeAddHideAndShowTextureScriptState(state, action.payload);
     }
     case ElementsReducerTypes.SetCurrentElement: {
       return makeSetCurrentElementState(state, action.payload);

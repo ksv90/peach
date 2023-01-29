@@ -1,4 +1,4 @@
-import { CalendarIcon, ChatIcon, EditIcon, StarIcon } from '@chakra-ui/icons';
+import { AttachmentIcon, CalendarIcon, ChatIcon, EditIcon, StarIcon } from '@chakra-ui/icons';
 import { Container } from '@chakra-ui/react';
 import { useElementsContext } from '@peach/contexts';
 import { LayerItem, PanelsTitel } from '@peach/components';
@@ -56,6 +56,18 @@ export default function LayersPanel() {
             showProps={() => setCurrentElement(sprite)}
             selected={currentElement === sprite}
             icon={<StarIcon {...ICON_OPTIONS} />}
+          />
+        );
+      })}
+      {Object.values(elementsContext.scripts).map((element, index) => {
+        const name = `${element.animationName}:script-${index + 1}`;
+        return (
+          <LayerItem
+            key={name}
+            name={name}
+            showProps={() => setCurrentElement(element)}
+            selected={currentElement === element}
+            icon={<AttachmentIcon {...ICON_OPTIONS} />}
           />
         );
       })}

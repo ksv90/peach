@@ -4,6 +4,7 @@ import { getHalf } from '@peach/utils';
 import {
   AddAnimationPayload,
   AddBitmapTextPayload,
+  AddHideAndShowTextureScriptPayload,
   AddSpritePayload,
   AddTextPayload,
   CurrentElementPayload,
@@ -73,6 +74,23 @@ export function makeAddSpriteState(
     ...state,
     sprites: { ...state.sprites, [name]: sprite },
     currentElement: sprite,
+  };
+}
+
+export function makeAddHideAndShowTextureScriptState(
+  state: ElementsReducerState,
+  [spriteName, animationName]: AddHideAndShowTextureScriptPayload,
+): ElementsReducerState {
+  const sprite = state.sprites[spriteName];
+  const spine = state.spineAnimations[animationName];
+  if (!sprite || !spine) throw new Error(`${spriteName} or ${animationName} not found`);
+  spine.visible = false;
+  sprite.visible = true;
+  const hideAndShowSprite = { sprite, spine, animationName };
+  return {
+    ...state,
+    scripts: [...state.scripts, hideAndShowSprite],
+    currentElement: hideAndShowSprite,
   };
 }
 

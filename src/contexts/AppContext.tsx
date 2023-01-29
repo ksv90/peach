@@ -6,7 +6,6 @@ import { useThemeContext } from '@peach/contexts';
 export type AppContextState = {
   readonly app: Application;
   readonly assets: Assets;
-  readonly loader: Loader;
   readonly filesUploaded: boolean;
   setFilesUploaded(): void;
 };
@@ -20,11 +19,10 @@ export const useAppContext = () => useContext(AppContext);
 export const AppProvider = ({ children }: AppContextProps) => {
   const { mainColorHover } = useThemeContext();
   const [filesUploaded, setFilesUploaded] = useState(false);
-  const assets = useMemo(() => new Assets(), []);
+  const assets = useMemo(() => new Assets(new Loader()), []);
   const appContext: AppContextState = {
     assets,
     filesUploaded,
-    loader: useMemo(() => new Loader(assets), []),
     app: useMemo(() => {
       const application = new Application({
         backgroundColor: parseInt(mainColorHover.slice(1), 16),

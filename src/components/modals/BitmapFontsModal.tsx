@@ -26,13 +26,13 @@ export type BitmapFontsModalProps = {
 export default function BitmapFontsModal(props: BitmapFontsModalProps) {
   const { isOpen, onClose, itemClick, colorHover } = props;
   const { specialColor, specialColorHover } = useThemeContext();
-  const { assets, loader, setFilesUploaded } = useAppContext();
+  const { assets, setFilesUploaded } = useAppContext();
   const [invalid, setInvalid] = useState(false);
   const [content, setContent] = useState('');
   const bitmapFonts = assets.getBitmapFonts();
 
   function uploadCkickHandler() {
-    uploadFiles(loader, setFilesUploaded);
+    uploadFiles(assets, setFilesUploaded);
   }
 
   function clickHandler(font: string) {

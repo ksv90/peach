@@ -10,6 +10,7 @@ import {
   AddTextPayload,
   AppProviderProps,
   AddSpritePayload,
+  AddHideAndShowTextureScriptPayload,
 } from './types';
 
 export const ElementsContext = createContext({} as ElementsContextState);
@@ -33,6 +34,9 @@ export const ElementsProvider = ({ children }: AppProviderProps) => {
     },
     addSprite(payload: AddSpritePayload) {
       dispatch({ type: ElementsReducerTypes.AddSprite, payload, app });
+    },
+    addHideAndShowTextureScript(payload: AddHideAndShowTextureScriptPayload) {
+      dispatch({ type: ElementsReducerTypes.AddHideAndShowTextureScript, payload });
     },
     setCurrentElement(payload: CurrentElementPayload) {
       dispatch({ type: ElementsReducerTypes.SetCurrentElement, payload });

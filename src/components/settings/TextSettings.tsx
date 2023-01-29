@@ -17,7 +17,7 @@ export type TextSettingsProps = {
 
 export default function TextSettings({ text }: TextSettingsProps) {
   const [content, setContent] = useState(text.text);
-  const { assets, loader, setFilesUploaded } = useAppContext();
+  const { assets, setFilesUploaded } = useAppContext();
   const [fontSize, setFontSize] = useState(Number(text.style.fontSize ?? 16));
   const textStyles = assets.getTextStyles();
 
@@ -36,7 +36,7 @@ export default function TextSettings({ text }: TextSettingsProps) {
   }
 
   function uploadCkickHandler() {
-    uploadFiles(loader, setFilesUploaded);
+    uploadFiles(assets, setFilesUploaded);
   }
 
   return (

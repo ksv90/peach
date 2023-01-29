@@ -27,7 +27,7 @@ export type WebFontsModalProps = {
 export default function WebFontsModal(props: WebFontsModalProps) {
   const { isOpen, onClose, itemClick } = props;
   const { specialColor, specialColorHover } = useThemeContext();
-  const { assets, loader, setFilesUploaded } = useAppContext();
+  const { assets, setFilesUploaded } = useAppContext();
   const [content, setContent] = useState('');
   const [systemFont, setSystemFont] = useState('');
   const [loadedFont, setLoadedFont] = useState('');
@@ -35,7 +35,7 @@ export default function WebFontsModal(props: WebFontsModalProps) {
   const webFonts = assets.getWebFonts();
 
   function uploadCkickHandler() {
-    uploadFiles(loader, setFilesUploaded);
+    uploadFiles(assets, setFilesUploaded);
   }
 
   function createTextClickHandler() {

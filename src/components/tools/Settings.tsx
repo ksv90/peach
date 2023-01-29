@@ -12,10 +12,10 @@ import { uploadFiles } from '@peach/utils';
 
 export default function Settings() {
   const { mainColor, specialColorHover } = useThemeContext();
-  const { loader, setFilesUploaded } = useAppContext();
+  const { assets, setFilesUploaded } = useAppContext();
 
   function uploadCkickHandler() {
-    uploadFiles(loader, setFilesUploaded);
+    uploadFiles(assets, setFilesUploaded);
   }
 
   return (
