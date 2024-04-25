@@ -1,5 +1,5 @@
-import { createRoot } from 'react-dom/client';
 import { App } from '@peach/components';
+import { createRoot } from 'react-dom/client';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);

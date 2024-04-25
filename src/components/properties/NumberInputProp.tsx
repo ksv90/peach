@@ -16,6 +16,7 @@ export type NumberInputPropProps = {
 };
 
 export default function NumberInputProp(props: NumberInputPropProps) {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { value, min, max, step, onChange, maxW } = props;
 
   function changeHandler(_: unknown, value: number) {

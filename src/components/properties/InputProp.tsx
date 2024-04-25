@@ -9,6 +9,7 @@ export type InputPropProps = {
 };
 
 export default function InputProp(props: InputPropProps) {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { content, invalid = false, onChange, onFocus } = props;
 
   function changeHandler({ currentTarget }: ChangeEvent<HTMLInputElement>) {

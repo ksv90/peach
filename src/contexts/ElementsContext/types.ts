@@ -22,13 +22,7 @@ export type AddBitmapTextPayload = [string, string];
 export type AddTextPayload = [string, string];
 export type AddSpritePayload = [string, Texture];
 export type AddHideAndShowTextureScriptPayload = [string, string];
-export type CurrentElementPayload =
-  | Spine
-  | Sprite
-  | BitmapText
-  | Text
-  | HideAndShowTextureScript
-  | null;
+export type CurrentElementPayload = Spine | Sprite | BitmapText | Text | HideAndShowTextureScript | null;
 
 export interface AddAnimationAction {
   type: ElementsReducerTypes.AddAnimation;

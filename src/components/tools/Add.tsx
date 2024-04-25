@@ -1,11 +1,12 @@
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
-import { useState } from 'react';
+import { BitmapFontsModal, SkeletonsModal, TexturesModal,WebFontsModal } from '@peach/components';
 import { useElementsContext, useThemeContext } from '@peach/contexts';
-import { SkeletonsModal, BitmapFontsModal, WebFontsModal, TexturesModal } from '@peach/components';
+import { useState } from 'react';
 
 export default function Add() {
   const { mainColor, mainColorHover, specialColorHover } = useThemeContext();
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { addAnimation, addSprite, addBitmapText, addText } = useElementsContext();
   const [animationModalOpen, setAnimationModalOpen] = useState(false);
   const [bitmapFontModalOpen, setBitmapFontModalOpen] = useState(false);
@@ -30,13 +31,7 @@ export default function Add() {
 
   return (
     <Menu>
-      <MenuButton
-        as={Button}
-        variant="custom"
-        rightIcon={<ChevronDownIcon />}
-        transition="all 0.2s"
-        borderRadius="lg"
-      >
+      <MenuButton as={Button} variant="custom" rightIcon={<ChevronDownIcon />} transition="all 0.2s" borderRadius="lg">
         Add to scene
       </MenuButton>
       <MenuList bg={mainColor}>
@@ -46,11 +41,7 @@ export default function Add() {
         <MenuItem onClick={animationModalHandler} bg={mainColor} _hover={{ bg: specialColorHover }}>
           Animation
         </MenuItem>
-        <MenuItem
-          onClick={bitmapFontModalHandler}
-          bg={mainColor}
-          _hover={{ bg: specialColorHover }}
-        >
+        <MenuItem onClick={bitmapFontModalHandler} bg={mainColor} _hover={{ bg: specialColorHover }}>
           BitmapText
         </MenuItem>
         <MenuItem onClick={webFontModalHandler} bg={mainColor} _hover={{ bg: specialColorHover }}>

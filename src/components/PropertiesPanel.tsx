@@ -1,14 +1,9 @@
 import { Container } from '@chakra-ui/react';
+import { AnimationSettings, BitmapTextSettings, PanelsTitel,SpriteSettings, TextSettings } from '@peach/components';
 import { CurrentElementPayload, useElementsContext } from '@peach/contexts';
 import { Spine } from '@pixi-spine/runtime-4.1';
 import { BitmapText, Sprite, Text } from 'pixi.js';
-import {
-  AnimationSettings,
-  BitmapTextSettings,
-  TextSettings,
-  SpriteSettings,
-  PanelsTitel,
-} from '@peach/components';
+
 import HideAndShowSpriteSettings from './settings/HideAndShowSpriteSettings';
 
 function getSettingsСomponent(element: CurrentElementPayload) {

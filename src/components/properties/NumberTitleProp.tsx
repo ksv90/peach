@@ -1,12 +1,4 @@
-import {
-  Box,
-  Flex,
-  Slider,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderTrack,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Flex, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Text } from '@chakra-ui/react';
 import { NumberInputProp } from '@peach/components';
 import { useThemeContext } from 'contexts/ThemeContext';
 
@@ -23,18 +15,12 @@ export type NumberTitlePropProps = {
 };
 
 export default function NumberTitleProp(props: NumberTitlePropProps) {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { content, value, min, max, step, onChange, input, slider, maxW } = props;
   const { sliderColor, sliderFill } = useThemeContext();
 
   const sliderElement = (slider || !input) && (
-    <Slider
-      focusThumbOnChange={false}
-      value={value}
-      min={min}
-      max={max}
-      step={step}
-      onChange={onChange}
-    >
+    <Slider focusThumbOnChange={false} value={value} min={min} max={max} step={step} onChange={onChange}>
       <SliderTrack bg={sliderColor}>
         <SliderFilledTrack bg={sliderFill} />
       </SliderTrack>
@@ -43,14 +29,7 @@ export default function NumberTitleProp(props: NumberTitlePropProps) {
   );
 
   const inputElement = input ? (
-    <NumberInputProp
-      value={value}
-      min={min}
-      max={max}
-      step={step}
-      onChange={onChange}
-      maxW={maxW}
-    />
+    <NumberInputProp value={value} min={min} max={max} step={step} onChange={onChange} maxW={maxW} />
   ) : (
     <Text>{value}</Text>
   );

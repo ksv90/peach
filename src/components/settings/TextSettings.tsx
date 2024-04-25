@@ -1,15 +1,9 @@
 import { Flex } from '@chakra-ui/react';
-import { Text } from 'pixi.js';
-import { useEffect, useState } from 'react';
-import {
-  BaseSettings,
-  FontSizeProp,
-  InputProp,
-  TextStyleProp,
-  UploadTextStyleProp,
-} from '@peach/components';
+import { BaseSettings, FontSizeProp, InputProp, TextStyleProp, UploadTextStyleProp } from '@peach/components';
 import { useAppContext } from '@peach/contexts';
 import { uploadFiles } from '@peach/utils';
+import { Text } from 'pixi.js';
+import { useEffect, useState } from 'react';
 
 export type TextSettingsProps = {
   text: Text;
@@ -17,6 +11,7 @@ export type TextSettingsProps = {
 
 export default function TextSettings({ text }: TextSettingsProps) {
   const [content, setContent] = useState(text.text);
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { assets, setFilesUploaded } = useAppContext();
   const [fontSize, setFontSize] = useState(Number(text.style.fontSize ?? 16));
   const textStyles = assets.getTextStyles();

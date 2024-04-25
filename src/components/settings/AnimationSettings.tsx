@@ -1,8 +1,8 @@
 import { Flex } from '@chakra-ui/react';
+import { BaseSettings, ButtonProp } from '@peach/components';
+import { useAppContext, useElementsContext } from '@peach/contexts';
 import { Spine } from '@pixi-spine/runtime-4.1';
 import { useEffect } from 'react';
-import { useAppContext, useElementsContext } from '@peach/contexts';
-import { BaseSettings, ButtonProp } from '@peach/components';
 
 export type AnimationSettingsProps = {
   spine: Spine;
@@ -10,6 +10,7 @@ export type AnimationSettingsProps = {
 
 export default function AnimationSettings({ spine }: AnimationSettingsProps) {
   const { app } = useAppContext();
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { spineAnimations, setCurrentElement } = useElementsContext();
 
   useEffect(() => {

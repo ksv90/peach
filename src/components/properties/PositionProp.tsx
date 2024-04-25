@@ -8,6 +8,7 @@ export type PositionPropProps = {
 };
 
 export default function PositionProp(props: PositionPropProps) {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { axis, value, max, onChange } = props;
 
   return (

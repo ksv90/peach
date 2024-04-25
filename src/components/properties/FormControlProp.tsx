@@ -1,4 +1,4 @@
-import { FormControl, FormLabel, Input, FormHelperText, FormErrorMessage } from '@chakra-ui/react';
+import { FormControl, FormErrorMessage,FormHelperText, FormLabel, Input } from '@chakra-ui/react';
 import { ChangeEvent } from 'react';
 
 export type FormControlPropProps = {
@@ -13,8 +13,8 @@ export type FormControlPropProps = {
 };
 
 export default function FormControlProp(props: FormControlPropProps) {
-  const { content, header, isRequired, invalid, helperMessage, errorMessage, onChange, onFocus } =
-    props;
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { content, header, isRequired, invalid, helperMessage, errorMessage, onChange, onFocus } = props;
 
   function changeHandler({ currentTarget }: ChangeEvent<HTMLInputElement>) {
     onChange(currentTarget.value);

@@ -1,7 +1,7 @@
 import { ChakraProvider } from '@chakra-ui/react';
+import { Main } from '@peach/components';
 import { theme } from '@peach/config';
 import { AppProvider, ElementsProvider, ThemeProvider } from '@peach/contexts';
-import { Main } from '@peach/components';
 
 export default function App() {
   return (

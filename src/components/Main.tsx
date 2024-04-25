@@ -1,6 +1,6 @@
 import { Flex } from '@chakra-ui/react';
-import { useThemeContext } from '@peach/contexts';
 import { LayersPanel, PropertiesPanel, Scene, ToolBar } from '@peach/components';
+import { useThemeContext } from '@peach/contexts';
 
 const FRAME = '0 0 1px 0';
 

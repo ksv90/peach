@@ -1,16 +1,16 @@
 import {
+  Button,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
+  ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Button,
-  ModalFooter,
   Select,
 } from '@chakra-ui/react';
-import { ChangeEvent, useState } from 'react';
 import { AddHideAndShowTextureScriptPayload, useElementsContext } from '@peach/contexts';
+import { ChangeEvent, useState } from 'react';
 
 export type HideAndShowTextureModalProps = {
   isOpen: boolean;
@@ -20,6 +20,7 @@ export type HideAndShowTextureModalProps = {
 };
 
 export default function HideAndShowTextureModal(props: HideAndShowTextureModalProps) {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { isOpen, onClose, itemClick } = props;
   const { sprites, spineAnimations } = useElementsContext();
   const [loadedTexture, setLoadedTexture] = useState('');

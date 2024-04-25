@@ -1,17 +1,11 @@
-import {
-  AddIcon,
-  DownloadIcon,
-  EditIcon,
-  ExternalLinkIcon,
-  HamburgerIcon,
-  RepeatIcon,
-} from '@chakra-ui/icons';
+import { AddIcon, DownloadIcon, EditIcon, ExternalLinkIcon, HamburgerIcon, RepeatIcon } from '@chakra-ui/icons';
 import { IconButton, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useAppContext, useThemeContext } from '@peach/contexts';
 import { uploadFiles } from '@peach/utils';
 
 export default function Settings() {
   const { mainColor, specialColorHover } = useThemeContext();
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { assets, setFilesUploaded } = useAppContext();
 
   function uploadCkickHandler() {

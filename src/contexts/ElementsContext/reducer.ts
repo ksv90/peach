@@ -2,10 +2,10 @@ import { ElementsReducerAction, ElementsReducerState, ElementsReducerTypes } fro
 import {
   makeAddAnimationState,
   makeAddBitmapTextState,
-  makeAddTextState,
-  makeAddSpriteState,
-  makeSetCurrentElementState,
   makeAddHideAndShowTextureScriptState,
+  makeAddSpriteState,
+  makeAddTextState,
+  makeSetCurrentElementState,
 } from './utils';
 
 export function createElementsReducerState(): ElementsReducerState {
@@ -19,10 +19,7 @@ export function createElementsReducerState(): ElementsReducerState {
   };
 }
 
-export function elementsReducer(
-  state: ElementsReducerState,
-  action: ElementsReducerAction,
-): ElementsReducerState {
+export function elementsReducer(state: ElementsReducerState, action: ElementsReducerAction): ElementsReducerState {
   switch (action.type) {
     case ElementsReducerTypes.AddAnimation: {
       return makeAddAnimationState(state, action.payload, action.app);

@@ -1,19 +1,20 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { ArrowDownIcon } from '@chakra-ui/icons';
 import {
-  Text,
+  Button,
+  Flex,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Flex,
-  Button,
+  Text,
 } from '@chakra-ui/react';
-import { Texture } from 'pixi.js';
 import type { AddSpritePayload } from '@peach/contexts';
 import { useAppContext, useThemeContext } from '@peach/contexts';
 import { uploadFiles } from '@peach/utils';
+import { Texture } from 'pixi.js';
 
 export type TexturesModalProps = {
   isOpen: boolean;

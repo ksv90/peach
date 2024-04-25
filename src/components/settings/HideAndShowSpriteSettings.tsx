@@ -1,8 +1,8 @@
 import { Flex } from '@chakra-ui/react';
-import { Spine } from '@pixi-spine/runtime-4.1';
-import { useEffect } from 'react';
 import { ButtonProp } from '@peach/components';
+import { Spine } from '@pixi-spine/runtime-4.1';
 import { Sprite } from 'pixi.js';
+import { useEffect } from 'react';
 
 export type HideAndShowSpriteSettingsProps = {
   elements: { spine: Spine; sprite: Sprite; animationName: string };

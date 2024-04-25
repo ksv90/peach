@@ -1,22 +1,23 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import {
   Accordion,
   AccordionButton,
   AccordionItem,
   AccordionPanel,
-  Text,
+  Button,
+  Flex,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Flex,
-  Button,
+  Text,
 } from '@chakra-ui/react';
-import { SkeletonData } from '@pixi-spine/runtime-4.1';
 import type { AddAnimationPayload } from '@peach/contexts';
 import { useAppContext, useThemeContext } from '@peach/contexts';
 import { uploadFiles } from '@peach/utils';
+import { SkeletonData } from '@pixi-spine/runtime-4.1';
 
 export type SkeletonsModalProps = {
   isOpen: boolean;
