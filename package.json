@@ -7,12 +7,9 @@
     "dev": "vite --host",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "format": "prettier --write .",
-    "type-check": "tsc --noEmit",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx --fix .",
-    "markdownlint": "markdownlint --fix '**/*.md'",
-    "prepare": "is-ci || husky install",
-    "commit": "cz"
+    "format": "prettier --write .",
+    "test": "echo test"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.1.1",
@@ -45,11 +42,13 @@
     "vite-tsconfig-paths": "^4.2.1"
   },
   "engines": {
-    "node": ">=18.12.1",
-    "pnpm": ">=7.0.0"
+    "node": ">=16.0.0",
+    "pnpm": ">=8.0.0"
   },
-  "packageManager": "pnpm@7.17.0",
-  "volta": {
-    "node": "18.12.1"
+  "packageManager": "pnpm@8.15.4",
+  "homepage": "https://ksv90.github.io/peach/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ksv90/peach.git"
   }
 }
