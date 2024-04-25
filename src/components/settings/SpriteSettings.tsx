@@ -1,7 +1,7 @@
 import { Flex } from '@chakra-ui/react';
+import { BaseSettings } from '@peach/components';
 import { Sprite } from 'pixi.js';
 import { useEffect } from 'react';
-import { BaseSettings } from '@peach/components';
 
 export type SpriteSettingsProps = {
   sprite: Sprite;

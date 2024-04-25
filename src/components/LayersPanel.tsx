@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { AttachmentIcon, CalendarIcon, ChatIcon, EditIcon, StarIcon } from '@chakra-ui/icons';
 import { Container } from '@chakra-ui/react';
-import { useElementsContext } from '@peach/contexts';
 import { LayerItem, PanelsTitel } from '@peach/components';
+import { useElementsContext } from '@peach/contexts';
 
 const ICON_OPTIONS = {
   boxSize: 6,

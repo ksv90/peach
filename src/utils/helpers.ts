@@ -23,6 +23,7 @@ export function uploadFiles(
   assets: { getAccept(): string; loadFiles(files: FileList): Promise<void> },
   cb?: () => void,
 ): void {
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   createSelectFile(assets.getAccept(), async (files) => {
     try {
       await assets.loadFiles(files);

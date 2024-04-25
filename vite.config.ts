@@ -1,14 +1,8 @@
 import react from '@vitejs/plugin-react';
-import tsconfigPaths from 'vite-tsconfig-paths';
-import dts from 'vite-plugin-dts';
 import { defineConfig } from 'vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
-  build: {
-    outDir: 'build',
-  },
-  server: {
-    port: 2001,
-  },
-  plugins: [react(), tsconfigPaths(), dts()],
+  plugins: [react(), tsconfigPaths()],
+  base: 'peach',
 });

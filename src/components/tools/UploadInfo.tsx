@@ -1,5 +1,5 @@
 import { CheckCircleIcon } from '@chakra-ui/icons';
-import { Flex, Text, ScaleFade } from '@chakra-ui/react';
+import { Flex, ScaleFade, Text } from '@chakra-ui/react';
 import { useAppContext } from '@peach/contexts';
 
 export default function UploadInfo() {

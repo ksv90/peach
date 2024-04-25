@@ -48,6 +48,7 @@ export function textStyleTest(json: Record<string, unknown>): boolean {
 }
 
 interface LoaderInterface {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-redundant-type-constituents
   readonly constructor: any & { readonly accept: ReadonlyArray<string> };
   loadFiles(fileList: FileList): Promise<void>;
   getJsons(): Record<string, Record<string, unknown>>;
@@ -133,7 +134,7 @@ export default class Assets {
                 try {
                   loaderFunction(baseTexture);
                 } catch (err) {
-                  throw new Error(`Texture atlas ${name} error. ${err}`);
+                  throw new Error(`Texture atlas ${name} error. ${String(err)}`);
                 }
               },
               (textureAtlas) => {
@@ -184,12 +185,16 @@ export default class Assets {
   private createWebFonts(): AssetsWebFonts {
     const fonts = this.loader.getFonts();
     return Object.entries(fonts).map(([name, fontFace]) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-expect-error
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       if (!document.fonts.has(fontFace)) document.fonts.add(fontFace);
       return getBaseName(name);
     });
   }
 
   public getAccept(): string {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     return this.loader.constructor.accept.join(',');
   }
 }

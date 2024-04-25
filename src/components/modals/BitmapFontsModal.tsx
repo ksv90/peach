@@ -1,20 +1,21 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { ArrowDownIcon } from '@chakra-ui/icons';
 import {
-  Text,
+  Button,
+  Flex,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Flex,
-  Button,
+  Text,
 } from '@chakra-ui/react';
+import { InputProp } from '@peach/components';
 import type { AddBitmapTextPayload } from '@peach/contexts';
-import { useThemeContext, useAppContext } from '@peach/contexts';
+import { useAppContext, useThemeContext } from '@peach/contexts';
 import { uploadFiles } from '@peach/utils';
 import { useState } from 'react';
-import { InputProp } from '@peach/components';
 
 export type BitmapFontsModalProps = {
   isOpen: boolean;
@@ -69,12 +70,7 @@ export default function BitmapFontsModal(props: BitmapFontsModalProps) {
       <ModalHeader textTransform="uppercase">Creating bitmapText</ModalHeader>
       <ModalCloseButton />
       <ModalBody>
-        <InputProp
-          content={content}
-          invalid={invalid}
-          onChange={changeHandler}
-          onFocus={() => setInvalid(false)}
-        />
+        <InputProp content={content} invalid={invalid} onChange={changeHandler} onFocus={() => setInvalid(false)} />
         <Flex justifyContent="center" alignItems="center" gap="10px">
           <ArrowDownIcon />
           <Text as="h1" margin="10px 0" textTransform="uppercase">

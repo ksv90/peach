@@ -6,18 +6,10 @@ export type ScalePropProps = {
 };
 
 export default function ScaleProp(props: ScalePropProps) {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { value, onChange } = props;
 
   return (
-    <NumberTitleProp
-      content="scale:"
-      value={value}
-      min={0}
-      max={10}
-      step={0.01}
-      onChange={onChange}
-      maxW={100}
-      input
-    />
+    <NumberTitleProp content="scale:" value={value} min={0} max={10} step={0.01} onChange={onChange} maxW={100} input />
   );
 }

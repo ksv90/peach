@@ -1,21 +1,22 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import {
-  Text,
+  Button,
+  Flex,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
+  ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Flex,
-  Button,
-  ModalFooter,
   Select,
+  Text,
 } from '@chakra-ui/react';
-import { ChangeEvent, useState } from 'react';
-import type { AddTextPayload } from '@peach/contexts';
-import { useThemeContext, useAppContext } from '@peach/contexts';
-import { uploadFiles } from '@peach/utils';
 import { FormControlProp } from '@peach/components';
+import type { AddTextPayload } from '@peach/contexts';
+import { useAppContext, useThemeContext } from '@peach/contexts';
+import { uploadFiles } from '@peach/utils';
+import { ChangeEvent, useState } from 'react';
 
 export type WebFontsModalProps = {
   isOpen: boolean;

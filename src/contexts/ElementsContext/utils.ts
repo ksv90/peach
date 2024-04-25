@@ -1,6 +1,7 @@
+import { getHalf } from '@peach/utils';
 import { Spine } from '@pixi-spine/runtime-4.1';
 import { Application, BitmapText, Sprite, Text } from 'pixi.js';
-import { getHalf } from '@peach/utils';
+
 import {
   AddAnimationPayload,
   AddBitmapTextPayload,
