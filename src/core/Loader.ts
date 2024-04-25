@@ -68,8 +68,8 @@ export default class Loader {
 
   public async loadFiles(fileList: FileList): Promise<void> {
     const queue = new Array<Promise<void>>();
-    for(let i = 0; i < fileList.length; i++) {
-      const file = fileList[i]
+    for (let i = 0; i < fileList.length; i++) {
+      const file = fileList[i];
       if (isJsonFile(file)) queue.push(this.loadJson(file));
       else if (isImageFile(file)) queue.push(this.loadTexture(file));
       else if (isXmlFile(file)) queue.push(this.loadXml(file));
@@ -84,7 +84,7 @@ export default class Loader {
     const name = getFileName(file);
     if (this.cache.jsons[name]) return;
     const response = await loadFile(file);
-    this.cache.jsons[name] = await response.json() as LoaderJsons
+    this.cache.jsons[name] = (await response.json()) as LoaderJsons;
   }
 
   protected async loadTexture(file: File): Promise<void> {

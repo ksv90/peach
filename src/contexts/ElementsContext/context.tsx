@@ -1,7 +1,7 @@
 import { useAppContext } from '@peach/contexts';
 import { createContext, useContext, useReducer } from 'react';
 
-import { createElementsReducerState,elementsReducer } from './reducer';
+import { createElementsReducerState, elementsReducer } from './reducer';
 import {
   AddAnimationPayload,
   AddBitmapTextPayload,

@@ -1,4 +1,4 @@
-import { FormControl, FormErrorMessage,FormHelperText, FormLabel, Input } from '@chakra-ui/react';
+import { FormControl, FormErrorMessage, FormHelperText, FormLabel, Input } from '@chakra-ui/react';
 import { ChangeEvent } from 'react';
 
 export type FormControlPropProps = {

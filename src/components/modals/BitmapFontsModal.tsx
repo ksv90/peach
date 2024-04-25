@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { InputProp } from '@peach/components';
 import type { AddBitmapTextPayload } from '@peach/contexts';
-import { useAppContext,useThemeContext } from '@peach/contexts';
+import { useAppContext, useThemeContext } from '@peach/contexts';
 import { uploadFiles } from '@peach/utils';
 import { useState } from 'react';
 

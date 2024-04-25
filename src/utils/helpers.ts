@@ -31,5 +31,5 @@ export function uploadFiles(
     } catch {
       new Error('Files not loaded');
     }
-  })
+  });
 }

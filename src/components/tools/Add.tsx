@@ -1,6 +1,6 @@
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
-import { BitmapFontsModal, SkeletonsModal, TexturesModal,WebFontsModal } from '@peach/components';
+import { BitmapFontsModal, SkeletonsModal, TexturesModal, WebFontsModal } from '@peach/components';
 import { useElementsContext, useThemeContext } from '@peach/contexts';
 import { useState } from 'react';
 

@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { FormControlProp } from '@peach/components';
 import type { AddTextPayload } from '@peach/contexts';
-import { useAppContext,useThemeContext } from '@peach/contexts';
+import { useAppContext, useThemeContext } from '@peach/contexts';
 import { uploadFiles } from '@peach/utils';
 import { ChangeEvent, useState } from 'react';
 

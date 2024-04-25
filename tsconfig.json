@@ -2,8 +2,8 @@
   "include": ["src/**/*", "vite.config.ts"],
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {
-    "baseUrl": "src",
     "jsx": "react-jsx",
+    "baseUrl": "src",
     "declaration": true,
     "lib": ["DOM", "ESNext"],
     "module": "ESNext",
